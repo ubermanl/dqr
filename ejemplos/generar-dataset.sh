@@ -8,7 +8,7 @@ X=$START
 export estado_anterior=0
 
 # Encabezado
-echo "mes,diaSemana,hora,minuto,idSensor,sensCorriente,sensLuminosidad,sensSonido,sensPresencia,estadoLuz"
+echo "mes,diaSemana,minuto,idSensor,sensCorriente,sensLuminosidad,sensSonido,sensPresencia,estadoLuz"
 while [ $X -le $STOP ] ;do 
 	#--- cálculo del timestamp ---
 	# El timestamp al que corresponde la medicón
@@ -34,6 +34,8 @@ while [ $X -le $STOP ] ;do
 	# de +-23:00 a 00:00, luz apagada
 	HORA=$(date -d "@$X" +%_H| tr -d ' ')
 	MINUTO=$(date -d "@$X" +%M| sed 's/^0//')
+	MINUTO_RELATIVO=$(($HORA*60 + $MINUTO ))
+
 	if [[ $HORA -ge 0  &&  $HORA -lt 7 ]] ;then
 		sensCorriente=0
 	elif [[ $HORA -eq 7 && $MINUTO -le 30 ]] ;then
@@ -174,6 +176,6 @@ while [ $X -le $STOP ] ;do
 	# Ahora, a la red neuronal, no le paso el dato de medición de corriente.
 	# Pretendo que determine el valor de la relación de los otros campos.
 
-	LINE="$mes,$diaSemana,$HORA,$MINUTO,$idSensor,$sensCorriente,$sensLuminosidad,$sensSonido,$sensPresencia,$estadoLuz"
+	LINE="$mes,$diaSemana,$MINUTO_RELATIVO,$idSensor,$sensCorriente,$sensLuminosidad,$sensSonido,$sensPresencia,$estadoLuz"
 	echo $LINE
 done
