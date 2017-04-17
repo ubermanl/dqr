@@ -1,28 +1,22 @@
-== README
+== Ratio Console
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Este es un primer approach a la consola web de gestion del ratio escrita en ruby on rails.
 
-Things you may want to cover:
+Dependencias Importantes
 
-* Ruby version
+* Ruby >=2.2
+* Rails 4.2.2
 
-* System dependencies
+Para poder hacer andar la app
 
-* Configuration
+1) Es necesario hacer el git clone del master en este caso
 
-* Database creation
+2) Una vez clonado, y situados en el dir de la app hacer un bundle install
 
-* Database initialization
+3) Copiar el archivo config/database.yml.example a config/database.yml
 
-* How to run the test suite
+4) Crear el usuario ratio con password ratio en mysql
 
-* Services (job queues, cache servers, search engines, etc.)
+5) Crear la db mediante un rake db:create && rake db:migrate && rake db:seed
 
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+A partir de esto si todo sale bien, el deberia crearse la db y tener el usuario por defecto admin, clave admin
