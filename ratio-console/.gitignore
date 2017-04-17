@@ -7,10 +7,26 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore the default SQLite database.
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/config/database.yml
+
 # Ignore all logfiles and tempfiles.
 /log/*
 !/log/.keep
 /tmp
 
-/config/database.yml
+# Ignore IDEA files
 /.idea/*
+
+# Ignore scaffold.scss
+/app/assets/stylesheets/scaffold.scss
+# ignore public assets
+/public/assets/*
+.DS_Store
+.byebug_history
+# ignore instance specific files
+/files/*
+# ignore jasper files
+*.jasper

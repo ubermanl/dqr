@@ -11,6 +11,14 @@ DeviceType.create([
     { name: 'DqR Potentia' }
                   ])
 
+Ambience.create([
+                    { name:'Cocina'},
+                    { name:'Habitación Principal'},
+                    { name:'Habitación Invitados'},
+                    { name:'Patio Trasero'},
+                    { name:'Patio Delantero'}
+
+])
 
 User.create([
     { name: 'Administrador', login:'admin', password:'admin', password_confirmation:'admin' }
