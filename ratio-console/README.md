@@ -6,6 +6,7 @@ Este es un primer approach a la consola web de gestion del ratio escrita en ruby
 
 * Ruby >=2.2
 * Rails 4.2.2
+* MySql 5.5+
 
 # Instalacion
 Para poder hacer andar la app
