@@ -92,8 +92,7 @@ def get_estado_sugerido(luxId, mes, diaSemana, hora, minuto, sensLuminosidad, se
     :rtype: None
     """
     X_new_test = [[mes, diaSemana, hora, minuto, sensSonido, sensPresencia]]
-    #return clf_model.predict(X_new_test)
-    clf_predict_new_test = clf_model.predict(X_new_test)[0]
+    clf_predict_new_test = { "resultado": clf_model.predict(X_new_test)[0] }
     return str(clf_predict_new_test)
 
 
