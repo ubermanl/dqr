@@ -1,0 +1,70 @@
+---
+swagger: "2.0"
+info:
+  description: "Api para el agente DqR RNA"
+  version: "1.0.0"
+  title: "Agente DqR RNA"
+host: "localhost:8080"
+basePath: "/"
+paths:
+  /getEstadoSugerido/{luxId}/{mes}/{diaSemana}/{hora}/{minuto}/{sensLuminosidad}/{sensSonido}/{sensPresencia}:
+    get:
+      tags:
+      - "ambiente"
+      summary: "Consultar el estado sugerido de un dispositivo Lux"
+      description: "Método para consultar el estado sugerido de un dispositivo DqR\
+        \ Lux, en un momento dado"
+      operationId: "get_estado_sugerido"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "luxId"
+        in: "path"
+        description: "ID del dispositivo"
+        required: true
+        type: "integer"
+      - name: "mes"
+        in: "path"
+        description: "Mes por la que se hace la consulta"
+        required: true
+        type: "integer"
+      - name: "diaSemana"
+        in: "path"
+        description: "Dia dela semana por la que se hace la consulta. Lunes = 1, etc."
+        required: true
+        type: "integer"
+      - name: "hora"
+        in: "path"
+        description: "Hora por la que se hace la consulta"
+        required: true
+        type: "integer"
+      - name: "minuto"
+        in: "path"
+        description: "Minuto por el que se hace la consulta"
+        required: true
+        type: "integer"
+      - name: "sensLuminosidad"
+        in: "path"
+        description: "valor del sensor de luminosidad"
+        required: true
+        type: "number"
+      - name: "sensSonido"
+        in: "path"
+        description: "valor del sensor de sonido"
+        required: true
+        type: "number"
+      - name: "sensPresencia"
+        in: "path"
+        description: "valor del sensor de presencia"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "consulta exitosa"
+        400:
+          description: "id inválido"
+        404:
+          description: "Dispositivo no encontrado"
+      x-swagger-router-controller: "swagger_server.controllers.ambiente_controller"
+definitions: {}
