@@ -1,5 +1,5 @@
 
-###Archivos en este directorio:
+### Archivos en este directorio:
 
 * RNA-MLPClassifier: Ejemplos de RNA usando el algoritmo clasificador (salida 0 o 1). El nivel de confianza pasa a ser un poco transparente para nosotros.
 	* RNA Monoambiente v1.ipynb: Ejemplo inicial. Usa un dataset con datos ficticios para entrenar una RNA.
