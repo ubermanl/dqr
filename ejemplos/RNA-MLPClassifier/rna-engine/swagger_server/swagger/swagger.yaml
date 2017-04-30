@@ -7,7 +7,7 @@ info:
 host: "localhost:8080"
 basePath: "/"
 paths:
-  /getEstadoSugerido/{luxId}/{mes}/{diaSemana}/{hora}/{minuto}/{sensLuminosidad}/{sensSonido}/{sensPresencia}:
+  /getEstadoSugerido/{luxId}/{mes}/{diaSemana}/{minuto}/{sensLuminosidad}/{sensSonido}/{sensPresencia}:
     get:
       tags:
       - "ambiente"
@@ -32,11 +32,6 @@ paths:
       - name: "diaSemana"
         in: "path"
         description: "Dia dela semana por la que se hace la consulta. Lunes = 1, etc."
-        required: true
-        type: "integer"
-      - name: "hora"
-        in: "path"
-        description: "Hora por la que se hace la consulta"
         required: true
         type: "integer"
       - name: "minuto"

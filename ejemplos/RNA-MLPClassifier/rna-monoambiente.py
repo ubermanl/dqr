@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
@@ -17,9 +16,9 @@ num_obs = len(df)
 num_true = len(df.loc[df['estadoLuz'] == 1])
 num_false = len(df.loc[df['estadoLuz'] == 0])
 #feature_col_names = ['mes', 'diaSemana', 'hora', 'minuto', 'sensLuminosidad', 'sensSonido', 'sensPresencia']
-feature_col_names = ['mes', 'diaSemana', 'hora', 'minuto', 'sensSonido', 'sensPresencia']
+feature_col_names = ['mes', 'diaSemana', 'minuto', 'sensSonido', 'sensPresencia']
 predicted_class_names = ['estadoLuz']
-X = df[feature_col_names].values     # Columnas del predictor (7 X m)
+X = df[feature_col_names].values     # Columnas del predictor (5 X m)
 y = df[predicted_class_names].values # Clase predecida (1=verdadero, 0=falso) column (1 X m)
 split_test_size = 0.30               # 0.30 es 30%, el tamaño para pruebas
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=split_test_size, random_state=0)
@@ -56,8 +55,8 @@ print(metrics.classification_report(y_test, clf_predict_test, labels=[1,0]))
 
 print("----------------------------------------------------")
 
-#X_new_test = [[4, 3, 21, 20, 0.65, 0.4, 0.4]]
-X_new_test = [[4, 3, 21, 20, 0.1, 0.1]]
+# Prueba con datos simulando Martes 2:16am
+X_new_test = [[2, 136, 0.020, 0.4, 0.3]]
 clf_predict_new_test = clf_model.predict(X_new_test)
 
 print ("Resultado: ", clf_predict_new_test)

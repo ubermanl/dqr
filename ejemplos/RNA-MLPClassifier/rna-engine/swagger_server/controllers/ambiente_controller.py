@@ -8,7 +8,6 @@ from ..util import deserialize_date, deserialize_datetime
 # Módulos necesarios para la RNA
 #
 import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
@@ -29,10 +28,9 @@ del df['sensLuminosidad']
 num_obs = len(df)
 num_true = len(df.loc[df['estadoLuz'] == 1])
 num_false = len(df.loc[df['estadoLuz'] == 0])
-#feature_col_names = ['mes', 'diaSemana', 'hora', 'minuto', 'sensLuminosidad', 'sensSonido', 'sensPresencia']
-feature_col_names = ['mes', 'diaSemana', 'hora', 'minuto', 'sensSonido', 'sensPresencia']
+feature_col_names = ['mes', 'diaSemana', 'minuto', 'sensSonido', 'sensPresencia']
 predicted_class_names = ['estadoLuz']
-X = df[feature_col_names].values     # Columnas del predictor (7 X m)
+X = df[feature_col_names].values     # Columnas del predictor (5 X m)
 y = df[predicted_class_names].values # Clase predecida (1=verdadero, 0=falso) column (1 X m)
 split_test_size = 0.30               # 0.30 es 30%, el tamaño para pruebas
 
@@ -68,7 +66,7 @@ print(metrics.classification_report(y_test, clf_predict_test, labels=[1,0]))
 
 print ("Cargando la api")
 
-def get_estado_sugerido(luxId, mes, diaSemana, hora, minuto, sensLuminosidad, sensSonido, sensPresencia):
+def get_estado_sugerido(luxId, mes, diaSemana, minuto, sensLuminosidad, sensSonido, sensPresencia):
     """
     Consultar el estado sugerido de un dispositivo Lux
     Método para consultar el estado sugerido de un dispositivo DqR Lux, en un momento dado
@@ -78,8 +76,6 @@ def get_estado_sugerido(luxId, mes, diaSemana, hora, minuto, sensLuminosidad, se
     :type mes: int
     :param diaSemana: Dia dela semana por la que se hace la consulta. Lunes &#x3D; 1, etc.
     :type diaSemana: int
-    :param hora: Hora por la que se hace la consulta
-    :type hora: int
     :param minuto: Minuto por el que se hace la consulta
     :type minuto: int
     :param sensLuminosidad: valor del sensor de luminosidad
@@ -91,7 +87,7 @@ def get_estado_sugerido(luxId, mes, diaSemana, hora, minuto, sensLuminosidad, se
 
     :rtype: None
     """
-    X_new_test = [[mes, diaSemana, hora, minuto, sensSonido, sensPresencia]]
+    X_new_test = [[mes, diaSemana, minuto, sensSonido, sensPresencia]]
     clf_predict_new_test = { "resultado": clf_model.predict(X_new_test)[0] }
     return str(clf_predict_new_test)
 
