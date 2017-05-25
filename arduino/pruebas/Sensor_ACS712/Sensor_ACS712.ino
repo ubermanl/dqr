@@ -73,9 +73,18 @@ void acRead(int rZero, int sampleDuration) {
     rSquaredSum += rVal * rVal;
     sampleCount++;
   }
+  double voltsError = (rZero * 1024) / 5.0;
   double voltRMS = 5.0 * sqrt(rSquaredSum / sampleCount) / 1024.0;
+  //Serial.print(rSquaredSum);
+  //Serial.print(" rSquaredSum | ");
+  //Serial.print(sampleCount);
+  //Serial.print(" sampleCount | ");
+  Serial.print(sqrt(rSquaredSum / sampleCount));
+  Serial.print(" sqrt(rSquaredSum / sampleCount) | ");
   Serial.print(voltRMS);
   Serial.print(" v RMS | ");
+  Serial.print(voltsError);
+  Serial.print(" voltsError | ");
 
   // x 1000 to convert volts to millivolts
   // divide by the number of millivolts per amp to determine amps measured
@@ -95,11 +104,11 @@ void setup() {
 
   // Apago el enchufe para asegurar lectura sin consumo
   digitalWrite(RELAY_OUTPUT, HIGH);
-  acSensorZero = acSensorCalibration();
+  //acSensorZero = acSensorCalibration();
   // Lo prendo de nuevo
   //digitalWrite(RELAY_OUTPUT, LOW);
-  Serial.print("Zero del sensor sin carga: ");
-  Serial.println(acSensorZero);
+  //Serial.print("Zero del sensor sin carga: ");
+  //Serial.println(acSensorZero);
   
 }
 
@@ -122,15 +131,23 @@ void loop(){
       touchLastState = LOW;
 
    // Leer del sensor se corriente durante 1s, cada 59s
-   int minute = time % 5000;
+   int minute = time % 1000;
    //Serial.print("Minuto: ");
    //Serial.println(minute);
    
    if (minute == 0) {
-     Serial.print("Time: ");
-     Serial.print(time);
-     Serial.print(" | "); 
-     acRead(acSensorZero, 1000);
+     //Serial.print("Time: ");
+     //Serial.print(time);
+     //Serial.print(" | ");
+     //acRead(acSensorZero, 1000);
+     //Serial.print("Lectura del sensor: ");
+     //Serial.println(analogRead(ACSENSOR_INPUT));
      //minute = 0;
    }
+   //Serial.print("Time: ");
+   //Serial.print(time);
+   //Serial.print("Lectura del sensor: ");
+   Serial.println(analogRead(ACSENSOR_INPUT));
+   delay(20);
+
 }
