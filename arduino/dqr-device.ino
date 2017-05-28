@@ -14,6 +14,13 @@ boolean POT = false;
 boolean OMNI = false;
 
 /*
+ * Libraries required by the different sensors
+ */
+#include <Wire.h>
+#include <BH1750.h>
+
+
+/*
  * These constants define cabling standards, so that all sensors are ALWAYS cabled in the same way
  * accross the different arduino models. This tells you where each of the digital or analog signal
  * cables go.
@@ -22,7 +29,9 @@ boolean OMNI = false;
 #define POT_AC_SENSOR_IN A2
 #define LUX_TOUCH_IN      3
 #define LUX_RELAY_OUT     4
-#define LUX_AC_SENSOR_IN A4
+#define LUX_AC_SENSOR_IN A3
+#define LUX_LUM_SENS_SDA A4
+#define LUX_LUM_SENS_SCL A5
 /* TODO
 #define PIR_SENSOR_IN     
 #define SND_SENSOR_IN     
@@ -36,7 +45,7 @@ boolean OMNI = false;
 boolean luxTouchLast = false;
 boolean luxRelayState = true;
 int luxCurrentZero = 511;
-
+BH1750 lightSensor;
 boolean potRelayState = true;
 int potCurrentZero = 511;
 
@@ -76,6 +85,7 @@ int getCurrentValue(int sensor, int periodNumber, int iZero){
   return abs(max - iZero);
 }
 
+
 /*
  * 
  */
@@ -87,6 +97,7 @@ void setup() {
     pinMode(LUX_RELAY_OUT, OUTPUT);
     digitalWrite(LUX_RELAY_OUT, luxRelayState);
     luxCurrentZero = getCurrentValue(LUX_AC_SENSOR_IN, 10, 0);
+    lightSensor.begin(BH1750_CONTINUOUS_HIGH_RES_MODE_2);
   }
   
   if ( POT == true ) {
@@ -117,6 +128,11 @@ void loop() {
   if (everySecond == 0) {
     double luxCurrentValue = getCurrentValue(LUX_AC_SENSOR_IN, 10, luxCurrentZero);
     luxCurrentValue = luxCurrentValue * 50/1024;  // * 5/1024 to pass steps to volts, then *1000 to pass volts to milivolts, then /100 which is the sensor sensitivity
+    unsigned int luxLightValue = lightSensor.readLightLevel();
+
+    Serial.print("luxLightValue: ");
+    Serial.print(luxLightValue);
+    Serial.print(" | luxCurrentValue: ");
     Serial.println(luxCurrentValue);
   }
 
