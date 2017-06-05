@@ -18,7 +18,7 @@ boolean OMNI = false;
  */
 #include <Wire.h>
 #include <BH1750.h>
-#include "dqr-device.h"
+//#include "dqr-device.h"
 
 /*
  * These constants define cabling standards, so that all sensors are ALWAYS cabled in the same way
@@ -33,7 +33,7 @@ boolean OMNI = false;
 #define LUX_LUM_SENS_SDA A4
 #define LUX_LUM_SENS_SCL A5
 #define LUX_PIR_SENS_IN   5
-#define LUX_SND_SENS_IN   6
+#define LUX_SND_SENS_IN  A0
 #define LUX_PRESENCE_OUT 12
 /* TODO
 #define PIR_SENSOR_IN     
@@ -103,8 +103,8 @@ double currentStepsToAmps(double steps, int sensorSensitivity) {
   
 }
 
-boolean getSoundStatus() {
-  return ! digitalRead(LUX_SND_SENS_IN);
+double getSoundStatus() {
+  return analogRead(LUX_SND_SENS_IN);
 }
 
 
@@ -157,7 +157,7 @@ void loop() {
   double luxCurrentValue;
   unsigned int luxLightValue;
   bool pirStatus;
-  bool sndStatus;
+  double sndStatus;
   
   // Timers are used so that data can be gathered at different intervals
   time = millis();
