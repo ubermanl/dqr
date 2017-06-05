@@ -18,7 +18,7 @@ boolean OMNI = false;
  */
 #include <Wire.h>
 #include <BH1750.h>
-
+#include "dqr-device.h"
 
 /*
  * These constants define cabling standards, so that all sensors are ALWAYS cabled in the same way
