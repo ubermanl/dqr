@@ -1,5 +1,5 @@
 /*
- * DqR Lux
+ * DqR Device
  * Version: 1.0
  * --- DqR Systems 2017 ---
  */
