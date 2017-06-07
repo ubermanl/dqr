@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  object: 
+  priority: 1
+  desired_state: false
+  description: MyString
+  start_time: MyString
+  stop_time: MyString
+  inactive: false
+
+two:
+  object: 
+  priority: 1
+  desired_state: false
+  description: MyString
+  start_time: MyString
+  stop_time: MyString
+  inactive: false

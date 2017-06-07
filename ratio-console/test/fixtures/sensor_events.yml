@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  device_sensor_id: 
+  value: 9.99
+  event_stamp: 2017-06-07 15:49:45
+
+two:
+  device_sensor_id: 
+  value: 9.99
+  event_stamp: 2017-06-07 15:49:45
