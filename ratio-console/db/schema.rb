@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20170607184945) do
 
   create_table "devices", force: :cascade do |t|
     t.string   "name",               limit: 255
-    t.integer  "device_type_id",     limit: 4
+    t.integer  "device_type_id",     limit: 4,   null: false
     t.string   "model",              limit: 255
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 20170607184945) do
   end
 
   create_table "sensor_events", force: :cascade do |t|
-    t.integer  "device_sensor_id", limit: 4
+    t.integer  "device_sensor_id", limit: 4,                          null: false
     t.decimal  "value",                      precision: 10, scale: 4
     t.datetime "created_at"
   end
