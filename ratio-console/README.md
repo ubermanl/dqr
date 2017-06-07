@@ -20,3 +20,64 @@ Para poder hacer andar la app
 7. Ejecutar el server `rails s`
 
 A partir de esto si todo sale bien, se deberia levantar WeBrick (server de rails) en http://localhost:3000 y al acceder redireccionar al login, donde se usa admin/admin
+
+- Ambiences
+    Id
+    Name
+
+- Scenes
+    Id
+    Nombre
+    
+- DeviceScenes
+    DeviceId
+    SceneId
+
+- Devices
+    Id
+    Name
+    AmbienceId
+    DeviceTypeId
+    NetworkAddress
+    Inactive
+      
+- DeviceSensors
+    DeviceId
+    SensorId
+    SensorTypeId
+
+- Samples
+    SampleId
+    SensorId
+    Value
+    Timestamp
+    
+- DeviceTypes
+    Id
+    Name
+    Description
+    
+- SensorTypes
+    Id
+    Description
+    Unit
+    Max
+    Min
+
+- Program
+    Id
+    ObjectType
+    ObjectId
+    Priority
+    Inactive
+    DesiredState
+    Description
+    Owner
+    StartTime
+    StopTime
+        
+- Condition
+    SensorId
+    ValueMin
+    ValueMax
+    ProgramId
