@@ -10,7 +10,7 @@
  * where you will be uploading the code. Just switch between TRUE and FALSE as needed.
  */
 boolean LUX = true;
-boolean POT = true;
+boolean POT = false;
 boolean OMNI = false;
 
 /*
@@ -54,7 +54,7 @@ void setup() {
   if (POT == true) potDevice.setup();
   
   Serial.begin(9600);
-  Serial.println("lum,snd,pir,luxamps,luxrelay");
+  Serial.println("time,lum,snd,pir,luxamps,luxrelay");
 }
 
 void loop() {
@@ -71,7 +71,7 @@ void loop() {
   // Override operation
   if (luxDevice.getTouchStatus() == HIGH) luxDevice.setRelayStatus(!luxDevice.getRelayStatus());
   
-  if (everySecond == 0) {  
+  if (everySecond == 0) {
     Serial.print(time);
     Serial.print(": ");
     Serial.print(luxDevice.getLumValue());
@@ -84,10 +84,11 @@ void loop() {
     Serial.print(" | ");
     Serial.print(luxDevice.getRelayStatus());
     Serial.println("");
+
   }
   if (everyTenSeconds == 0) {
     Serial.println("");
-    Serial.println("lum,snd,pir,luxamps,luxrelay");
+    Serial.println("time,lum,snd,pir,luxamps,luxrelay");
   }
 }
 
