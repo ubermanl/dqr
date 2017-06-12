@@ -88,7 +88,7 @@ class Lux : public RelayDevice {
     Lux(int, int, int, int, int, int);
     void setup();
     int getSoundValue();
-    boolean getTouchStatus();
+    void senseTouch();
     int getLumValue();
     boolean getPirStatus();
   private:
@@ -115,16 +115,11 @@ void Lux::setup() {
   digitalWrite(_pinRelay, ! _relayStatus);
   digitalWrite(_pinPir, LOW); //Necesario? Probar comentado
   _lightSensor.begin(BH1750_CONTINUOUS_HIGH_RES_MODE_2);
+  attachInterrupt(digitalPinToInterrupt(_pinTouch), senseTouch, RISING);
 };
 
-boolean Lux::getTouchStatus() {
-  boolean touchCurrent = digitalRead(_pinTouch);
-  if (touchCurrent != _touchLast) {
-    //Serial.println("*** touch pressed or released ***");
-    _touchLast = touchCurrent;
-    return ! _touchLast;
-  }
-  return LOW;
+void Lux::senseTouch() {
+  setRelayStatus(!getRelayStatus());
 }
 
 int Lux::getSoundValue() {
