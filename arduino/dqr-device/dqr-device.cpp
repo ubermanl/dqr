@@ -26,7 +26,8 @@ Module::Module(int pinRelay) {
   _pinRelay = pinRelay;  
 };
 
-Lux::Lux(int pinRelay): Module(pinRelay) {
+Lux::Lux(int pinRelay, int pinTouch): Module(pinRelay) {
+  _pinTouch = pinTouch;
   pinMode(_pinTouch, INPUT);
   pinMode(_pinRelay, OUTPUT);  
   _relayStatus = HIGH; // Lux default is off
@@ -80,7 +81,8 @@ void Module::getSensorsData() {
 void Module::getState() { 
 };
 
-void Module::addSensor(Sensor sen) {  
+void Module::addSensor(Sensor sen) {
+  //_configuredSensors[last] = *sen;
 };
 
 void Module::setupSensor() {
@@ -146,17 +148,17 @@ float ACSensor::getACValue() {
   // if steps <= 7, then it's probably noise. If it's not, then we can't measure this type of current anyway
   if (steps <= 7) return 0;
   
-  // The number of steps should be multiplied by 5 and divided by 1024 to convert to volts, then divided by 2 to get
-  // just one side of the sin function. Then it should be multiplied by sqrt(2)/2 to get RMS Volts, and multiply by 1000 
-  // to convert  to mVs. Finally, divide by sensorSensitivity, which is expressed in mV/A.
-  //
-  // Instead of doing that, I'm going to multiply first, then divide, so that decimals are not lost in the calculation.
-  // This helps calculate on very small currents.
-  //
-  // Vrms = {[(steps * 5/1024) / 2 ] * sqrt(2)/2 } * 1000/_acSensorSensitivity
-  //      = (steps * 5 * 1000 * sqrt(2) ) / (1024 * 2 * 2 * _acSensorSensitivity)
-  //      = (steps * 5000 * sqrt(2)) / (4096 * acSensorSensitivity)
-  //
+  /* The number of steps should be multiplied by 5 and divided by 1024 to convert to volts, then divided by 2 to get
+   * just one side of the sin function. Then it should be multiplied by sqrt(2)/2 to get RMS Volts, and multiply by 1000 
+   * to convert  to mVs. Finally, divide by sensorSensitivity, which is expressed in mV/A.
+   *
+   * Instead of doing that, I'm going to multiply first, then divide, so that decimals are not lost in the calculation.
+   * This helps calculate on very small currents.
+   *
+   * Vrms = {[(steps * 5/1024) / 2 ] * sqrt(2)/2 } * 1000/_acSensorSensitivity
+   *      = (steps * 5 * 1000 * sqrt(2) ) / (1024 * 2 * 2 * _acSensorSensitivity)
+   *      = (steps * 5000 * sqrt(2)) / (4096 * acSensorSensitivity)
+   */
   float Vrms = steps*sqrt(2)*5000/4096;
   return Vrms/_acSensorSensitivity;
 };

@@ -86,7 +86,7 @@ class Module {
 
 class Lux : public Module {
   public:
-    Lux(int);
+    Lux(int, int);
   protected:
     int _pinTouch;
 };
@@ -103,6 +103,7 @@ class Omni : public Module {
 // Device class
 class Device {
   public:
+    Device();
     void getModuleStatus();
   protected:
     Module _configuredModules[];

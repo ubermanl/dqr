@@ -29,10 +29,15 @@ boolean OMNI = false;
 #define LUX_TOUCH_IN      3
 #define LUX_RELAY_OUT     4
 #define LUX_AC_SENSOR_IN A3
-#define LUX_LUM_SENS_SDA A4   # This one is a default, not passed to the Lux constructor
-#define LUX_LUM_SENS_SCL A5   # This one is a default, not passed to the Lux constructor
+#define LUX_LUM_SENS_SDA A4   # This one is a default, not passed to the constructor
+#define LUX_LUM_SENS_SCL A5   # This one is a default, not passed to the constructor
 #define LUX_PIR_SENS_IN   5
 #define LUX_SND_SENS_IN  A0
+#define RF24_CE    7
+#define RF24_CSN   8
+#define RF24_MOSI 11
+#define RF24_MISO 12 
+#define RF24_SCK  13
 
 /* TODO
 #define TMP_SENSOR_IN     
@@ -44,6 +49,13 @@ boolean OMNI = false;
 int luxSensorSensitivity = 100;
 int potSensorSensitivity = 100;
 unsigned long time = 0;
+
+
+
+Lux luxModule(LUX_RELAY_OUT, LUX_TOUCH_IN);
+
+Device luxDevice();
+
 
 
 void setup() {
