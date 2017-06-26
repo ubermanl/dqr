@@ -62,7 +62,7 @@ SoundSensor::SoundSensor(int pin): Sensor(pin) {
 /*--------------------------[ end of Constructors ]---------------------------*/
 
 
-/*---------------[ implementation of methods for Module Sensor ]--------------*/
+/*--------------[ implementation of methods for the Module class ]------------*/
 boolean Module::setRelayStatus(boolean newStatus) {
   if (_relayStatus != newStatus) {
     digitalWrite(_pinRelay, ! newStatus);

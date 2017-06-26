@@ -52,9 +52,9 @@ unsigned long time = 0;
 
 
 
-Lux luxModule(LUX_RELAY_OUT, LUX_TOUCH_IN);
-
-Device luxDevice();
+//Lux luxModule(LUX_RELAY_OUT, LUX_TOUCH_IN);
+//Device dqrDevice();
+//dqrDevice.add
 
 
 

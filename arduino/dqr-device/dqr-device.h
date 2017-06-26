@@ -28,7 +28,7 @@ class Sensor {
 
 
 // Abstract classes for the different sensors
-class ACSensor : public Sensor {
+class ACSensor : Sensor {
   public:
     ACSensor(int);
     void senseData();
@@ -37,28 +37,28 @@ class ACSensor : public Sensor {
     int _acSensorSensitivity;
 };
 
-class PIRSensor : public Sensor {
+class PIRSensor : Sensor {
   public:
     PIRSensor(int);
     void senseData();
   protected:
 };
 
-class TempSensor : public Sensor {
+class TempSensor : Sensor {
   public:
     TempSensor();
     void senseData();
   protected:
 };
 
-class SoundSensor : public Sensor {
+class SoundSensor : Sensor {
   public:
     SoundSensor(int);
     void senseData();
   protected:    
 };
 
-class LightSensor : public Sensor {
+class LightSensor : Sensor {
   private:
     LightSensor();
     void senseData();
@@ -84,18 +84,18 @@ class Module {
     boolean _relayStatus;
 };
 
-class Lux : public Module {
+class Lux : Module {
   public:
     Lux(int, int);
   protected:
     int _pinTouch;
 };
-class Potentia : public Module {
+class Potentia : Module {
   public:
     Potentia(int);
   protected:
 };
-class Omni : public Module {
+class Omni : Module {
   public:
   protected:  
 };
@@ -105,6 +105,7 @@ class Device {
   public:
     Device();
     void getModuleStatus();
+    void addModule(Module);
   protected:
     Module _configuredModules[];
 };
