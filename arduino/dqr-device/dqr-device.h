@@ -1,8 +1,9 @@
 /*
- * DqR header for file the DqR device library
- * Version: 1.0
+ * DqR Device header of classes
+ * Version: 2.0
  * --- DqR Systems 2017 ---
  */
+ 
 #ifndef DqR_h
 #define DqR_h
 

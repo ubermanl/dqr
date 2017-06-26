@@ -1,6 +1,6 @@
 /*
- * DqR implmentation file
- * Version: 1.0
+ * DqR Device implementation of classes
+ * Version: 2.0
  * --- DqR Systems 2017 ---
  */
 
