@@ -5,6 +5,7 @@
  */
 
 #include "dqr-device.h"
+#include "dqr-device-config.h"
 
 /*----------------------------[ Data Structures ]-----------------------------*/
 struct sensor_t {
@@ -23,6 +24,7 @@ struct module_t {
 
 /*------------------------------[ Constructors ]------------------------------*/
 Module::Module(int pinRelay) {
+  _lastIndex = -1;
   _pinRelay = pinRelay;  
 };
 
@@ -40,23 +42,23 @@ Potentia::Potentia(int pinRelay): Module(pinRelay) {
   digitalWrite(_pinRelay, ! _relayStatus);
 }
 
-Sensor::Sensor(int pin) {
-  _pinSensor = pin;  
+Sensor::Sensor() {
+  
 };
 
-PIRSensor::PIRSensor(int pin): Sensor (pin) {
+PIRSensor::PIRSensor() {
   pinMode(_pinSensor, INPUT);
 };
 
-LightSensor::LightSensor(): Sensor(99) {
+LightSensor::LightSensor() {
   _lightSensor.begin(BH1750_CONTINUOUS_HIGH_RES_MODE_2);
 };
 
-ACSensor::ACSensor(int pin): Sensor(pin) {
+ACSensor::ACSensor() {
   pinMode(_pinSensor, INPUT);
 };
 
-SoundSensor::SoundSensor(int pin): Sensor(pin) {
+SoundSensor::SoundSensor() {
   pinMode(_pinSensor, INPUT);  
 }
 /*--------------------------[ end of Constructors ]---------------------------*/
@@ -82,7 +84,12 @@ void Module::getState() {
 };
 
 void Module::addSensor(Sensor sen) {
-  //_configuredSensors[last] = *sen;
+ if(_lastIndex == MAX_SENSORS_X_MODULES){
+  return;
+ }
+ _lastIndex++;
+ _configuredSensors[_lastIndex] = sen;
+ 
 };
 
 void Module::setupSensor() {

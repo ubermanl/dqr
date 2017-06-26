@@ -9,15 +9,18 @@
 
 #include "Arduino.h"
 #include <BH1750.h>
+#include "dqr-device-config.h"
 
 
 // class Sensor implements the different type of sensors
 class Sensor {
   public:
-    Sensor(int pin);
+    Sensor();
+
     byte getId();
     float getAverageValue();
     void senseData();
+    void setPin(int);
   protected:
     byte _id;
     byte _typeId;
@@ -31,7 +34,7 @@ class Sensor {
 // Abstract classes for the different sensors
 class ACSensor : Sensor {
   public:
-    ACSensor(int);
+    ACSensor();
     void senseData();
     float getACValue();
   protected:
@@ -40,7 +43,7 @@ class ACSensor : Sensor {
 
 class PIRSensor : Sensor {
   public:
-    PIRSensor(int);
+    PIRSensor();
     void senseData();
   protected:
 };
@@ -54,7 +57,7 @@ class TempSensor : Sensor {
 
 class SoundSensor : Sensor {
   public:
-    SoundSensor(int);
+    SoundSensor();
     void senseData();
   protected:    
 };
@@ -80,7 +83,8 @@ class Module {
     boolean getRelayStatus();
   protected:
     byte _state;
-    Sensor _configuredSensors[];
+    byte _lastIndex;
+    Sensor _configuredSensors[MAX_SENSORS_X_MODULES];
     int _pinRelay;      
     boolean _relayStatus;
 };
