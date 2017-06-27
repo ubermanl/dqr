@@ -13,42 +13,34 @@ boolean LUX = true;
 boolean POT = false;
 boolean OMNI = false;
 
-/*
- * Libraries required by the different sensors
- */
-// Definition of classes
-#include "dqr-device.h"
 // Configutation parameters
 #include "dqr-device-config.h"
+
+// Definition of classes
+#include "dqr-device.h"
+
 // Custom network implementation
 #include "dqr-device-network.h"
 
-
-/* TODO
-#define TMP_SENSOR_IN     
-*/
 
 /*
  * These global variables control device tuning
  */
 int luxSensorSensitivity = 100;
 int potSensorSensitivity = 100;
-unsigned long time = 0;
 
 
-
-//Lux luxModule(LUX_RELAY_OUT, LUX_TOUCH_IN);
-//Device dqrDevice();
-//dqrDevice.add
-
-
+Device dqrDevice;
 
 void setup() {
   Serial.begin(9600);
-  
+  dqrDevice.addModule(LUX_TYPE_ID);
+  dqrDevice.addModule(POTENTIA_TYPE_ID);
+
 }
 
-void loop() {
-  
+void loop() { 
+  dqrDevice.getModuleStatus(); 
+  delay(1000);
 }
 

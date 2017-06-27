@@ -7,6 +7,7 @@
 #include "dqr-device.h"
 #include "dqr-device-config.h"
 
+
 /*----------------------------[ Data Structures ]-----------------------------*/
 struct sensor_t {
   byte sensorId;
@@ -23,27 +24,26 @@ struct module_t {
 
 
 /*------------------------------[ Constructors ]------------------------------*/
-Module::Module(int pinRelay) {
+Module::Module() {
   _lastIndex = -1;
-  _pinRelay = pinRelay;  
+  //_pinRelay = pinRelay;  
 };
 
-Lux::Lux(int pinRelay, int pinTouch): Module(pinRelay) {
-  _pinTouch = pinTouch;
+Lux::Lux(): Module() {
+  //_pinTouch = pinTouch;
   pinMode(_pinTouch, INPUT);
   pinMode(_pinRelay, OUTPUT);  
   _relayStatus = HIGH; // Lux default is off
   digitalWrite(_pinRelay, ! _relayStatus);
 };
 
-Potentia::Potentia(int pinRelay): Module(pinRelay) {
+Potentia::Potentia(): Module() {
   pinMode(_pinRelay, OUTPUT);
   _relayStatus = LOW; // Potentia default is on
   digitalWrite(_pinRelay, ! _relayStatus);
 }
 
-Sensor::Sensor() {
-  
+Omni::Omni(): Module() {  
 };
 
 PIRSensor::PIRSensor() {
@@ -83,19 +83,19 @@ void Module::getSensorsData() {
 void Module::getState() { 
 };
 
-void Module::addSensor(Sensor sen) {
- if(_lastIndex == MAX_SENSORS_X_MODULES){
-  return;
+boolean Module::addSensor(Sensor sen) {
+ if(_lastIndex == MAX_SENSORS_X_MODULE){
+  return false;
  }
  _lastIndex++;
  _configuredSensors[_lastIndex] = sen;
- 
+ return true;
 };
 
 void Module::setupSensor() {
 };
 
-/*---------------[ implementation of methods for class Sensor ]---------------*/
+/*---------------[ implementation of methods for Sensor class ]---------------*/
 float Sensor::getAverageValue() {
   float avg = _accumulatedValue / _sampleCount;
   _accumulatedValue = 0;
@@ -103,6 +103,39 @@ float Sensor::getAverageValue() {
   return avg;
 };
 
+void Sensor::setup(int pin) {
+  _pinSensor = pin;
+};
+
+/*--------------[ implementation of methods for the Device class ]------------*/
+Device::Device() {  
+};
+
+void Device::getModuleStatus() {
+
+};
+
+boolean Device::addModule(byte modType) {
+  if(_lastIndex == MAX_MODULES_X_DEVICE){
+    return false;
+  }
+  _lastIndex++;
+  Lux luxmodule;
+  Potentia potmodule;
+  Omni omnimodule;
+  switch (modType) {
+    case LUX_TYPE_ID:
+      _configuredModules[_lastIndex] = luxmodule;
+      return true;
+    case POTENTIA_TYPE_ID:
+      _configuredModules[_lastIndex] = potmodule;
+      return true;
+    case OMNI_TYPE_ID:
+      _configuredModules[_lastIndex] = omnimodule;
+      return true;
+  };
+  return false;
+};
 
 /*-----[ implementation of senseData for the different types of sensors ]-----*/
 // AC
@@ -169,7 +202,5 @@ float ACSensor::getACValue() {
   float Vrms = steps*sqrt(2)*5000/4096;
   return Vrms/_acSensorSensitivity;
 };
-
-
 
 

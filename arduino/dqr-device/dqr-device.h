@@ -15,8 +15,7 @@
 // class Sensor implements the different type of sensors
 class Sensor {
   public:
-    Sensor();
-
+    void setup(int);
     byte getId();
     float getAverageValue();
     void senseData();
@@ -74,34 +73,35 @@ class LightSensor : Sensor {
 // Module class and the different classes that it implements (Lux, Potentia, Omni)
 class Module {
   public:
-    Module(int);
+    Module();
     void getSensorsData();
     void getState();
-    void addSensor(Sensor);
+    boolean addSensor(Sensor);
     void setupSensor();
     boolean setRelayStatus(boolean);
     boolean getRelayStatus();
   protected:
     byte _state;
     byte _lastIndex;
-    Sensor _configuredSensors[MAX_SENSORS_X_MODULES];
+    Sensor _configuredSensors[MAX_SENSORS_X_MODULE];
     int _pinRelay;      
     boolean _relayStatus;
 };
 
-class Lux : Module {
+class Lux : public Module {
   public:
-    Lux(int, int);
+    Lux();
   protected:
     int _pinTouch;
 };
-class Potentia : Module {
+class Potentia : public Module {
   public:
-    Potentia(int);
+    Potentia();
   protected:
 };
-class Omni : Module {
+class Omni : public Module {
   public:
+    Omni();
   protected:  
 };
 
@@ -110,9 +110,10 @@ class Device {
   public:
     Device();
     void getModuleStatus();
-    void addModule(Module);
+    boolean addModule(byte);
   protected:
-    Module _configuredModules[];
+    byte _lastIndex;
+    Module _configuredModules[MAX_MODULES_X_DEVICE];
 };
 
 // NetworkModule class
