@@ -8,94 +8,18 @@
 #include "dqr-device-config.h"
 
 
-/*----------------------------[ Data Structures ]-----------------------------*/
-struct sensor_t {
-  byte sensorId;
-  byte sensorType;
-  float avgValue;
-};
+/*
+ * Definition of constructors and methods of the different classes.
+ * Note that Device uses Module, and Module uses Sensor, so declaring bottom-up
+ * 
+ */
 
-struct module_t {
-  byte moduleId;
-  byte moduleType;
-  sensor_t sensors[];
-  byte state;
-};
-
-
-/*------------------------------[ Constructors ]------------------------------*/
-Module::Module() {
-  _lastIndex = -1;
-  //_pinRelay = pinRelay;  
-};
-
-Lux::Lux(): Module() {
-  //_pinTouch = pinTouch;
-  pinMode(_pinTouch, INPUT);
-  pinMode(_pinRelay, OUTPUT);  
-  _relayStatus = HIGH; // Lux default is off
-  digitalWrite(_pinRelay, ! _relayStatus);
-};
-
-Potentia::Potentia(): Module() {
-  pinMode(_pinRelay, OUTPUT);
-  _relayStatus = LOW; // Potentia default is on
-  digitalWrite(_pinRelay, ! _relayStatus);
-}
-
-Omni::Omni(): Module() {  
-};
-
-PIRSensor::PIRSensor() {
+/*----------------------------------[ Sensor ]----------------------------------*/
+void Sensor::setup(byte pinSensor) {
+  _pinSensor = pinSensor;
   pinMode(_pinSensor, INPUT);
 };
 
-LightSensor::LightSensor() {
-  _lightSensor.begin(BH1750_CONTINUOUS_HIGH_RES_MODE_2);
-};
-
-ACSensor::ACSensor() {
-  pinMode(_pinSensor, INPUT);
-};
-
-SoundSensor::SoundSensor() {
-  pinMode(_pinSensor, INPUT);  
-}
-/*--------------------------[ end of Constructors ]---------------------------*/
-
-
-/*--------------[ implementation of methods for the Module class ]------------*/
-boolean Module::setRelayStatus(boolean newStatus) {
-  if (_relayStatus != newStatus) {
-    digitalWrite(_pinRelay, ! newStatus);
-    _relayStatus = newStatus;
-  };
-  return _relayStatus;
-};
-
-boolean Module::getRelayStatus() {
-  return _relayStatus;
-};
-
-void Module::getSensorsData() {
-};
-
-void Module::getState() { 
-};
-
-boolean Module::addSensor(Sensor sen) {
- if(_lastIndex == MAX_SENSORS_X_MODULE){
-  return false;
- }
- _lastIndex++;
- _configuredSensors[_lastIndex] = sen;
- return true;
-};
-
-void Module::setupSensor() {
-};
-
-/*---------------[ implementation of methods for Sensor class ]---------------*/
 float Sensor::getAverageValue() {
   float avg = _accumulatedValue / _sampleCount;
   _accumulatedValue = 0;
@@ -103,46 +27,15 @@ float Sensor::getAverageValue() {
   return avg;
 };
 
-void Sensor::setup(int pin) {
-  _pinSensor = pin;
-};
 
-/*--------------[ implementation of methods for the Device class ]------------*/
-Device::Device() {  
-};
-
-void Device::getModuleStatus() {
-
-};
-
-boolean Device::addModule(byte modType) {
-  if(_lastIndex == MAX_MODULES_X_DEVICE){
-    return false;
-  }
-  _lastIndex++;
-  Lux luxmodule;
-  Potentia potmodule;
-  Omni omnimodule;
-  switch (modType) {
-    case LUX_TYPE_ID:
-      _configuredModules[_lastIndex] = luxmodule;
-      return true;
-    case POTENTIA_TYPE_ID:
-      _configuredModules[_lastIndex] = potmodule;
-      return true;
-    case OMNI_TYPE_ID:
-      _configuredModules[_lastIndex] = omnimodule;
-      return true;
-  };
-  return false;
-};
-
-/*-----[ implementation of senseData for the different types of sensors ]-----*/
-// AC
-void ACSensor::senseData() {
-  _currentValue = getACValue();
-  _accumulatedValue += _currentValue;
-  _sampleCount += 1;
+/* borrar
+PIRSensor::PIRSensor() {};
+ACSensor::ACSensor() {};
+SoundSensor::SoundSensor() {}
+LightSensor::LightSensor() {};
+*/
+void LightSensor::setup(byte dummy) {
+  _lightSensor.begin(BH1750_CONTINUOUS_HIGH_RES_MODE_2);
 };
 
 // Sound
@@ -155,9 +48,16 @@ void SoundSensor::senseData() {
 // PIR
 void PIRSensor::senseData() {
   _currentValue = digitalRead(_pinSensor);
-  _accumulatedValue += _currentValue;
-  _sampleCount += 1;
+  if ( _currentValue == 1 )
+    _timer = 0;
+  else if ( _timer < PIR_TIMEOUT_SECONDS )
+    _currentValue = 1;
+  };
+
+float PIRSensor::getAverageValue() {
+  return _currentValue;
 };
+
 
 // Light
 void LightSensor::senseData() {
@@ -166,8 +66,13 @@ void LightSensor::senseData() {
   _sampleCount += 1;
 };
 
+// AC
+void ACSensor::senseData() {
+  _currentValue = getACValue();
+  _accumulatedValue += _currentValue;
+  _sampleCount += 1;
+};
 
-/*---------------[ helper function for converting steps to mAmp ]---------------*/
 float ACSensor::getACValue() {
   int numberOfPeriods = 20; // We are measuring 20 cicles of a 50Hz function
   double startTime = millis();
@@ -203,4 +108,107 @@ float ACSensor::getACValue() {
   return Vrms/_acSensorSensitivity;
 };
 
+
+
+/*----------------------------------[ Module ]----------------------------------*/
+Module::Module() {
+  _lastIndex = -1;
+};
+
+Lux::Lux(): Module() {};
+Potentia::Potentia(): Module() {};
+Omni::Omni(): Module() {};
+
+boolean Lux::setup(byte pinRelay, byte pinTouch) {
+  if ( pinTouch == 2 || pinTouch == 3)
+    return false;
+
+  _pinTouch = pinTouch;
+  _pinRelay = pinRelay;
+  pinMode(_pinTouch, INPUT);
+  pinMode(_pinRelay, OUTPUT);  
+  _relayStatus = HIGH; // Lux default is off
+  digitalWrite(_pinRelay, ! _relayStatus);
+  return true;
+};
+
+boolean Potentia::setup(byte pinRelay) {
+  _pinRelay = pinRelay;
+  pinMode(_pinRelay, OUTPUT);
+  _relayStatus = LOW; // Potentia default is on
+  digitalWrite(_pinRelay, ! _relayStatus);  
+};
+
+boolean Omni::setup() {};
+
+boolean Module::setRelayStatus(boolean newStatus) {
+  if (_relayStatus != newStatus) {
+    digitalWrite(_pinRelay, ! newStatus);
+    _relayStatus = newStatus;
+  };
+  return _relayStatus;
+};
+
+boolean Module::getRelayStatus() {
+  return _relayStatus;
+};
+
+void Module::getSensorsData() {
+};
+
+void Module::getState() { 
+};
+
+boolean Module::addSensor(Sensor sen) {
+ if(_lastIndex == MAX_SENSORS_X_MODULE){
+  return false;
+ }
+ _lastIndex++;
+ _configuredSensors[_lastIndex] = sen;
+ return true;
+};
+
+void Module::setupSensor() {
+};
+
+
+Device::Device() {  
+};
+
+void Device::getModuleStatus() {
+
+};
+
+boolean Device::addModule(byte modType) {
+  if(_lastIndex == MAX_MODULES_X_DEVICE){
+    return false;
+  }
+  _lastIndex++;
+  Lux luxmodule;
+  Potentia potmodule;
+  Omni omnimodule;
+  switch (modType) {
+    case LUX_TYPE_ID:
+      if(! luxmodule.setup(LUX_RELAY_OUT, LUX_TOUCH_IN))
+        return false;
+      _configuredModules[_lastIndex] = luxmodule;
+      return true;
+    case POTENTIA_TYPE_ID:
+      if(! potmodule.setup(LUX_RELAY_OUT))
+        return false;
+      _configuredModules[_lastIndex] = potmodule;
+      return true;
+    case OMNI_TYPE_ID:
+      if(! omnimodule.setup())
+        return false;
+      _configuredModules[_lastIndex] = omnimodule;
+      return true;
+  };
+  return false;
+};
+
+
+
+
+/*----------------------------------[ Device ]----------------------------------*/
 

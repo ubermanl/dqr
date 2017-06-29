@@ -11,11 +11,26 @@
 #include <BH1750.h>
 #include "dqr-device-config.h"
 
+/*----------------------------[ Data Structures ]-----------------------------*/
+struct sensor_t {
+  byte sensorId;
+  byte sensorType;
+  float avgValue;
+};
+
+struct module_t {
+  byte moduleId;
+  byte moduleType;
+  sensor_t sensors[];
+  byte state;
+};
+
+/*--------------------------------[ Classes ]---------------------------------*/
 
 // class Sensor implements the different type of sensors
 class Sensor {
   public:
-    void setup(int);
+    void setup(byte);
     byte getId();
     float getAverageValue();
     void senseData();
@@ -44,7 +59,9 @@ class PIRSensor : Sensor {
   public:
     PIRSensor();
     void senseData();
+    float getAverageValue();
   protected:
+    int _timer;
 };
 
 class TempSensor : Sensor {
@@ -64,6 +81,7 @@ class SoundSensor : Sensor {
 class LightSensor : Sensor {
   private:
     LightSensor();
+    void setup(byte);
     void senseData();
   protected:
     BH1750 _lightSensor;
@@ -91,17 +109,20 @@ class Module {
 class Lux : public Module {
   public:
     Lux();
+    boolean setup(byte, byte);
   protected:
     int _pinTouch;
 };
 class Potentia : public Module {
   public:
     Potentia();
+    boolean setup(byte);
   protected:
 };
 class Omni : public Module {
   public:
     Omni();
+    boolean setup();
   protected:  
 };
 

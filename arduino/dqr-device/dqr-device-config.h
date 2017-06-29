@@ -43,6 +43,19 @@
 #define MAX_SENSORS_X_MODULE 10
 #define MAX_MODULES_X_DEVICE  3
 
+/*
+ * These define the four possible states of a module, from the FSM perspective
+ */
+#define MODULE_INACTIVE 0
+#define MODULE_ACTIVE 1
+#define MODULE_INACTIVE_OVR 2 
+#define MODULE_ACTIVE_OVR 3
+
+/*
+ * The ammount of seconds a PIR detection window lasts
+ * 
+ */
+#define PIR_TIMEOUT_SECONDS 60
 
 
 #endif
