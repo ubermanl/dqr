@@ -11,6 +11,7 @@
 #include <BH1750.h>
 #include "dqr-device-config.h"
 
+
 /*----------------------------[ Data Structures ]-----------------------------*/
 struct sensor_t {
   byte sensorId;
@@ -24,6 +25,7 @@ struct module_t {
   sensor_t sensors[];
   byte state;
 };
+
 
 /*--------------------------------[ Classes ]---------------------------------*/
 

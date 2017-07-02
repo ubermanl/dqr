@@ -57,5 +57,12 @@
  */
 #define PIR_TIMEOUT_SECONDS 60
 
+/*
+ * Sensitivity of the Lux and Potentia AC sensors
+ * 
+ */
+const int luxSensorSensitivity = 100;
+const int potSensorSensitivity = 100;
+
 
 #endif

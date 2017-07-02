@@ -5,8 +5,6 @@
  */
 
 #include "dqr-device.h"
-#include "dqr-device-config.h"
-
 
 /*
  * Definition of constructors and methods of the different classes.
@@ -28,16 +26,6 @@ float Sensor::getAverageValue() {
 };
 
 
-/* borrar
-PIRSensor::PIRSensor() {};
-ACSensor::ACSensor() {};
-SoundSensor::SoundSensor() {}
-LightSensor::LightSensor() {};
-*/
-void LightSensor::setup(byte dummy) {
-  _lightSensor.begin(BH1750_CONTINUOUS_HIGH_RES_MODE_2);
-};
-
 // Sound
 void SoundSensor::senseData() {
   _currentValue = analogRead(_pinSensor);
@@ -58,8 +46,11 @@ float PIRSensor::getAverageValue() {
   return _currentValue;
 };
 
-
 // Light
+void LightSensor::setup(byte dummy) {
+  _lightSensor.begin(BH1750_CONTINUOUS_HIGH_RES_MODE_2);
+};
+
 void LightSensor::senseData() {
   _currentValue = _lightSensor.readLightLevel();
   _accumulatedValue += _currentValue;
@@ -153,11 +144,9 @@ boolean Module::getRelayStatus() {
   return _relayStatus;
 };
 
-void Module::getSensorsData() {
-};
-
-void Module::getState() { 
-};
+void Module::setupSensor() {};
+void Module::getSensorsData() {};
+void Module::getState() {};
 
 boolean Module::addSensor(Sensor sen) {
  if(_lastIndex == MAX_SENSORS_X_MODULE){
@@ -168,16 +157,12 @@ boolean Module::addSensor(Sensor sen) {
  return true;
 };
 
-void Module::setupSensor() {
-};
 
 
-Device::Device() {  
-};
+/*----------------------------------[ Device ]----------------------------------*/
+Device::Device() {};
 
-void Device::getModuleStatus() {
-
-};
+void Device::getModuleStatus() {};
 
 boolean Device::addModule(byte modType) {
   if(_lastIndex == MAX_MODULES_X_DEVICE){
@@ -207,8 +192,4 @@ boolean Device::addModule(byte modType) {
   return false;
 };
 
-
-
-
-/*----------------------------------[ Device ]----------------------------------*/
 
