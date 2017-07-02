@@ -1,4 +1,4 @@
-mes,diaSemana,minuto,idSensor,sensCorriente,sensLuminosidad,sensSonido,sensPresencia,estadoLuz
+mes,diaSemana,minuto,idSensor,sensCorriente,sensLuminosidad,sensSonido,sensPir,estadoLuz
 1,7,1,1020,0,0.027,0.065,0,0
 1,7,2,1020,0,0.020,0.046,0,0
 1,7,3,1020,0,0.026,0.051,0,0
