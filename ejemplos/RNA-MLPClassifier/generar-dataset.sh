@@ -8,10 +8,10 @@ X=$START
 export estado_anterior=0
 
 # Encabezado
-echo "mes,diaSemana,minuto,idSensor,sensCorriente,sensLuminosidad,sensSonido,sensPresencia,estadoLuz"
+echo "mes,diaSemana,minuto,idSensor,sensCorriente,sensLuminosidad,sensSonido,sensPir,estadoLuz"
 while [ $X -le $STOP ] ;do 
 	#--- cálculo del timestamp ---
-	# El timestamp al que corresponde la medicón
+	# El timestamp al que corresponde la medición
 	X=$(($X+60))
 	# Un cantidad de segundos random menor a 10 para simular la demora que tiene el paquete desde
 	# que sale del sensor hasta que se registra en la base de datos
@@ -128,39 +128,43 @@ while [ $X -le $STOP ] ;do
 	# Después de las 18:30, independientemente de los otros sensores, 80% de prob de detectar presencia
 	if [[ $HORA -ge 0  &&  $HORA -lt 7 ]] ;then
 		if [ $(( RANDOM %100 )) -le 10 ] ;then
-			sensPresencia="0.$(( ( RANDOM %200 ) + 100 ))"
+			sensPresencia="1"
 		else
-			sensPresencia="0.0$(( ( RANDOM %10 ) + 1 ))"
+			sensPresencia="0"
 		fi
 	elif [[ $HORA -eq 7 && $MINUTO -le 30 ]] ;then
 		if [ $(( RANDOM %100 )) -le 60 ] ;then
-			sensPresencia="0.$(( ( RANDOM %400 ) + 100 ))"
+			sensPresencia="1"
 		else
-			sensPresencia="0.0$(( ( RANDOM %100 ) + 1 ))"
+			sensPresencia="0"
 		fi
 	elif [[ ($HORA -eq 7 && $MINUTO -gt 30) || ($HORA -gt 7 && $HORA -lt 18) ]] ;then
 		if [ $(( RANDOM %100 )) -le 95 ] ;then
-			sensPresencia="0.$(( ( RANDOM %50 ) + 100 ))"
+			sensPresencia="0"
 		else
-			sensPresencia="0.0$(( ( RANDOM %10 ) + 1 ))"
+			sensPresencia="1"
 		fi
 		if [ $diaSemana -ge 6 ] ;then
-			sensPresencia="0.$(( ( RANDOM %400 ) + 100 ))"
+			if [ $(( RANDOM %100 )) -le 80 ] ;then
+				sensPresencia="1"
+			else
+				sensPresencia="0"
+			fi
 		fi
 	elif [[ $HORA -eq 18 && $MINUTO -le 30 ]] ;then
 		if [ $(( RANDOM %100 )) -le 95 ] ;then
-			sensPresencia="0.$(( ( RANDOM %100 ) + 100 ))"
+			sensPresencia="0"
 		else
-			sensPresencia="0.0$(( ( RANDOM %10 ) + 1 ))"
+			sensPresencia="1"
 		fi
 	elif [[ ($HORA -eq 18 && $MINUTO -gt 30) || ($HORA -eq 19 && $HORA -le 22) ]] ;then
 		if [ $(( RANDOM %100 )) -le 80 ] ;then
-			sensPresencia="0.$(( ( RANDOM %400 ) + 100 ))"
+			sensPresencia="1"
 		else
-			sensPresencia="0.$(( ( RANDOM %100 ) + 100 ))"
+			sensPresencia="0"
 		fi
 	elif [ $HORA -eq 23 ] ;then
-		sensPresencia="0.0$(( ( RANDOM %100 ) + 1 ))"
+		sensPresencia="0"
 	fi
 	
 	
@@ -171,7 +175,6 @@ while [ $X -le $STOP ] ;do
 	else
 		estadoLuz=0
 	fi
-	
 
 	# Ahora, a la red neuronal, no le paso el dato de medición de corriente.
 	# Pretendo que determine el valor de la relación de los otros campos.
