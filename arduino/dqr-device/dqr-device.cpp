@@ -27,6 +27,7 @@ float Sensor::getAverageValue() {
 
 
 // Sound
+SoundSensor::SoundSensor() {};
 void SoundSensor::senseData() {
   _currentValue = analogRead(_pinSensor);
   _accumulatedValue += _currentValue;
@@ -34,6 +35,8 @@ void SoundSensor::senseData() {
 };
 
 // PIR
+PIRSensor::PIRSensor() {};
+
 void PIRSensor::senseData() {
   _currentValue = digitalRead(_pinSensor);
   if ( _currentValue == 1 )
@@ -47,6 +50,7 @@ float PIRSensor::getAverageValue() {
 };
 
 // Light
+LightSensor::LightSensor() {};
 void LightSensor::setup(byte dummy) {
   _lightSensor.begin(BH1750_CONTINUOUS_HIGH_RES_MODE_2);
 };
@@ -58,6 +62,8 @@ void LightSensor::senseData() {
 };
 
 // AC
+ACSensor::ACSensor() {};
+
 void ACSensor::senseData() {
   _currentValue = getACValue();
   _accumulatedValue += _currentValue;
@@ -120,6 +126,13 @@ boolean Lux::setup(byte pinRelay, byte pinTouch) {
   pinMode(_pinRelay, OUTPUT);  
   _relayStatus = HIGH; // Lux default is off
   digitalWrite(_pinRelay, ! _relayStatus);
+
+  // Prefixed list of sensors to add to a Lux device
+  //PIRSensor newSensor;
+  //addSensor(newSensor);
+  //ACSensor newSensor;
+  //addSensor(newSensor);
+  
   return true;
 };
 
@@ -164,32 +177,13 @@ Device::Device() {};
 
 void Device::getModuleStatus() {};
 
-boolean Device::addModule(byte modType) {
+boolean Device::addModule(Module newModule) {
   if(_lastIndex == MAX_MODULES_X_DEVICE){
     return false;
   }
   _lastIndex++;
-  Lux luxmodule;
-  Potentia potmodule;
-  Omni omnimodule;
-  switch (modType) {
-    case LUX_TYPE_ID:
-      if(! luxmodule.setup(LUX_RELAY_OUT, LUX_TOUCH_IN))
-        return false;
-      _configuredModules[_lastIndex] = luxmodule;
-      return true;
-    case POTENTIA_TYPE_ID:
-      if(! potmodule.setup(LUX_RELAY_OUT))
-        return false;
-      _configuredModules[_lastIndex] = potmodule;
-      return true;
-    case OMNI_TYPE_ID:
-      if(! omnimodule.setup())
-        return false;
-      _configuredModules[_lastIndex] = omnimodule;
-      return true;
-  };
-  return false;
+  _configuredModules[_lastIndex] = newModule;
+  return true;
 };
 
 

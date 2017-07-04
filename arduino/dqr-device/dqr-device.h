@@ -48,7 +48,7 @@ class Sensor {
 
 
 // Abstract classes for the different sensors
-class ACSensor : Sensor {
+class ACSensor : public Sensor {
   public:
     ACSensor();
     void senseData();
@@ -57,7 +57,7 @@ class ACSensor : Sensor {
     int _acSensorSensitivity;
 };
 
-class PIRSensor : Sensor {
+class PIRSensor : public Sensor {
   public:
     PIRSensor();
     void senseData();
@@ -66,22 +66,22 @@ class PIRSensor : Sensor {
     int _timer;
 };
 
-class TempSensor : Sensor {
+class TempSensor : public Sensor {
   public:
     TempSensor();
     void senseData();
   protected:
 };
 
-class SoundSensor : Sensor {
+class SoundSensor : public Sensor {
   public:
     SoundSensor();
     void senseData();
   protected:    
 };
 
-class LightSensor : Sensor {
-  private:
+class LightSensor : public Sensor {
+  public:
     LightSensor();
     void setup(byte);
     void senseData();
@@ -133,7 +133,7 @@ class Device {
   public:
     Device();
     void getModuleStatus();
-    boolean addModule(byte);
+    boolean addModule(Module);
   protected:
     byte _lastIndex;
     Module _configuredModules[MAX_MODULES_X_DEVICE];

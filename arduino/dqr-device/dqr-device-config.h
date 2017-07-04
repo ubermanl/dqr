@@ -13,9 +13,9 @@
  */
 
 // Device Types
-#define LUX_TYPE_ID 1
+#define LUX_TYPE_ID      1
 #define POTENTIA_TYPE_ID 2
-#define OMNI_TYPE_ID 3
+#define OMNI_TYPE_ID     3
 
 // Potentia
 #define POT_RELAY_OUT     2
@@ -37,6 +37,7 @@
 #define RF24_MISO 12 
 #define RF24_SCK  13
 
+
 /*
  * These constants define max number of sensors per module, and max number of modules per devices
  */
@@ -46,10 +47,11 @@
 /*
  * These define the four possible states of a module, from the FSM perspective
  */
-#define MODULE_INACTIVE 0
-#define MODULE_ACTIVE 1
+#define MODULE_INACTIVE     0
+#define MODULE_ACTIVE       1
 #define MODULE_INACTIVE_OVR 2 
-#define MODULE_ACTIVE_OVR 3
+#define MODULE_ACTIVE_OVR   3
+
 
 /*
  * The ammount of seconds a PIR detection window lasts
