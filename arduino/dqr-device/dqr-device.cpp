@@ -176,15 +176,14 @@ boolean Module::addSensor(Sensor sen) {
 /*----------------------------------[ Device ]----------------------------------*/
 Device::Device() {};
 
-void Device::getModuleStatus() {
-  module_t modules[];
+module_t* Device::getModuleStatus(module_t* modules) {
   Module module;
   for (int i=0; i < sizeof(_configuredModules[0]); i++) {
     module = _configuredModules[i];
     module_t currentModule;
 
-    currentModule.moduleId = module.getId();
-    currentModule.moduleType = module.getType();
+    //currentModule.moduleId = module.getId();
+    //currentModule.moduleType = module.getType();
     currentModule.sensors = module.getSensorsData();
   }
   return modules;

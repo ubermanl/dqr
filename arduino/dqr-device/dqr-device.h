@@ -132,7 +132,7 @@ class Omni : public Module {
 class Device {
   public:
     Device();
-    void getModuleStatus();
+    module_t* getModuleStatus(module_t*);
     boolean addModule(Module);
   protected:
     byte _lastIndex;
