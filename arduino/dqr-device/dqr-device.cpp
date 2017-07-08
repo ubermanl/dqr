@@ -112,6 +112,7 @@ Module::Module() {
   _lastIndex = -1;
 };
 
+// Se podrían borrar todos os consturctores vacíos?
 Lux::Lux(): Module() {};
 Potentia::Potentia(): Module() {};
 Omni::Omni(): Module() {};
@@ -158,7 +159,7 @@ boolean Module::getRelayStatus() {
 };
 
 void Module::setupSensor() {};
-void Module::getSensorsData() {};
+sensor_t* Module::getSensorsData() {};
 void Module::getState() {};
 
 boolean Module::addSensor(Sensor sen) {
@@ -175,7 +176,19 @@ boolean Module::addSensor(Sensor sen) {
 /*----------------------------------[ Device ]----------------------------------*/
 Device::Device() {};
 
-void Device::getModuleStatus() {};
+void Device::getModuleStatus() {
+  module_t modules[];
+  Module module;
+  for (int i=0; i < sizeof(_configuredModules[0]); i++) {
+    module = _configuredModules[i];
+    module_t currentModule;
+
+    currentModule.moduleId = module.getId();
+    currentModule.moduleType = module.getType();
+    currentModule.sensors = module.getSensorsData();
+  }
+  return modules;
+};
 
 boolean Device::addModule(Module newModule) {
   if(_lastIndex == MAX_MODULES_X_DEVICE){

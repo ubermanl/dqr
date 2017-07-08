@@ -94,7 +94,7 @@ class LightSensor : public Sensor {
 class Module {
   public:
     Module();
-    void getSensorsData();
+    sensor_t* getSensorsData();
     void getState();
     boolean addSensor(Sensor);
     void setupSensor();

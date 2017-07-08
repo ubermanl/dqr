@@ -24,20 +24,28 @@ ACSensor potentiaACSensor;
 
 void setup() {
   Serial.begin(9600);
+
+  // setup Lux and Potentia Modules
+  luxModule.setup(LUX_RELAY_OUT, LUX_TOUCH_IN);
+  potentiaModule.setup(POT_RELAY_OUT);
+
+  // setup Lux sensors
   pirSensor.setup(LUX_PIR_SENS_IN);
   soundSensor.setup(LUX_SND_SENS_IN);
   luxACSensor.setup(LUX_AC_SENSOR_IN);
   lightSensor.setup(99);
-
-  luxModule.setup(LUX_RELAY_OUT, LUX_TOUCH_IN);
-
-  dqrDevice.addModule(luxModule);
+  
+  // setup Potentia sensors
   potentiaACSensor.setup(POT_AC_SENSOR_IN);
+
+  // Finally, add modules to DqR device
+  dqrDevice.addModule(luxModule);
   dqrDevice.addModule(potentiaModule);
 }
 
-void loop() { 
+void loop() {
   dqrDevice.getModuleStatus(); 
+  
   delay(1000);
 }
 
