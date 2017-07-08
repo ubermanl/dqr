@@ -77,9 +77,9 @@ void Device::runAwaitingConnection() {
 
 void Device::runUnmanaged() {
 	_currentState = DEVICE_UNMANAGED;
-  LOG2("Current Device State: ",_currentState);
 	if (millis() - _timer >= 15000) {
 		_timer = millis();
+    LOG2("Current Device State: ",_currentState);
 		_devFSM->transitionTo(*_sPreconfigured);
 	}
 }
