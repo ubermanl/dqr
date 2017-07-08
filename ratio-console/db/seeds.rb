@@ -5,7 +5,7 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-DeviceType.create([
+ModuleType.create([
     { name: 'DqR Lux' },
     { name: 'DqR Omni' },
     { name: 'DqR Potentia' }
@@ -18,6 +18,15 @@ Ambience.create([
                     { name:'Patio Trasero'},
                     { name:'Patio Delantero'}
 
+])
+
+SensorType.create([
+  {name: 'PIR - Presence', unit: '', max_value: 1, min_value: 0},
+  {name: 'TEM - Temperature',unit: 'deg', max_value: 100, min_value: 0},
+  {name: 'SND - Sound',unit: 'db', max_value: 1024, min_value: 0},
+  {name: 'TCH - Touch Button',unit: '', max_value:1, min_value:0},
+  {name: 'LUM - Luminosity',unit: 'lux', max_value:1024, min_value:0},
+  {name: 'AMP - Power Consumption',unit: 'amp', max_value:512, min_value:0}
 ])
 
 User.create([
