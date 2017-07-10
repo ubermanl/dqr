@@ -22,7 +22,7 @@ struct sensor_t {
 struct module_t {
   byte moduleId;
   byte moduleType;
-  sensor_t sensors[];
+  sensor_t sensors[MAX_SENSORS_X_MODULE];
   byte state;
 };
 
@@ -33,7 +33,8 @@ struct module_t {
 class Sensor {
   public:
     void setup(byte);
-    byte getId();
+    byte getId() { return _id; };
+    byte getType() { return _typeId; };
     float getAverageValue();
     void senseData();
     void setPin(int);
@@ -94,13 +95,17 @@ class LightSensor : public Sensor {
 class Module {
   public:
     Module();
-    sensor_t* getSensorsData();
+    byte getId() { return _id; };
+    byte getType() { return _typeId; };
+    void getSensorsData(sensor_t sensors[]);
     void getState();
     boolean addSensor(Sensor);
     void setupSensor();
     boolean setRelayStatus(boolean);
     boolean getRelayStatus();
   protected:
+    byte _id;
+    byte _typeId;
     byte _state;
     byte _lastIndex;
     Sensor _configuredSensors[MAX_SENSORS_X_MODULE];
@@ -132,7 +137,7 @@ class Omni : public Module {
 class Device {
   public:
     Device();
-    void getModuleStatus();
+    void getModuleStatus(module_t modules[]);
     boolean addModule(Module);
   protected:
     byte _lastIndex;

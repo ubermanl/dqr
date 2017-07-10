@@ -44,7 +44,8 @@ void setup() {
 }
 
 void loop() {
-  dqrDevice.getModuleStatus(); 
+  module_t modules[MAX_MODULES_X_DEVICE];
+  dqrDevice.getModuleStatus(modules); 
   
   delay(1000);
 }

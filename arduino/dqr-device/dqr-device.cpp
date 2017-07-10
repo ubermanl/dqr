@@ -159,7 +159,15 @@ boolean Module::getRelayStatus() {
 };
 
 void Module::setupSensor() {};
-sensor_t* Module::getSensorsData() {};
+
+void Module::getSensorsData(sensor_t sensors[]) {
+  for (int i=0; i <= _lastIndex; i++) {
+     sensors[i].sensorId = _configuredSensors[i].getId();
+     sensors[i].sensorType = _configuredSensors[i].getType();
+     sensors[i].avgValue = _configuredSensors[i].getAverageValue();
+  }
+};
+
 void Module::getState() {};
 
 boolean Module::addSensor(Sensor sen) {
@@ -176,18 +184,12 @@ boolean Module::addSensor(Sensor sen) {
 /*----------------------------------[ Device ]----------------------------------*/
 Device::Device() {};
 
-void Device::getModuleStatus() {
-  module_t modules[];
-  Module module;
-  for (int i=0; i < sizeof(_configuredModules[0]); i++) {
-    module = _configuredModules[i];
-    module_t currentModule;
-
-    currentModule.moduleId = module.getId();
-    currentModule.moduleType = module.getType();
-    currentModule.sensors = module.getSensorsData();
+void Device::getModuleStatus(module_t modules[]) {
+  for (int i=0; i <= _lastIndex; i++) {
+     modules[i].moduleId = _configuredModules[i].getId();
+     modules[i].moduleType = _configuredModules[i].getType();
+     _configuredModules[i].getSensorsData(modules[i].sensors);
   }
-  return modules;
 };
 
 boolean Device::addModule(Module newModule) {

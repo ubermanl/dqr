@@ -29,7 +29,7 @@ void setup() {
   Serial.begin(9600);
   Serial.flush();
   Device::setFSM(devFSM, sPreconfigured, sDiscovery, sAwaitingConnection, sUnmanaged, sOperational);
-  Device::setMesh(mesh);
+  Device::setNetwork(network,mesh);
   Device::setup();
 }
 
