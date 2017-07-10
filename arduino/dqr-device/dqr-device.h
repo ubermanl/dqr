@@ -144,17 +144,6 @@ class Device {
     Module _configuredModules[MAX_MODULES_X_DEVICE];
 };
 
-// NetworkModule class
-class NetworkModule {
-  public:
-    void getAddress();
-    void setAddress();
-    void send();
-    void receive();
-  protected:
-    byte _address;
-};
-
 #endif
 
 
