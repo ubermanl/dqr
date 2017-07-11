@@ -38,8 +38,7 @@ typedef struct {
 } payload_S;
 typedef struct {
   byte sensorId = 0;
-  byte value1 = 0;
-  byte value2 = 0;
+  unsigned char value[4];
 } payload_sensor;
 typedef struct {
   byte moduleId = 0;
@@ -55,6 +54,18 @@ typedef struct {
   byte moduleId;
 } payload_A;
 
+union float_t {
+   unsigned char part[4];
+   float number;
+};
+
+
+/*** Sensors Outputs ***/
+/**** 
+ - Luz: 0-1024 => /4
+ - Sonido:
+ - Corriente: 
+****/
 
 
 RF24 radio(RPI_V2_GPIO_P1_15, BCM2835_SPI_CS0, BCM2835_SPI_SPEED_8MHZ);  
@@ -108,8 +119,13 @@ while(1)
 					//while (j < MAX_SENSORS_X_MODULE && dat.modules[i].sensors[j].sensorId != 0) {
 					while (j < MAX_SENSORS_X_MODULE) {
 						printf("     . Sensor Id: %d\n",dat.modules[i].sensors[j].sensorId);
-						printf("     . Sensor Value: %d\n",dat.modules[i].sensors[j].value1);
-						printf("     . Sensor Value2: %d\n",dat.modules[i].sensors[j].value2);
+						float_t temp;
+						for (int n=0; n < 4; n++) {
+							temp.part[n] = dat.modules[i].sensors[j].value[n];
+							//printf("     . Sensor Value (%d): %d\n",n,temp.part[n]);
+						}
+					    printf("     . Sensor Value (Float): %f\n",temp.number);
+
 						j++;
 					}
 					i++;

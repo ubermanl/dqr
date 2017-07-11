@@ -98,7 +98,7 @@ class Module {
     byte getId() { return _id; };
     byte getType() { return _typeId; };
     void getSensorsData(sensor_t sensors[]);
-    void getState();
+    byte getState() { return _state; };
     boolean addSensor(Sensor);
     void setupSensor();
     boolean setRelayStatus(boolean);

@@ -168,8 +168,6 @@ void Module::getSensorsData(sensor_t sensors[]) {
   }
 };
 
-void Module::getState() {};
-
 boolean Module::addSensor(Sensor sen) {
  if(_lastIndex == MAX_SENSORS_X_MODULE){
   return false;

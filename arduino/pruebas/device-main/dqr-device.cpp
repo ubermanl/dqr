@@ -99,14 +99,13 @@ void Device::runOperational() {
     /* payload I example */
     payload_sensor sensor1, sensor2, sensor3;
     sensor1.sensorId = 5;
-    sensor1.value1 = 124;
-    sensor1.value2 = 125;
+    float value1 = 123.98765;
+    unsigned char const * p = reinterpret_cast<unsigned char const *>(&value1);
+    for (unsigned char i = 0; i != sizeof(float); ++i) {
+      sensor1.value[i] = p[i];
+    }
     sensor2.sensorId = 2;
-    sensor2.value1 = 250;
-    sensor2.value2 = 251;
     sensor3.sensorId = 2;
-    sensor3.value1 = 110;
-    sensor3.value2 = 111;
     payload_module module1, module2;
     module1.moduleId = 1;
     module1.state = 2;

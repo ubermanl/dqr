@@ -17,9 +17,9 @@
 /*** Device FSM State Codes ***/
 #define DEVICE_PRECONFIGURED 0
 #define DEVICE_DISCOVERY 1
-#define DEVICE_AWAITINGCONNECTION 3
-#define DEVICE_UNMANAGED 4
-#define DEVICE_OPERATIONAL 5
+#define DEVICE_AWAITINGCONNECTION 2
+#define DEVICE_UNMANAGED 3
+#define DEVICE_OPERATIONAL 4
 
 /*** Debugging  ***/
 #define DEBUG
@@ -47,8 +47,7 @@ typedef struct {
 } payload_S;
 typedef struct {
   byte sensorId = 0;
-  byte value1 = 0;
-  byte value2 = 0;
+  byte value[4] = { 0, 0, 0, 0 };
 } payload_sensor;
 typedef struct {
   byte moduleId = 0;
