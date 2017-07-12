@@ -101,8 +101,9 @@ class Module {
     byte getState() { return _state; };
     boolean addSensor(Sensor);
     void setupSensor();
-    boolean setRelayStatus(boolean);
+    void setRelayStatus(boolean);
     boolean getRelayStatus();
+    void toggleRelayStatus();
   protected:
     byte _id;
     byte _typeId;
@@ -115,20 +116,21 @@ class Module {
 
 class Lux : public Module {
   public:
-    Lux();
+    Lux() {};
     boolean setup(byte, byte);
+    byte getPinTouch() { return _pinTouch; }; 
   protected:
     int _pinTouch;
 };
 class Potentia : public Module {
   public:
-    Potentia();
+    Potentia() {};
     boolean setup(byte);
   protected:
 };
 class Omni : public Module {
   public:
-    Omni();
+    Omni() {};
     boolean setup();
   protected:  
 };

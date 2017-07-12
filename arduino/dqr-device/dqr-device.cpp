@@ -112,10 +112,6 @@ Module::Module() {
   _lastIndex = -1;
 };
 
-// Se podrían borrar todos os consturctores vacíos?
-Lux::Lux(): Module() {};
-Potentia::Potentia(): Module() {};
-Omni::Omni(): Module() {};
 
 boolean Lux::setup(byte pinRelay, byte pinTouch) {
   if ( pinTouch == 2 || pinTouch == 3)
@@ -127,13 +123,6 @@ boolean Lux::setup(byte pinRelay, byte pinTouch) {
   pinMode(_pinRelay, OUTPUT);  
   _relayStatus = HIGH; // Lux default is off
   digitalWrite(_pinRelay, ! _relayStatus);
-
-  // Prefixed list of sensors to add to a Lux device
-  //PIRSensor newSensor;
-  //addSensor(newSensor);
-  //ACSensor newSensor;
-  //addSensor(newSensor);
-  
   return true;
 };
 
@@ -146,16 +135,19 @@ boolean Potentia::setup(byte pinRelay) {
 
 boolean Omni::setup() {};
 
-boolean Module::setRelayStatus(boolean newStatus) {
+void Module::setRelayStatus(boolean newStatus) {
   if (_relayStatus != newStatus) {
     digitalWrite(_pinRelay, ! newStatus);
     _relayStatus = newStatus;
   };
-  return _relayStatus;
 };
 
 boolean Module::getRelayStatus() {
   return _relayStatus;
+};
+
+void Module::toggleRelayStatus() {
+  setRelayStatus(!getRelayStatus());
 };
 
 void Module::setupSensor() {};
