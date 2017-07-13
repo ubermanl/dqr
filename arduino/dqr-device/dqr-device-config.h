@@ -22,7 +22,7 @@
 #define POT_AC_SENSOR_IN A2
 
 // Lux
-#define LUX_TOUCH_IN      3
+#define LUX_TOUCH_IN 3
 #define LUX_RELAY_OUT     4
 #define LUX_AC_SENSOR_IN A3
 #define LUX_LUM_SENS_SDA A4   # This one is a default, not passed to the constructor

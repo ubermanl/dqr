@@ -109,14 +109,16 @@ float ACSensor::getACValue() {
 
 /*----------------------------------[ Module ]----------------------------------*/
 Module::Module() {
-  _lastIndex = -1;
+  
+  _configuredSensorsSize = 0;
 };
 
 
-boolean Lux::setup(byte pinRelay, byte pinTouch) {
-  if ( pinTouch == 2 || pinTouch == 3)
+boolean Lux::setup(byte id, byte pinRelay, byte pinTouch) {
+  if ( pinTouch != 2 && pinTouch != 3) {
     return false;
-
+  }
+  _id = id;
   _pinTouch = pinTouch;
   _pinRelay = pinRelay;
   pinMode(_pinTouch, INPUT);
@@ -126,14 +128,17 @@ boolean Lux::setup(byte pinRelay, byte pinTouch) {
   return true;
 };
 
-boolean Potentia::setup(byte pinRelay) {
+boolean Potentia::setup(byte id, byte pinRelay) {
+  _id = id;
   _pinRelay = pinRelay;
   pinMode(_pinRelay, OUTPUT);
   _relayStatus = LOW; // Potentia default is on
   digitalWrite(_pinRelay, ! _relayStatus);  
 };
 
-boolean Omni::setup() {};
+boolean Omni::setup(byte id) {
+  _id = id;  
+};
 
 void Module::setRelayStatus(boolean newStatus) {
   if (_relayStatus != newStatus) {
@@ -153,7 +158,7 @@ void Module::toggleRelayStatus() {
 void Module::setupSensor() {};
 
 void Module::getSensorsData(sensor_t sensors[]) {
-  for (int i=0; i <= _lastIndex; i++) {
+  for (int i=0; i <= _configuredSensorsSize; i++) {
      sensors[i].sensorId = _configuredSensors[i].getId();
      sensors[i].sensorType = _configuredSensors[i].getType();
      sensors[i].avgValue = _configuredSensors[i].getAverageValue();
@@ -161,11 +166,11 @@ void Module::getSensorsData(sensor_t sensors[]) {
 };
 
 boolean Module::addSensor(Sensor sen) {
- if(_lastIndex == MAX_SENSORS_X_MODULE){
+ if(_configuredSensorsSize >= MAX_SENSORS_X_MODULE){
   return false;
  }
- _lastIndex++;
- _configuredSensors[_lastIndex] = sen;
+ _configuredSensors[_configuredSensorsSize] = sen;
+ _configuredSensorsSize++;
  return true;
 };
 
@@ -175,19 +180,20 @@ boolean Module::addSensor(Sensor sen) {
 Device::Device() {};
 
 void Device::getModuleStatus(module_t modules[]) {
-  for (int i=0; i <= _lastIndex; i++) {
+  for (int i=0; i <_configuredModulesSize; i++) {
      modules[i].moduleId = _configuredModules[i].getId();
      modules[i].moduleType = _configuredModules[i].getType();
+     modules[i].state = _configuredModules[i].getState();
      _configuredModules[i].getSensorsData(modules[i].sensors);
   }
 };
 
-boolean Device::addModule(Module newModule) {
-  if(_lastIndex == MAX_MODULES_X_DEVICE){
+boolean Device::addModule(Module *newModule) {
+  if(_configuredModulesSize >= MAX_MODULES_X_DEVICE){
     return false;
   }
-  _lastIndex++;
-  _configuredModules[_lastIndex] = newModule;
+  _configuredModules[_configuredModulesSize] = newModule;
+  _configuredModulesSize++;
   return true;
 };
 

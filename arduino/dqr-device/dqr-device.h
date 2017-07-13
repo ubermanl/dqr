@@ -14,13 +14,13 @@
 
 /*----------------------------[ Data Structures ]-----------------------------*/
 struct sensor_t {
-  byte sensorId;
+  byte sensorId = 0;
   byte sensorType;
   float avgValue;
 };
 
 struct module_t {
-  byte moduleId;
+  byte moduleId = 0;
   byte moduleType;
   sensor_t sensors[MAX_SENSORS_X_MODULE];
   byte state;
@@ -98,7 +98,7 @@ class Module {
     byte getId() { return _id; };
     byte getType() { return _typeId; };
     void getSensorsData(sensor_t sensors[]);
-    byte getState() { return _state; };
+    byte getState() { return _relayStatus; }; // TODO: Cambiar esto a FSM
     boolean addSensor(Sensor);
     void setupSensor();
     void setRelayStatus(boolean);
@@ -108,7 +108,7 @@ class Module {
     byte _id;
     byte _typeId;
     byte _state;
-    byte _lastIndex;
+    byte _configuredSensorsSize;
     Sensor _configuredSensors[MAX_SENSORS_X_MODULE];
     int _pinRelay;      
     boolean _relayStatus;
@@ -116,22 +116,19 @@ class Module {
 
 class Lux : public Module {
   public:
-    Lux() {};
-    boolean setup(byte, byte);
+    boolean setup(byte, byte, byte);
     byte getPinTouch() { return _pinTouch; }; 
   protected:
-    int _pinTouch;
+    byte _pinTouch;
 };
 class Potentia : public Module {
   public:
-    Potentia() {};
-    boolean setup(byte);
+    boolean setup(byte, byte);
   protected:
 };
 class Omni : public Module {
   public:
-    Omni() {};
-    boolean setup();
+    boolean setup(byte);
   protected:  
 };
 
@@ -140,10 +137,11 @@ class Device {
   public:
     Device();
     void getModuleStatus(module_t modules[]);
-    boolean addModule(Module);
-  protected:
-    byte _lastIndex;
+    boolean addModule(Module *);
     Module _configuredModules[MAX_MODULES_X_DEVICE];
+  protected:
+    byte _configuredModulesSize;
+    
 };
 
 #endif
