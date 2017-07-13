@@ -44,8 +44,8 @@ void setup() {
   potentiaACSensor.setup(POT_AC_SENSOR_IN);
 
   // Finally, add modules to DqR device
-  dqrDevice.addModule(luxModule);
-  dqrDevice.addModule(potentiaModule);
+  dqrDevice.addModule(& luxModule);
+  dqrDevice.addModule(& potentiaModule);
 
   attachInterrupt(digitalPinToInterrupt(LUX_TOUCH_IN), toggleRelayStatus, RISING);
 
@@ -57,7 +57,7 @@ void loop() {
 
   int i=0;
   Serial.println(luxModule.getState());
-  Serial.println(dqrDevice._configuredModules[0].getState());
+  Serial.println(dqrDevice._configuredModules[0]->getState());
   while (i < MAX_MODULES_X_DEVICE && modules[i].moduleId != 0) {
     Serial.print("   . Module Id: ");
     Serial.println(modules[i].moduleId);

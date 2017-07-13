@@ -181,14 +181,14 @@ Device::Device() {};
 
 void Device::getModuleStatus(module_t modules[]) {
   for (int i=0; i <_configuredModulesSize; i++) {
-     modules[i].moduleId = _configuredModules[i].getId();
-     modules[i].moduleType = _configuredModules[i].getType();
-     modules[i].state = _configuredModules[i].getState();
-     _configuredModules[i].getSensorsData(modules[i].sensors);
+     modules[i].moduleId = _configuredModules[i]->getId();
+     modules[i].moduleType = _configuredModules[i]->getType();
+     modules[i].state = _configuredModules[i]->getState();
+     _configuredModules[i]->getSensorsData(modules[i].sensors);
   }
 };
 
-boolean Device::addModule(Module *newModule) {
+boolean Device::addModule(Module * newModule) {
   if(_configuredModulesSize >= MAX_MODULES_X_DEVICE){
     return false;
   }

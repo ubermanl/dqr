@@ -138,9 +138,9 @@ class Device {
     Device();
     void getModuleStatus(module_t modules[]);
     boolean addModule(Module *);
-    Module _configuredModules[MAX_MODULES_X_DEVICE];
+    Module * _configuredModules[MAX_MODULES_X_DEVICE]; // TODO: Mover a protected
   protected:
-    byte _configuredModulesSize;
+    byte _configuredModulesSize = 0;
     
 };
 
