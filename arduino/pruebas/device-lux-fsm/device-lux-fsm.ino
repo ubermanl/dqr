@@ -7,19 +7,25 @@
 #include <FiniteStateMachine.h>
 
 // Constants
-#define LUX_OUTPUT 7
-#define TOUCH_INPUT  2
+#define LUX_OUTPUT 13
+#define TOUCH_INPUT  3
 #define CURRENT_INPUT A0
-#define LUX_DEFAULT_RELAY HIGH
+#define LUX_DEFAULT_RELAY LOW
 
 // Global Variables
 int relayState = LUX_DEFAULT_RELAY;      // relay apagado
 int touchCurrent = LOW;
 int touchLastState = LOW;
 
+// Function primitives
+void LuxOperational();
+
 // FSM Variables
+
 State LuxInactive = State(LuxOperational);
 State LuxActive = State(LuxOperational);
+
+
 State LuxInactiveOvr = State(LuxOperational);
 State LuxActiveOvr = State(LuxOperational);
 FSM luxFSM = FiniteStateMachine(LuxInactive);
@@ -58,10 +64,10 @@ int toggleRelay() {
   digitalWrite(LUX_OUTPUT, relayState);
 }
 void lightOn() {
-  digitalWrite(LUX_OUTPUT, LOW);
+  digitalWrite(LUX_OUTPUT, HIGH);
 }
 void lightOff() {
-  digitalWrite(LUX_OUTPUT, HIGH);
+  digitalWrite(LUX_OUTPUT, LOW);
 }
 
 void processMessages() {
