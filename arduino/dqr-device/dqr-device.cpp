@@ -13,21 +13,32 @@
  */
 
 /*----------------------------------[ Sensor ]----------------------------------*/
-void Sensor::setup(byte pinSensor) {
-  _pinSensor = pinSensor;
+Sensor::Sensor(byte id, byte type, byte pin) {
+  _id = id;
+  _typeId = type;
+  _pinSensor = pin;
+  _accumulatedValue = 0;
+  _currentValue = 0;
+  _sampleCount = 0;
+}
+
+void Sensor::setup() {
   pinMode(_pinSensor, INPUT);
-};
+}
 
 float Sensor::getAverageValue() {
+  if (_sampleCount == 0) {
+    return 0;
+  }
   float avg = _accumulatedValue / _sampleCount;
   _accumulatedValue = 0;
   _sampleCount = 0;
   return avg;
 };
 
-
 // Sound
-SoundSensor::SoundSensor() {};
+SoundSensor::SoundSensor(byte id, byte pin) : Sensor(id, SND_TYPE_ID, pin) {};
+
 void SoundSensor::senseData() {
   _currentValue = analogRead(_pinSensor);
   _accumulatedValue += _currentValue;
@@ -35,23 +46,26 @@ void SoundSensor::senseData() {
 };
 
 // PIR
-PIRSensor::PIRSensor() {};
+PIRSensor::PIRSensor(byte id, byte pin) : Sensor(id, PIR_TYPE_ID, pin) {};
 
 void PIRSensor::senseData() {
   _currentValue = digitalRead(_pinSensor);
+  /* TODO: "suavizar" deteccion de movimiento
   if ( _currentValue == 1 )
     _timer = 0;
   else if ( _timer < PIR_TIMEOUT_SECONDS )
     _currentValue = 1;
-  };
+  */
+};
 
 float PIRSensor::getAverageValue() {
   return _currentValue;
 };
 
 // Light
-LightSensor::LightSensor() {};
-void LightSensor::setup(byte dummy) {
+LightSensor::LightSensor(byte id, byte pin) : Sensor(id, LUM_TYPE_ID, pin) {};
+
+void LightSensor::setup() {
   _lightSensor.begin(BH1750_CONTINUOUS_HIGH_RES_MODE_2);
 };
 
@@ -62,7 +76,7 @@ void LightSensor::senseData() {
 };
 
 // AC
-ACSensor::ACSensor() {};
+ACSensor::ACSensor(byte id, byte pin) : Sensor(id, AC_TYPE_ID, pin) {};
 
 void ACSensor::senseData() {
   _currentValue = getACValue();
@@ -72,7 +86,7 @@ void ACSensor::senseData() {
 
 float ACSensor::getACValue() {
   int numberOfPeriods = 20; // We are measuring 20 cicles of a 50Hz function
-  double startTime = millis();
+  uint32_t startTime = millis();
   int max = 0;
   int min = 1023;
   int rVal = 0;
@@ -108,19 +122,23 @@ float ACSensor::getACValue() {
 
 
 /*----------------------------------[ Module ]----------------------------------*/
-Module::Module() {
-  
+Module::Module(byte id, byte type) {
+  _id = id;
+  _typeId = type;
   _configuredSensorsSize = 0;
+  _relayStatus = 0;
 };
 
+Lux::Lux(struct luxConfig conf) : Module(conf.ID, LUX_TYPE_ID) {
+  _conf = conf;  
+}
 
-boolean Lux::setup(byte id, byte pinRelay, byte pinTouch) {
-  if ( pinTouch != 2 && pinTouch != 3) {
+boolean Lux::setup() {
+  if ( _conf.TOUCH_IN != 2 && _conf.TOUCH_IN != 3) {
     return false;
   }
-  _id = id;
-  _pinTouch = pinTouch;
-  _pinRelay = pinRelay;
+  _pinTouch = _conf.TOUCH_IN;
+  _pinRelay = _conf.RELAY_OUT;
   pinMode(_pinTouch, INPUT);
   pinMode(_pinRelay, OUTPUT);  
   _relayStatus = HIGH; // Lux default is off
@@ -128,16 +146,24 @@ boolean Lux::setup(byte id, byte pinRelay, byte pinTouch) {
   return true;
 };
 
-boolean Potentia::setup(byte id, byte pinRelay) {
-  _id = id;
-  _pinRelay = pinRelay;
+Potentia::Potentia(struct potentiaConfig conf) : Module(conf.ID, POTENTIA_TYPE_ID) {
+  _conf = conf;
+}
+
+boolean Potentia::setup() {
+  _pinRelay = _conf.RELAY_OUT;
   pinMode(_pinRelay, OUTPUT);
   _relayStatus = LOW; // Potentia default is on
   digitalWrite(_pinRelay, ! _relayStatus);  
+  return true;
 };
 
-boolean Omni::setup(byte id) {
-  _id = id;  
+Omni::Omni(struct omniConfig conf) : Module(conf.ID, OMNI_TYPE_ID) {
+  _conf = conf;
+}
+
+boolean Omni::setup() {
+  return true;
 };
 
 void Module::setRelayStatus(boolean newStatus) {
@@ -155,17 +181,21 @@ void Module::toggleRelayStatus() {
   setRelayStatus(!getRelayStatus());
 };
 
-void Module::setupSensor() {};
-
-void Module::getSensorsData(sensor_t sensors[]) {
-  for (int i=0; i <= _configuredSensorsSize; i++) {
-     sensors[i].sensorId = _configuredSensors[i].getId();
-     sensors[i].sensorType = _configuredSensors[i].getType();
-     sensors[i].avgValue = _configuredSensors[i].getAverageValue();
+void Module::setupSensors() {
+  for (int i=0; i < _configuredSensorsSize; i++) {
+    _configuredSensors[i]->setup();
   }
 };
 
-boolean Module::addSensor(Sensor sen) {
+void Module::getSensorsData(sensor_t sensors[]) {
+  for (int i=0; i < _configuredSensorsSize; i++) {
+     sensors[i].sensorId = _configuredSensors[i]->getId();
+     sensors[i].sensorType = _configuredSensors[i]->getType();
+     sensors[i].avgValue = _configuredSensors[i]->getAverageValue();
+  }
+};
+
+boolean Module::addSensor(Sensor * sen) {
  if(_configuredSensorsSize >= MAX_SENSORS_X_MODULE){
   return false;
  }
@@ -174,13 +204,19 @@ boolean Module::addSensor(Sensor sen) {
  return true;
 };
 
+void Module::run() {
+  for (int i=0; i < _configuredSensorsSize; i++) {
+     _configuredSensors[i]->senseData();
+  }
+}
+
 
 
 /*----------------------------------[ Device ]----------------------------------*/
 Device::Device() {};
 
 void Device::getModuleStatus(module_t modules[]) {
-  for (int i=0; i <_configuredModulesSize; i++) {
+  for (int i=0; i < _configuredModulesSize; i++) {
      modules[i].moduleId = _configuredModules[i]->getId();
      modules[i].moduleType = _configuredModules[i]->getType();
      modules[i].state = _configuredModules[i]->getState();
@@ -196,5 +232,29 @@ boolean Device::addModule(Module * newModule) {
   _configuredModulesSize++;
   return true;
 };
+
+void Device::setupModules() {  
+  for (int i=0; i < _configuredModulesSize; i++) {
+    _configuredModules[i]->setup();
+    _configuredModules[i]->setupSensors();
+    switch (_configuredModules[i]->getType()) {
+      case LUX_TYPE_ID:
+        LOG2("LUX Module Setup, id: ", _configuredModules[i]->getId());
+        break;
+      case POTENTIA_TYPE_ID:
+        LOG2("POTENTIA Module Setup, id: ", _configuredModules[i]->getId());
+        break;
+      case OMNI_TYPE_ID:
+        LOG2("OMNI Module Setup, id: ", _configuredModules[i]->getId());
+        break;
+    }
+  }
+}
+
+void Device::run() {
+  for (int i=0; i < _configuredModulesSize; i++) {
+     _configuredModules[i]->run();
+  }
+}
 
 
