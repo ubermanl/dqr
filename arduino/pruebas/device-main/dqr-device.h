@@ -40,28 +40,29 @@
 #define S_SUBTYPE_SENSOR 2
 enum S_subtype { all = S_SUBTYPE_ALL, state = S_SUBTYPE_STATE, sensor = S_SUBTYPE_SENSOR };
 
-typedef struct {
+struct __attribute__ ((__packed__)) payload_S {
   S_subtype subtype;
   byte moduleId[MAX_MODULES_X_DEVICE];
   byte sensorId[MAX_SENSORS_X_MODULE];
-} payload_S;
-typedef struct {
+};
+struct __attribute__ ((__packed__)) payload_sensor {
   byte sensorId = 0;
-  byte value[4] = { 0, 0, 0, 0 };
-} payload_sensor;
-typedef struct {
+  //byte value[4] = { 0, 0, 0, 0 };
+  float value;
+};
+struct __attribute__ ((__packed__)) payload_module {
   byte moduleId = 0;
   byte state = 0;
   payload_sensor sensors[MAX_SENSORS_X_MODULE];
-} payload_module;
-typedef struct {
+};
+struct __attribute__ ((__packed__)) payload_I {
   byte deviceId = 0;
   payload_module modules[MAX_MODULES_X_DEVICE];
-} payload_I;
-typedef struct {
+};
+struct __attribute__ ((__packed__)) payload_A {
   byte desiredState;
   byte moduleId;
-} payload_A;
+};
 
 
 class Device {

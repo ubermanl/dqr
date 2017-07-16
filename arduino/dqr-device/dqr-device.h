@@ -9,7 +9,10 @@
 
 #include "Arduino.h"
 #include <BH1750.h>
+#include <FiniteStateMachine.h>
 #include "dqr-device-config.h"
+#include "dqr-device-network.h"
+
 
 /*** Debugging  ***/
 #define DEBUG
@@ -21,20 +24,6 @@
 #define LOG2(m1,m2)
 #endif
 
-
-/*----------------------------[ Data Structures ]-----------------------------*/
-struct sensor_t {
-  byte sensorId = 0;
-  byte sensorType;
-  float avgValue;
-};
-
-struct module_t {
-  byte moduleId = 0;
-  byte moduleType;
-  sensor_t sensors[MAX_SENSORS_X_MODULE];
-  byte state;
-};
 
 /*--------------------------------[ Classes ]---------------------------------*/
 
@@ -48,6 +37,8 @@ class Sensor {
     virtual float getAverageValue();
     virtual void senseData() = 0;
     void setPin(int);
+    boolean isUrgentNotification() { return _notifyCurrentValue; };
+    void resetUrgentNotification() { _notifyCurrentValue = false; };
   protected:
     byte _id;
     byte _typeId;
@@ -55,6 +46,7 @@ class Sensor {
     float _currentValue;
     int _sampleCount;
     int _pinSensor;
+    boolean _notifyCurrentValue = false;
 };
 
 
@@ -107,13 +99,12 @@ class Module {
     Module(byte, byte);
     byte getId() { return _id; };
     byte getType() { return _typeId; };
-    void getSensorsData(sensor_t sensors[]);
-    byte getState() { return _relayStatus; }; // TODO: Cambiar esto a FSM
+    void getSensorsData(payload_sensor sensors[]);
+    byte getState() { return _state; };
     boolean addSensor(Sensor *);
     void setupSensors();
     void setRelayStatus(boolean);
     boolean getRelayStatus();
-    void toggleRelayStatus();
     virtual boolean setup() = 0;
     void run();
   protected:
@@ -131,6 +122,8 @@ class Lux : public Module {
     Lux(struct luxConfig conf);
     boolean setup();
     byte getPinTouch() { return _pinTouch; }; 
+    void touchEvent();
+    void setDesiredState(boolean);
   private:
     byte _pinTouch;
     struct luxConfig _conf;
@@ -153,14 +146,74 @@ class Omni : public Module {
 // Device class
 class Device {
   public:
-    Device();
-    void setupModules();
-    void getModuleStatus(module_t modules[]);
-    boolean addModule(Module *);
-    void run();
-  protected:
-    Module * _configuredModules[MAX_MODULES_X_DEVICE];
-    byte _configuredModulesSize = 0;
+    /*
+     * Device setup initialization
+     * Arduino Setup()
+     */
+    static void setFSM(FSM &fsm, State &pc, State &di, State &aw, State &un, State &op);
+    static void setNetwork(RF24Network &network, RF24Mesh &mesh);
+    static void setup();
+
+    /*
+     * Device Modules operation
+     */
+    static void setupModules();
+    static void getModuleStatus(payload_module modules[]);
+    static boolean addModule(Module *);
+    
+    /*
+     * Device continuos operation
+     * Arduino Loop()
+     */
+    static void run();
+
+    /*
+     * Send Message to Ratio
+     */
+    static void sendMessage(const void * data, uint8_t msg_type, size_t size);
+
+    /*
+     * Preconfigured State Operation
+     */
+    static void runPreconfigured();
+    
+    /*
+     * Discovery State Operation
+     */
+    static void runDiscovery();
+    
+    /*
+     * Awaiting Connection State Operation
+     */
+    static void runAwaitingConnection();
+    
+    /*
+     * Unmanage State Operation
+     */
+    static void runUnmanaged();
+    
+    /*
+     * Fully Operational State Operation
+     */
+    static void runOperational();
+
+  private:
+    /*** Variables ***/
+    static Module * _configuredModules[MAX_MODULES_X_DEVICE];
+    static byte _configuredModulesSize;
+    static State * _sPreconfigured;
+    static State * _sDiscovery;
+    static State * _sAwaitingConnection;
+    static State * _sUnmanaged;
+    static State * _sOperational;
+    static FSM * _devFSM;
+    static byte _currentState;
+    static uint32_t _timer;
+    static RF24Network * _network;
+    static RF24Mesh * _mesh;
+
+    /*** Methods ***/
+    static void receive();
 };
 
 #endif

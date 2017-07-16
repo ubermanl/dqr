@@ -4,17 +4,11 @@
    --- DqR Systems 2017 ---
 */
 
-
-// Definition of classes
 #include "dqr-device.h"
 
-uint32_t timer = 0;
-module_t modules[MAX_MODULES_X_DEVICE];
-
 /*
-   Device Initialization: This sample configuration has 1x Lux and 1x Potentia module
-*/
-Device dqrDevice;
+ *  Device Initialization: This sample configuration has 1x Lux and 1x Potentia module
+ */
 Lux luxModule(luxConfig1);
 ACSensor luxACSensor(100, luxConfig1.AC_SENSOR_IN);
 PIRSensor pirSensor(101, luxConfig1.PIR_SENS_IN);
@@ -24,15 +18,37 @@ LightSensor lightSensor(103, luxConfig1.LUM_SENS_SDA);
 Potentia potentiaModule(potentiaConfig1);
 ACSensor potentiaACSensor(104, potentiaConfig1.AC_SENSOR_IN);
 
-
 /*** Helper Functions ***/
 void toggleRelayStatus() {
   Serial.println("Button pressed");
-  luxModule.toggleRelayStatus();
+  luxModule.touchEvent();
 }
+
+
+
+/**** Configure the nrf24l01 CE and CS pins ****/
+RF24 radio(RF24_CE, RF24_CSN);
+RF24Network network(radio);
+RF24Mesh mesh(radio, network);
+
+/**** FSM States ****/
+State sPreconfigured = State(Device::runPreconfigured);
+State sDiscovery = State(Device::runDiscovery);
+State sAwaitingConnection = State(Device::runAwaitingConnection);
+State sUnmanaged = State(Device::runUnmanaged);
+State sOperational = State(Device::runOperational);
+FSM devFSM = FSM(sPreconfigured); 
+
 
 void setup() {
   Serial.begin(9600);
+  Serial.setTimeout(250);
+  Serial.flush();
+
+  // Device Initial config
+  Device::setFSM(devFSM, sPreconfigured, sDiscovery, sAwaitingConnection, sUnmanaged, sOperational);
+  Device::setNetwork(network,mesh);
+  Device::setup();
 
   // Sensors Config
   luxModule.addSensor(& luxACSensor);
@@ -42,9 +58,9 @@ void setup() {
   potentiaModule.addSensor(& potentiaACSensor);
 
   // Modules Config
-  dqrDevice.addModule(& luxModule);
-  dqrDevice.addModule(& potentiaModule);
-  dqrDevice.setupModules();
+  Device::addModule(& luxModule);
+  Device::addModule(& potentiaModule);
+  Device::setupModules();
 
   /**** CONFIG: Interruptions for Lux Modules ****/
   attachInterrupt(digitalPinToInterrupt(luxConfig1.TOUCH_IN), toggleRelayStatus, RISING);
@@ -52,28 +68,26 @@ void setup() {
 }
 
 void loop() {
+  
+  Device::run();
 
-  dqrDevice.run();
-  
-  if (millis() - timer > 5000) {
-    timer = millis();
-  
-    dqrDevice.getModuleStatus(modules);
 
-    int i=0;
-    while (i < MAX_MODULES_X_DEVICE && modules[i].moduleId != 0) {
-      LOG2("   . Module Id: ", modules[i].moduleId);
-      LOG2("   . Module State: ", modules[i].state);
-  
-      int j = 0;
-      while (j < MAX_SENSORS_X_MODULE && modules[i].sensors[j].sensorId != 0) {
-        LOG2("     . Sensor Id: ", modules[i].sensors[j].sensorId);
-        LOG2("     . Sensor Value: ", modules[i].sensors[j].avgValue);
-        j++;
-      }
-      i++;
+  /*************** TODO LO QUE ESTA ACA ES PARA PROBAR Y SE PUEDE BORRAR *************************/
+
+  /*
+  // Agregado para probar activacion del LUX por SERIAL
+  if (Serial.available() > 0) {
+    Serial.print("Processing messages...");
+    String msg = Serial.readString();
+    if ( msg == "ON") {
+      luxModule.setDesiredState(true);
+    } else if (msg == "OFF") {
+      luxModule.setDesiredState(false);
     }
-    LOG("------------------------ LOOP 5 segs ---------------------------");
- }
+    Serial.println(" Complete!");
+  }
+  */
+
+ /*************** TODO LO QUE ESTA ACA ES PARA PROBAR Y SE PUEDE BORRAR *************************/
 }
 

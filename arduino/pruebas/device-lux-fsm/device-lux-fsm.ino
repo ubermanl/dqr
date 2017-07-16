@@ -14,18 +14,15 @@
 
 // Global Variables
 int relayState = LUX_DEFAULT_RELAY;      // relay apagado
-int touchCurrent = LOW;
-int touchLastState = LOW;
+//int touchCurrent = LOW;
+//int touchLastState = LOW;
 
 // Function primitives
 void LuxOperational();
 
 // FSM Variables
-
 State LuxInactive = State(LuxOperational);
 State LuxActive = State(LuxOperational);
-
-
 State LuxInactiveOvr = State(LuxOperational);
 State LuxActiveOvr = State(LuxOperational);
 FSM luxFSM = FiniteStateMachine(LuxInactive);

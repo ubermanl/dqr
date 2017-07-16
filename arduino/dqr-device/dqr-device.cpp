@@ -50,12 +50,18 @@ PIRSensor::PIRSensor(byte id, byte pin) : Sensor(id, PIR_TYPE_ID, pin) {};
 
 void PIRSensor::senseData() {
   _currentValue = digitalRead(_pinSensor);
-  /* TODO: "suavizar" deteccion de movimiento
-  if ( _currentValue == 1 )
-    _timer = 0;
-  else if ( _timer < PIR_TIMEOUT_SECONDS )
-    _currentValue = 1;
-  */
+
+  if ( _currentValue == 1 ) {
+    if ( (millis() - _timer) / 1000 > PIR_TIMEOUT_SECONDS ) {
+      /* Send movement detection */
+      _notifyCurrentValue = true;
+    }
+    _timer = millis();
+  } else {
+    if ( (millis() - _timer) / 1000 < PIR_TIMEOUT_SECONDS ) {
+      _currentValue = 1;
+    }
+  }      
 };
 
 float PIRSensor::getAverageValue() {
@@ -141,10 +147,56 @@ boolean Lux::setup() {
   _pinRelay = _conf.RELAY_OUT;
   pinMode(_pinTouch, INPUT);
   pinMode(_pinRelay, OUTPUT);  
-  _relayStatus = HIGH; // Lux default is off
+  _relayStatus = LUX_DEFAULT_RELAY;
   digitalWrite(_pinRelay, ! _relayStatus);
   return true;
 };
+
+void Lux::touchEvent() {
+  switch (_state) {
+    case MODULE_INACTIVE:
+      _state = MODULE_ACTIVE_OVR;
+      setRelayStatus(LUX_RELAY_ON);
+      break;
+    case MODULE_ACTIVE:
+      _state = MODULE_INACTIVE_OVR;
+      setRelayStatus(LUX_RELAY_OFF);
+      break;
+    case MODULE_INACTIVE_OVR:
+      _state = MODULE_ACTIVE;
+      setRelayStatus(LUX_RELAY_ON);
+      break;
+    case MODULE_ACTIVE_OVR:
+      _state = MODULE_INACTIVE;
+      setRelayStatus(LUX_RELAY_OFF);
+      break;
+  }
+}
+
+void Lux::setDesiredState(boolean desiredState) {
+  if (desiredState) {
+    switch (_state) {
+      case MODULE_INACTIVE:
+        _state = MODULE_ACTIVE;
+        setRelayStatus(LUX_RELAY_ON);
+        break;
+      case MODULE_ACTIVE_OVR:
+        _state = MODULE_ACTIVE;
+        break;
+    }
+  } else {
+    switch (_state) {
+      case MODULE_INACTIVE_OVR:
+        _state = MODULE_INACTIVE;
+        break;
+      case MODULE_ACTIVE:
+        _state = MODULE_INACTIVE;
+        setRelayStatus(LUX_RELAY_OFF);
+        break;
+    }
+  }
+}
+
 
 Potentia::Potentia(struct potentiaConfig conf) : Module(conf.ID, POTENTIA_TYPE_ID) {
   _conf = conf;
@@ -153,7 +205,7 @@ Potentia::Potentia(struct potentiaConfig conf) : Module(conf.ID, POTENTIA_TYPE_I
 boolean Potentia::setup() {
   _pinRelay = _conf.RELAY_OUT;
   pinMode(_pinRelay, OUTPUT);
-  _relayStatus = LOW; // Potentia default is on
+  _relayStatus = POTENTIA_DEFAULT_RELAY;
   digitalWrite(_pinRelay, ! _relayStatus);  
   return true;
 };
@@ -177,9 +229,11 @@ boolean Module::getRelayStatus() {
   return _relayStatus;
 };
 
+/*
 void Module::toggleRelayStatus() {
   setRelayStatus(!getRelayStatus());
 };
+*/
 
 void Module::setupSensors() {
   for (int i=0; i < _configuredSensorsSize; i++) {
@@ -187,11 +241,10 @@ void Module::setupSensors() {
   }
 };
 
-void Module::getSensorsData(sensor_t sensors[]) {
+void Module::getSensorsData(payload_sensor sensors[]) {
   for (int i=0; i < _configuredSensorsSize; i++) {
      sensors[i].sensorId = _configuredSensors[i]->getId();
-     sensors[i].sensorType = _configuredSensors[i]->getType();
-     sensors[i].avgValue = _configuredSensors[i]->getAverageValue();
+     sensors[i].value = _configuredSensors[i]->getAverageValue();
   }
 };
 
@@ -206,19 +259,68 @@ boolean Module::addSensor(Sensor * sen) {
 
 void Module::run() {
   for (int i=0; i < _configuredSensorsSize; i++) {
-     _configuredSensors[i]->senseData();
+    _configuredSensors[i]->senseData();
+    if (_configuredSensors[i]->isUrgentNotification()) {
+      payload_I payload;
+      payload.deviceId = DEVICE_NODE_ID;
+      payload.modules[0].moduleId = _id;
+      payload.modules[0].state = _state;
+      payload.modules[0].sensors[0].sensorId = _configuredSensors[i]->getId();
+      payload.modules[0].sensors[0].value = _configuredSensors[i]->getAverageValue();
+      Device::sendMessage(&payload, 'I', sizeof(payload));
+      _configuredSensors[i]->resetUrgentNotification();
+    }
   }
 }
 
 
 
 /*----------------------------------[ Device ]----------------------------------*/
-Device::Device() {};
 
-void Device::getModuleStatus(module_t modules[]) {
+/*** Static variables definitions ***/
+Module * Device::_configuredModules[MAX_MODULES_X_DEVICE];
+byte Device::_configuredModulesSize;
+State * Device::_sPreconfigured;
+State * Device::_sDiscovery;
+State * Device::_sAwaitingConnection;
+State * Device::_sUnmanaged;
+State * Device::_sOperational;
+FSM * Device::_devFSM;
+byte Device::_currentState;
+uint32_t Device::_timer;
+RF24Network * Device::_network;
+RF24Mesh * Device::_mesh;
+
+/*** Setup device FSM ***/
+void Device::setFSM(FSM &fsm, State &pc, State &di, State &aw, State &un, State &op) {
+  _sPreconfigured = &pc;
+  _sDiscovery = &di;
+  _sAwaitingConnection = &aw;
+  _sUnmanaged = &un;
+  _sOperational = &op;
+  _devFSM = &fsm;
+}
+
+/*** Setup device Mesh connection ***/
+void Device::setNetwork(RF24Network &network, RF24Mesh &mesh) {
+  _network = &network;
+  _mesh = &mesh;
+}
+
+/*** Overall device Setup ***/
+void Device::setup() {
+  /**** Mesh setup and initialization ****/
+  _mesh->setNodeID(DEVICE_NODE_ID);
+  LOG(F("Connecting to the mesh..."));
+  _mesh->begin();
+
+  _configuredModulesSize = 0;
+  _timer = 0;
+}
+
+void Device::getModuleStatus(payload_module modules[]) {
   for (int i=0; i < _configuredModulesSize; i++) {
      modules[i].moduleId = _configuredModules[i]->getId();
-     modules[i].moduleType = _configuredModules[i]->getType();
      modules[i].state = _configuredModules[i]->getState();
      _configuredModules[i]->getSensorsData(modules[i].sensors);
   }
@@ -251,9 +353,117 @@ void Device::setupModules() {
   }
 }
 
+/*** Device methods for different operating States ***/
+void Device::runPreconfigured() {
+  _currentState = DEVICE_PRECONFIGURED;
+  LOG2("Current Device State: ",_currentState);
+  
+  if (_mesh->checkConnection()) {
+    _devFSM->transitionTo(*_sOperational);
+  } else {
+    _devFSM->transitionTo(*_sDiscovery);
+  }
+}
+
+void Device::runDiscovery() {
+  _currentState = DEVICE_DISCOVERY;
+  LOG2("Current Device State: ",_currentState);
+  
+  _mesh->renewAddress();
+  _devFSM->transitionTo(*_sAwaitingConnection);
+}
+
+void Device::runAwaitingConnection() {
+  _currentState = DEVICE_AWAITINGCONNECTION;
+   LOG2("Current Device State: ",_currentState);
+  
+  if (_mesh->checkConnection()) {
+    _devFSM->transitionTo(*_sOperational);
+  } else {
+    _timer = millis();
+    _devFSM->transitionTo(*_sUnmanaged);
+  }
+}
+
+void Device::runUnmanaged() {
+  _currentState = DEVICE_UNMANAGED;
+  if (millis() - _timer >= 15000) {
+    _timer = millis();
+    LOG2("Current Device State: ",_currentState);
+    _devFSM->transitionTo(*_sPreconfigured);
+  }
+}
+
+void Device::runOperational() {
+  _currentState = DEVICE_OPERATIONAL;
+  
+  _mesh->update();
+  
+  // Send to the master node Information Message
+  if ((millis() - _timer) / 1000 >= SEND_TO_RATIO_PERIOD ) {
+    _timer = millis();
+    LOG2("Current Device State: ",_currentState);
+    
+    payload_I payload;
+    payload.deviceId = DEVICE_NODE_ID;
+    getModuleStatus(payload.modules);
+    
+    sendMessage(&payload, 'I', sizeof(payload));
+  }
+  
+
+  receive();
+}
+
+/*** Device running in loop() ***/
 void Device::run() {
+  _devFSM->update();
   for (int i=0; i < _configuredModulesSize; i++) {
      _configuredModules[i]->run();
+  }
+}
+
+/*** Private Functions ***/
+
+void Device::sendMessage(const void * data, uint8_t msg_type, size_t size) {
+  if (!_mesh->write(data, msg_type, size)) {
+    LOG("Send Failed!");
+    _devFSM->transitionTo(*_sPreconfigured);
+  } else {
+    LOG2("Send OK: ",_timer);
+  }
+}
+
+void Device::receive() {
+  while (_network->available()) {
+    RF24NetworkHeader header;
+    _network->peek(header);
+    switch (header.type) {
+      case REQUEST_MESSAGE:
+      {
+        payload_S payload;
+        _network->read(header, &payload, sizeof(payload));
+        LOG2("Received packet #", payload.subtype);
+        break;
+      }
+      case INFORM_MESSAGE:
+      {
+        payload_I payload;
+        _network->read(header, &payload, sizeof(payload));
+        LOG2("Received packet #", payload.deviceId);
+        break;
+      }
+      case ACTION_MESSAGE:
+      {
+        payload_A payload;
+        _network->read(header, &payload, sizeof(payload));
+        LOG2("Received packet #", payload.moduleId);
+        break;
+      }
+      default:
+        LOG("Error in received message: Invalid type");
+    }
+    
   }
 }
 

@@ -100,12 +100,17 @@ void Device::runOperational() {
     payload_sensor sensor1, sensor2, sensor3;
     sensor1.sensorId = 5;
     float value1 = 123.98765;
+    /*
     unsigned char const * p = reinterpret_cast<unsigned char const *>(&value1);
     for (unsigned char i = 0; i != sizeof(float); ++i) {
       sensor1.value[i] = p[i];
     }
+    */
+    sensor1.value = value1;
     sensor2.sensorId = 2;
+    sensor2.value = 234.567;
     sensor3.sensorId = 2;
+    sensor3.value = 9876.1234;
     payload_module module1, module2;
     module1.moduleId = 1;
     module1.state = 2;
