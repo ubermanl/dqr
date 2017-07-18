@@ -106,12 +106,15 @@ const int potSensorSensitivity = 100;
 #define LUX_DEFAULT_RELAY HIGH
 #define POTENTIA_DEFAULT_RELAY LOW
 
-
+/*
+ * Maximum value stored for accumulated sensing
+ */
+#define MAX_ACCUMULATED_VALUE 4294967295
 
 /************************************ Device Specific Configuration - Module config ************************************/
 
 /*** RF24 Node ID (1-255) ***/
-#define DEVICE_NODE_ID 2
+#define DEVICE_NODE_ID 13
 
 // Module ID 3 - Potentia
 const struct potentiaConfig potentiaConfig1 = {

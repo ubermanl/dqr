@@ -90,21 +90,12 @@ int main(int argc, char** argv) {
 					printf(" - Device Id: %d\n",dat.deviceId);
 					int i = 0;
 					while (i < MAX_MODULES_X_DEVICE && dat.modules[i].moduleId != 0) {
-					//while (i < MAX_MODULES_X_DEVICE) {
 						printf("   . Module Id: %d\n",dat.modules[i].moduleId);
 						printf("   . Module State: %d\n",dat.modules[i].state);
 						int j = 0;
 						while (j < MAX_SENSORS_X_MODULE && dat.modules[i].sensors[j].sensorId != 0) {
-						//while (j < MAX_SENSORS_X_MODULE) {
 							printf("     . Sensor Id: %d\n",dat.modules[i].sensors[j].sensorId);
-							/*
-							float_t temp;
-							for (int n=0; n < 4; n++) {
-								temp.part[n] = dat.modules[i].sensors[j].value[n];
-								//printf("     . Sensor Value (%d): %d\n",n,temp.part[n]);
-							}
-							*/
-							printf("     . Sensor Value (Float): %f\n",dat.modules[i].sensors[j].value);
+							printf("     . Sensor Value: %f\n",dat.modules[i].sensors[j].value);
 
 							j++;
 						}

@@ -41,6 +41,9 @@ SoundSensor::SoundSensor(byte id, byte pin) : Sensor(id, SND_TYPE_ID, pin) {};
 
 void SoundSensor::senseData() {
   _currentValue = analogRead(_pinSensor);
+  if (_accumulatedValue + _currentValue > MAX_ACCUMULATED_VALUE) {
+    _accumulatedValue = getAverageValue();
+  }
   _accumulatedValue += _currentValue;
   _sampleCount += 1;
 };
@@ -77,6 +80,9 @@ void LightSensor::setup() {
 
 void LightSensor::senseData() {
   _currentValue = _lightSensor.readLightLevel();
+  if (_accumulatedValue + _currentValue > MAX_ACCUMULATED_VALUE) {
+    _accumulatedValue = getAverageValue();
+  }
   _accumulatedValue += _currentValue;
   _sampleCount += 1;
 };
@@ -86,6 +92,9 @@ ACSensor::ACSensor(byte id, byte pin) : Sensor(id, AC_TYPE_ID, pin) {};
 
 void ACSensor::senseData() {
   _currentValue = getACValue();
+  if (_accumulatedValue + _currentValue > MAX_ACCUMULATED_VALUE) {
+    _accumulatedValue = getAverageValue();
+  }
   _accumulatedValue += _currentValue;
   _sampleCount += 1;
 };

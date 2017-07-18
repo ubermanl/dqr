@@ -27,7 +27,7 @@
 
 /*--------------------------------[ Classes ]---------------------------------*/
 
-// class Sensor implements the different type of sensors
+// Abstract class Sensor implements the different type of sensors
 class Sensor {
   public:
     Sensor(byte id, byte type, byte pin);
@@ -44,13 +44,13 @@ class Sensor {
     byte _typeId;
     float _accumulatedValue;
     float _currentValue;
-    int _sampleCount;
+    long _sampleCount;
     int _pinSensor;
     boolean _notifyCurrentValue = false;
 };
 
 
-// Abstract classes for the different sensors
+// Classes for the different sensors
 class ACSensor : public Sensor {
   public:
     ACSensor(byte, byte);
