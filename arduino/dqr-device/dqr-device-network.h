@@ -31,12 +31,11 @@
 enum S_subtype { all = S_SUBTYPE_ALL, state = S_SUBTYPE_STATE, sensor = S_SUBTYPE_SENSOR };
 struct __attribute__ ((__packed__)) payload_S {
   S_subtype subtype;
-  byte moduleId[MAX_MODULES_X_DEVICE];
-  byte sensorId[MAX_SENSORS_X_MODULE];
+  byte modules[MAX_MODULES_X_DEVICE];
+  byte sensors[MAX_SENSORS_X_MODULE];
 };
 struct __attribute__ ((__packed__)) payload_sensor {
-  byte sensorId = 0;
-  //byte value[4] = { 0, 0, 0, 0 };
+  byte sensorType = 0;
   float value;
 };
 struct __attribute__ ((__packed__)) payload_module {
@@ -57,4 +56,4 @@ struct __attribute__ ((__packed__)) payload_A {
 /*
  * Send to Ratio Notification period in seconds
  */
- #define SEND_TO_RATIO_PERIOD 5
+ #define SEND_TO_RATIO_PERIOD 10

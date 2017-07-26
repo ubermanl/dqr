@@ -10,13 +10,13 @@
  *  Device Initialization: This sample configuration has 1x Lux and 1x Potentia module
  */
 Lux luxModule(luxConfig1);
-ACSensor luxACSensor(100, luxConfig1.AC_SENSOR_IN);
-PIRSensor pirSensor(101, luxConfig1.PIR_SENS_IN);
-SoundSensor soundSensor(102, luxConfig1.SND_SENS_IN);
-LightSensor lightSensor(103, luxConfig1.LUM_SENS_SDA);
+ACSensor luxACSensor(luxConfig1.AC_SENSOR_IN);
+PIRSensor pirSensor(luxConfig1.PIR_SENS_IN);
+SoundSensor soundSensor(luxConfig1.SND_SENS_IN);
+LightSensor lightSensor(luxConfig1.LUM_SENS_SDA);
 
 Potentia potentiaModule(potentiaConfig1);
-ACSensor potentiaACSensor(104, potentiaConfig1.AC_SENSOR_IN);
+ACSensor potentiaACSensor(potentiaConfig1.AC_SENSOR_IN);
 
 /*** Helper Functions ***/
 void toggleRelayStatus() {

@@ -114,7 +114,7 @@ const int potSensorSensitivity = 100;
 /************************************ Device Specific Configuration - Module config ************************************/
 
 /*** RF24 Node ID (1-255) ***/
-#define DEVICE_NODE_ID 13
+#define DEVICE_NODE_ID 3
 
 // Module ID 3 - Potentia
 const struct potentiaConfig potentiaConfig1 = {

@@ -30,9 +30,8 @@
 // Abstract class Sensor implements the different type of sensors
 class Sensor {
   public:
-    Sensor(byte id, byte type, byte pin);
+    Sensor(byte type, byte pin);
     virtual void setup();
-    byte getId() { return _id; };
     byte getType() { return _typeId; };
     virtual float getAverageValue();
     virtual void senseData() = 0;
@@ -40,7 +39,6 @@ class Sensor {
     boolean isUrgentNotification() { return _notifyCurrentValue; };
     void resetUrgentNotification() { _notifyCurrentValue = false; };
   protected:
-    byte _id;
     byte _typeId;
     float _accumulatedValue;
     float _currentValue;
@@ -53,7 +51,7 @@ class Sensor {
 // Classes for the different sensors
 class ACSensor : public Sensor {
   public:
-    ACSensor(byte, byte);
+    ACSensor(byte);
     void senseData();
     float getACValue();
   protected:
@@ -62,7 +60,7 @@ class ACSensor : public Sensor {
 
 class PIRSensor : public Sensor {
   public:
-    PIRSensor(byte, byte);
+    PIRSensor(byte);
     void senseData();
     float getAverageValue();
   protected:
@@ -71,21 +69,21 @@ class PIRSensor : public Sensor {
 
 class TempSensor : public Sensor {
   public:
-    TempSensor(byte, byte);
+    TempSensor(byte);
     void senseData();
   protected:
 };
 
 class SoundSensor : public Sensor {
   public:
-    SoundSensor(byte, byte);
+    SoundSensor(byte);
     void senseData();
   protected:    
 };
 
 class LightSensor : public Sensor {
   public:
-    LightSensor(byte, byte);
+    LightSensor(byte);
     void setup();
     void senseData();
   private:

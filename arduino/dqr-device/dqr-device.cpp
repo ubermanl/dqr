@@ -13,8 +13,7 @@
  */
 
 /*----------------------------------[ Sensor ]----------------------------------*/
-Sensor::Sensor(byte id, byte type, byte pin) {
-  _id = id;
+Sensor::Sensor(byte type, byte pin) {
   _typeId = type;
   _pinSensor = pin;
   _accumulatedValue = 0;
@@ -37,7 +36,7 @@ float Sensor::getAverageValue() {
 };
 
 // Sound
-SoundSensor::SoundSensor(byte id, byte pin) : Sensor(id, SND_TYPE_ID, pin) {};
+SoundSensor::SoundSensor(byte pin) : Sensor(SND_TYPE_ID, pin) {};
 
 void SoundSensor::senseData() {
   _currentValue = analogRead(_pinSensor);
@@ -49,7 +48,7 @@ void SoundSensor::senseData() {
 };
 
 // PIR
-PIRSensor::PIRSensor(byte id, byte pin) : Sensor(id, PIR_TYPE_ID, pin) {};
+PIRSensor::PIRSensor(byte pin) : Sensor(PIR_TYPE_ID, pin) {};
 
 void PIRSensor::senseData() {
   _currentValue = digitalRead(_pinSensor);
@@ -72,7 +71,7 @@ float PIRSensor::getAverageValue() {
 };
 
 // Light
-LightSensor::LightSensor(byte id, byte pin) : Sensor(id, LUM_TYPE_ID, pin) {};
+LightSensor::LightSensor(byte pin) : Sensor(LUM_TYPE_ID, pin) {};
 
 void LightSensor::setup() {
   _lightSensor.begin(BH1750_CONTINUOUS_HIGH_RES_MODE_2);
@@ -88,7 +87,7 @@ void LightSensor::senseData() {
 };
 
 // AC
-ACSensor::ACSensor(byte id, byte pin) : Sensor(id, AC_TYPE_ID, pin) {};
+ACSensor::ACSensor(byte pin) : Sensor(AC_TYPE_ID, pin) {};
 
 void ACSensor::senseData() {
   _currentValue = getACValue();
@@ -252,7 +251,7 @@ void Module::setupSensors() {
 
 void Module::getSensorsData(payload_sensor sensors[]) {
   for (int i=0; i < _configuredSensorsSize; i++) {
-     sensors[i].sensorId = _configuredSensors[i]->getId();
+     sensors[i].sensorType = _configuredSensors[i]->getType();
      sensors[i].value = _configuredSensors[i]->getAverageValue();
   }
 };
@@ -274,7 +273,7 @@ void Module::run() {
       payload.deviceId = DEVICE_NODE_ID;
       payload.modules[0].moduleId = _id;
       payload.modules[0].state = _state;
-      payload.modules[0].sensors[0].sensorId = _configuredSensors[i]->getId();
+      payload.modules[0].sensors[0].sensorType = _configuredSensors[i]->getType();
       payload.modules[0].sensors[0].value = _configuredSensors[i]->getAverageValue();
       Device::sendMessage(&payload, 'I', sizeof(payload));
       _configuredSensors[i]->resetUrgentNotification();
