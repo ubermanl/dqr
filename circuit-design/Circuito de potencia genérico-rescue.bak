@@ -1,0 +1,23 @@
+EESchema-LIBRARY Version 2.3
+#encoding utf-8
+#
+# PowerSupply_5V-RESCUE-Circuito_de_potencia_genérico
+#
+DEF ~PowerSupply_5V-RESCUE-Circuito_de_potencia_genérico PowerSupply_5V 0 40 Y Y 1 F N
+F0 "PowerSupply_5V" 0 0 60 H I L BNN
+F1 "PowerSupply_5V-RESCUE-Circuito_de_potencia_genérico" 0 0 60 H I R TNN
+F2 "" 0 0 60 H I C CNN
+F3 "" 0 0 60 H I C CNN
+$FPLIST
+ PowerSupply_5V
+$ENDFPLIST
+DRAW
+S 0 0 750 -1350 0 1 0 N
+X AC1 1 300 -100 200 U 50 50 1 1 W
+X AC2 2 450 -100 200 U 50 50 1 1 P
+X +5V 3 100 -1250 200 D 50 50 1 1 w
+X GND ~ 650 -1250 200 D 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+#End Library

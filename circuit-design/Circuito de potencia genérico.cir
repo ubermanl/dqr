@@ -1,0 +1,17 @@
+* /home/eric/git/dqr/circuit-design/Circuito de potencia genérico.cir
+
+* EESchema Netlist Version 1.1 (Spice format) creation date: dom 06 ago 2017 19:59:59 -03
+
+* To exclude a component from the Spice Netlist add [Spice_Netlist_Enabled] user FIELD set to: N
+* To reorder the component spice node sequence add [Spice_Node_Sequence] user FIELD and define sequence: 2,1,0
+
+* Sheet Name: /
+ACS712-20A2  Net-_ACS712-20A1-Pad1_ Net-_ACS712-20A2-Pad2_ Net-_ACS712-20A1-Pad3_ Net-_ACS712-20A2-Pad4_ Net-_ACS712-20A2-Pad5_ ACS712-20A		
+Relay1  ? Net-_ACS712-20A1-Pad5_ ? Net-_ACS712-20A1-Pad3_ Net-_ACS712-20A1-Pad1_ Net-_J2-Pad6_ Relay		
+Relay2  ? ? Net-_ACS712-20A2-Pad5_ Net-_ACS712-20A1-Pad3_ Net-_ACS712-20A1-Pad1_ Net-_J2-Pad5_ Relay		
+J1  Net-_J1-Pad1_ Net-_J1-Pad2_ Net-_ACS712-20A2-Pad4_ Net-_ACS712-20A1-Pad4_ Screw_Terminal_1x04		
+ACS712-20A1  Net-_ACS712-20A1-Pad1_ Net-_ACS712-20A1-Pad2_ Net-_ACS712-20A1-Pad3_ Net-_ACS712-20A1-Pad4_ Net-_ACS712-20A1-Pad5_ ACS712-20A		
+J2  Net-_ACS712-20A1-Pad3_ Net-_ACS712-20A1-Pad1_ Net-_ACS712-20A1-Pad2_ Net-_ACS712-20A2-Pad2_ Net-_J2-Pad5_ Net-_J2-Pad6_ CONN_01X06		
+PowerSupply_5V1  Net-_J1-Pad2_ Net-_J1-Pad1_ Net-_ACS712-20A1-Pad3_ Net-_ACS712-20A1-Pad1_ PowerSupply_5V		
+
+.end

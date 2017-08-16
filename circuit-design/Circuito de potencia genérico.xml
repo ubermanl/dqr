@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="D">
+  <design>
+    <source>/home/eric/git/dqr/circuit-design/Circuito de potencia genérico.sch</source>
+    <date>jue 10 ago 2017 21:36:42 -03</date>
+    <tool>Eeschema 4.0.6</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>Circuito de potencia genérico.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="ACS712-20A2">
+      <value>ACS712-20A</value>
+      <footprint>Huellas de Componentes DqR:ACS712</footprint>
+      <libsource lib="Componentes DqR" part="ACS712-20A"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5986365D</tstamp>
+    </comp>
+    <comp ref="Relay1">
+      <value>Relay</value>
+      <footprint>Huellas de Componentes DqR:Relay</footprint>
+      <libsource lib="Componentes DqR" part="Relay"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>59863DAD</tstamp>
+    </comp>
+    <comp ref="Relay2">
+      <value>Relay</value>
+      <footprint>Huellas de Componentes DqR:Relay</footprint>
+      <libsource lib="Componentes DqR" part="Relay"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>59863DC1</tstamp>
+    </comp>
+    <comp ref="J1">
+      <value>Screw_Terminal_1x04</value>
+      <footprint>Connectors:bornier4</footprint>
+      <libsource lib="conn" part="Screw_Terminal_1x04"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>59863F3A</tstamp>
+    </comp>
+    <comp ref="ACS712-20A1">
+      <value>ACS712-20A</value>
+      <footprint>Huellas de Componentes DqR:ACS712</footprint>
+      <libsource lib="Componentes DqR" part="ACS712-20A"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>59863649</tstamp>
+    </comp>
+    <comp ref="J2">
+      <value>CONN_01X06</value>
+      <footprint>Pin_Headers:Pin_Header_Straight_1x06_Pitch1.27mm</footprint>
+      <libsource lib="conn" part="CONN_01X06"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5987931C</tstamp>
+    </comp>
+    <comp ref="PowerSupply_5V1">
+      <value>PowerSupply_5V</value>
+      <footprint>Huellas de Componentes DqR:PowerSupply5V</footprint>
+      <libsource lib="Componentes DqR" part="PowerSupply_5V"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>598643CC</tstamp>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="Componentes DqR" part="ACS712-20A">
+      <footprints>
+        <fp>ACS712</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">ACS712-20A</field>
+        <field name="Value">ACS712-20A</field>
+      </fields>
+      <pins>
+        <pin num="1" name="GND" type="passive"/>
+        <pin num="2" name="OUT" type="output"/>
+        <pin num="3" name="VCC" type="power_in"/>
+        <pin num="4" name="AC1" type="BiDi"/>
+        <pin num="5" name="AC2" type="BiDi"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="CONN_01X06">
+      <description>Connector, single row, 01x06, pin header</description>
+      <footprints>
+        <fp>Pin_Header_Straight_1X*</fp>
+        <fp>Pin_Header_Angled_1X*</fp>
+        <fp>Socket_Strip_Straight_1X*</fp>
+        <fp>Socket_Strip_Angled_1X*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">CONN_01X06</field>
+      </fields>
+      <pins>
+        <pin num="1" name="P1" type="passive"/>
+        <pin num="2" name="P2" type="passive"/>
+        <pin num="3" name="P3" type="passive"/>
+        <pin num="4" name="P4" type="passive"/>
+        <pin num="5" name="P5" type="passive"/>
+        <pin num="6" name="P6" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Componentes DqR" part="PowerSupply_5V">
+      <footprints>
+        <fp>PowerSupply_5V</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">PowerSupply_5V</field>
+        <field name="Value">PowerSupply_5V</field>
+      </fields>
+      <pins>
+        <pin num="1" name="AC1" type="power_in"/>
+        <pin num="2" name="AC2" type="passive"/>
+        <pin num="3" name="+5V" type="power_out"/>
+        <pin num="~" name="GND" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Componentes DqR" part="Relay">
+      <fields>
+        <field name="Reference">Relay</field>
+        <field name="Value">Relay</field>
+      </fields>
+      <pins>
+        <pin num="1" name="AC" type="power_in"/>
+        <pin num="2" name="NC" type="power_out"/>
+        <pin num="3" name="NA" type="power_out"/>
+        <pin num="4" name="VCC" type="power_in"/>
+        <pin num="5" name="GND" type="passive"/>
+        <pin num="6" name="IN" type="input"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="Screw_Terminal_1x04">
+      <description>4-pin screw terminal connector</description>
+      <footprints>
+        <fp>bornier4</fp>
+        <fp>TerminalBlock*4pol</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Screw_Terminal_1x04</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+        <pin num="3" name="~" type="passive"/>
+        <pin num="4" name="~" type="passive"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="conn">
+      <uri>/usr/share/kicad/library/conn.lib</uri>
+    </library>
+    <library logical="Componentes DqR">
+      <uri>components-library/Componentes DqR.lib</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="Net-(ACS712-20A1-Pad3)">
+      <node ref="Relay2" pin="4"/>
+      <node ref="Relay1" pin="4"/>
+      <node ref="ACS712-20A2" pin="3"/>
+      <node ref="PowerSupply_5V1" pin="3"/>
+      <node ref="ACS712-20A1" pin="3"/>
+      <node ref="J2" pin="1"/>
+    </net>
+    <net code="2" name="Net-(J2-Pad5)">
+      <node ref="J2" pin="5"/>
+      <node ref="Relay2" pin="6"/>
+    </net>
+    <net code="3" name="Net-(ACS712-20A2-Pad5)">
+      <node ref="Relay2" pin="3"/>
+      <node ref="ACS712-20A2" pin="5"/>
+    </net>
+    <net code="4" name="Net-(ACS712-20A2-Pad2)">
+      <node ref="ACS712-20A2" pin="2"/>
+      <node ref="J2" pin="4"/>
+    </net>
+    <net code="5" name="Net-(J1-Pad1)">
+      <node ref="J1" pin="1"/>
+      <node ref="PowerSupply_5V1" pin="2"/>
+    </net>
+    <net code="6" name="Net-(ACS712-20A1-Pad2)">
+      <node ref="ACS712-20A1" pin="2"/>
+      <node ref="J2" pin="3"/>
+    </net>
+    <net code="7" name="Net-(J2-Pad6)">
+      <node ref="Relay1" pin="6"/>
+      <node ref="J2" pin="6"/>
+    </net>
+    <net code="8" name="Net-(ACS712-20A1-Pad1)">
+      <node ref="J2" pin="2"/>
+      <node ref="Relay1" pin="5"/>
+      <node ref="ACS712-20A2" pin="1"/>
+      <node ref="Relay2" pin="5"/>
+      <node ref="ACS712-20A1" pin="1"/>
+      <node ref="PowerSupply_5V1" pin="~"/>
+    </net>
+    <net code="9" name="Net-(ACS712-20A2-Pad4)">
+      <node ref="ACS712-20A2" pin="4"/>
+      <node ref="J1" pin="3"/>
+    </net>
+    <net code="10" name="Net-(J1-Pad2)">
+      <node ref="PowerSupply_5V1" pin="1"/>
+      <node ref="J1" pin="2"/>
+      <node ref="Relay2" pin="1"/>
+      <node ref="Relay1" pin="1"/>
+    </net>
+    <net code="11" name="Net-(Relay1-Pad3)">
+      <node ref="Relay1" pin="3"/>
+    </net>
+    <net code="12" name="Net-(Relay2-Pad2)">
+      <node ref="Relay2" pin="2"/>
+    </net>
+    <net code="15" name="Net-(ACS712-20A1-Pad4)">
+      <node ref="J1" pin="4"/>
+      <node ref="ACS712-20A1" pin="4"/>
+    </net>
+    <net code="16" name="Net-(ACS712-20A1-Pad5)">
+      <node ref="Relay1" pin="2"/>
+      <node ref="ACS712-20A1" pin="5"/>
+    </net>
+  </nets>
+</export>
