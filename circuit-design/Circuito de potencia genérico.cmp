@@ -1,0 +1,59 @@
+Cmp-Mod V01 Created by PcbNew   date = sáb 19 ago 2017 23:30:55 -03
+
+BeginCmp
+TimeStamp = 599644A4
+Path = /5987931C
+Reference = J2;
+ValeurCmp = CONN_01X06;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x06_Pitch1.27mm;
+EndCmp
+
+BeginCmp
+TimeStamp = 59964468
+Path = /59863649
+Reference = ACS712-20A1;
+ValeurCmp = ACS712-20A;
+IdModule  = Huellas de Componentes DqR:ACS712;
+EndCmp
+
+BeginCmp
+TimeStamp = 59964475
+Path = /5986365D
+Reference = ACS712-20A2;
+ValeurCmp = ACS712-20A;
+IdModule  = Huellas de Componentes DqR:ACS712;
+EndCmp
+
+BeginCmp
+TimeStamp = 5996448C
+Path = /59863F3A
+Reference = J1;
+ValeurCmp = Screw_Terminal_1x04;
+IdModule  = Connectors:bornier4;
+EndCmp
+
+BeginCmp
+TimeStamp = 599644B0
+Path = /598643CC
+Reference = PowerSupply_5V1;
+ValeurCmp = PowerSupply_5V;
+IdModule  = Huellas de Componentes DqR:PowerSupply5V;
+EndCmp
+
+BeginCmp
+TimeStamp = 599644BE
+Path = /59863DAD
+Reference = Relay1;
+ValeurCmp = Relay;
+IdModule  = Huellas de Componentes DqR:Relay;
+EndCmp
+
+BeginCmp
+TimeStamp = 599644CC
+Path = /59863DC1
+Reference = Relay2;
+ValeurCmp = Relay;
+IdModule  = Huellas de Componentes DqR:Relay;
+EndCmp
+
+EndListe
