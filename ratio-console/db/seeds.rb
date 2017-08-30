@@ -12,13 +12,19 @@ ModuleType.create([
                   ])
 
 Ambience.create([
-                    { name:'Cocina'},
-                    { name:'Habitación Principal'},
-                    { name:'Habitación Invitados'},
-                    { name:'Patio Trasero'},
-                    { name:'Patio Delantero'}
+    { name:'Cocina'},
+    { name:'Habitación Principal'},
+    { name:'Habitación Invitados'},
+    { name:'Patio Trasero'},
+    { name:'Patio Delantero'}
 
 ])
+
+Scene.create(
+ [
+     { name: 'None' }
+ ]
+)
 
 SensorType.create([
   {name: 'PIR - Presence', unit: '', max_value: 1, min_value: 0},
@@ -31,4 +37,18 @@ SensorType.create([
 
 User.create([
     { name: 'Administrador', login:'admin', password:'admin', password_confirmation:'admin' }
-            ])
+])
+
+# configuracion de un dispositivo
+d1 = Device.create name:'Prueba1', ambience_id: 1, model:'Base', network_identifier:0, scene_id: 1
+
+# modulo LUX
+m1 = d1.device_modules.create module_type_id: 1
+m1.sensors.create sensor_type_id: 1
+m1.sensors.create sensor_type_id: 3
+m1.sensors.create sensor_type_id: 4
+m1.sensors.create sensor_type_id: 5
+
+# modulo POTENTIA
+m2 = d2.device_modules.create module_type_id: 3
+m2.sensors.create sensor_type_id: 5

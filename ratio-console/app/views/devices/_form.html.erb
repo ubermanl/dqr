@@ -16,16 +16,20 @@
       <%= f.text_field :name %>
     </div>
     <div class="field">
-      <%= f.label :device_type_id %><br>
-      <%= f.collection_select :device_type_id, DeviceType.all, :id, :name %>
-    </div>
-    <div class="field">
       <%= f.label :ambience_id %><br>
       <%= f.collection_select :ambience_id, Ambience.all, :id, :name %>
     </div>
     <div class="field">
       <%= f.label :model %><br>
       <%= f.text_field :model %>
+    </div>
+    <div class="field">
+      <%= f.label :network_identifier %><br>
+      <%= f.text_field :network_identifier %>
+    </div>
+    <div class="field">
+      <%= f.label :scene_id %><br>
+      <%= f.collection_select :scene_id, Scene.all, :id, :name %>
     </div>
     <div class="actions">
       <%= f.submit %>
