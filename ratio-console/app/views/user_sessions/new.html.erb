@@ -1,1 +1,29 @@
-<%= render partial:'form' %>
+<div class="vertical-center">
+  <div>
+    <div>
+      <%= form_for @user_session do |f| %>
+        <h1>DQR Ratio Console Login</h1>
+        <%= render 'shared/errors', object: @user_session %>
+        <div class="ui form">
+          <div class="ui stacked segment basic">
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="user icon"></i>
+                <%= f.text_field :login, placeholder:'Usuario' %>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="user icon"></i>
+                <%= f.password_field :password, placeholder:'Clave' %>
+              </div>    
+            </div>
+            <div class="field">
+              <%= f.submit 'Ingresar',class:'ui button fluid teal' %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,9 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  device: 
-  module_type_id: 1
+  device_id: 
+  module_id: 1
+  module_type_id: 
+  disabled: false
 
 two:
-  device: 
-  module_type_id: 1
+  device_id: 
+  module_id: 1
+  module_type_id: 
+  disabled: false

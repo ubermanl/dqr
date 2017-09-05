@@ -7,4 +7,3 @@ namespace :app do
     Rake::Task['db:seed'].invoke
   end
 end
-

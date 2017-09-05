@@ -2,6 +2,8 @@
 
 one:
   name: MyString
+  is_deleted: false
 
 two:
   name: MyString
+  is_deleted: false

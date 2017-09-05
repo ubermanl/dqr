@@ -1,8 +1,23 @@
 <%= form_for(@ambience) do |f| %>
-  <%= render partial: 'shared/errors', locals:{object: @ambience} %>
+  <% if @ambience.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@ambience.errors.count, "error") %> prohibited this ambience from being saved:</h2>
+
+      <ul>
+      <% @ambience.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <div class="field">
     <%= f.label :name %><br>
     <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :is_deleted %><br>
+    <%= f.check_box :is_deleted %>
   </div>
   <div class="actions">
     <%= f.submit %>

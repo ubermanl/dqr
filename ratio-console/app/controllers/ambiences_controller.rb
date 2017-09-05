@@ -69,6 +69,6 @@ class AmbiencesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def ambience_params
-      params.require(:ambience).permit(:name)
+      params.require(:ambience).permit(:name, :is_deleted)
     end
 end

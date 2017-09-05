@@ -18,7 +18,7 @@ class AmbiencesControllerTest < ActionController::TestCase
 
   test "should create ambience" do
     assert_difference('Ambience.count') do
-      post :create, ambience: { name: @ambience.name }
+      post :create, ambience: { is_deleted: @ambience.is_deleted, name: @ambience.name }
     end
 
     assert_redirected_to ambience_path(assigns(:ambience))
@@ -35,7 +35,7 @@ class AmbiencesControllerTest < ActionController::TestCase
   end
 
   test "should update ambience" do
-    patch :update, id: @ambience, ambience: { name: @ambience.name }
+    patch :update, id: @ambience, ambience: { is_deleted: @ambience.is_deleted, name: @ambience.name }
     assert_redirected_to ambience_path(assigns(:ambience))
   end
 

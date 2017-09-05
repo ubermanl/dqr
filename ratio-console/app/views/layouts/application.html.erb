@@ -1,48 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>RatioConsole</title>
-  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+  <title>Workspace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body>
-<div id="main-container" class="container-fluid">
-  <nav class="navbar navbar-inverse">
-    <div class="container">
-      <div class="navbar-header">
-        <%= link_to 'DqR Domo', root_path, class: 'navbar-brand' %>
-      </div>
-      <div id="navbar">
-        <ul class="nav navbar-nav">
-          <li><%= link_to 'Home', root_path %></li>
-          <li><%= link_to 'Dispositivos', devices_path %></li>
-          <li><%= link_to 'Ambientes', ambiences_path %></li>
-          <li><%= link_to 'Programación', '#' %></li>
-          <li><%= link_to 'Informes', '#' %></li>
-        </ul>
-        <ul class="nav navbar-nav pull-right">
-          <% if current_user %>
-              <li><a href="#"><span><%= current_user.login %></span></a></li>
-              <li><%= link_to 'Sign Out', sign_out_path, method: :delete %></li>
-          <% else %>
-              <li><%= link_to 'Sign In', sign_in_path %></li>
-          <% end %>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <div class="container">
-    <% flash.each do |key, value| %>
-        <div class="alert alert-<%= key %>">
-          <%= value %>
-        </div>
-    <% end %>
 
-    <%= yield %>
+<body>
+<div class="ui bottom attached segment pushable">
+  <div class="ui inverted black labeled icon left inline vertical sidebar menu" style="">
+    <%= render partial:'shared/sidebar' %>
+  </div>
+  <div class="pusher">
+    <div class="ui top attached menu inverted black">
+      <%= render partial:'shared/topmenu' %>
+    </div>
+    <div class="ui basic segment">
+      <%= yield %>
+    </div>
   </div>
 </div>
-
-
 </body>
 </html>

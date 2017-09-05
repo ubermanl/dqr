@@ -5,5 +5,10 @@
   <%= @ambience.name %>
 </p>
 
+<p>
+  <strong>Is deleted:</strong>
+  <%= @ambience.is_deleted %>
+</p>
+
 <%= link_to 'Edit', edit_ambience_path(@ambience) %> |
 <%= link_to 'Back', ambiences_path %>

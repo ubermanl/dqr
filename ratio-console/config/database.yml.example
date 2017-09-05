@@ -9,13 +9,13 @@ development:
   <<: *default
   database: ratio_dev
   username: ratio_dev
-  password: ratio_dev
+  password: ratio_dev_1234
 
 test:
   <<: *default
   database: ratio_test
   username: ratio_test
-  password: ratio_test_password
+  password: ratio_test_1234
 
 staging:
   <<: *default
@@ -27,4 +27,4 @@ production:
   <<: *default
   database: ratio_prod
   username: root
-  password: MysqlR00t01
+  password: crypted_password

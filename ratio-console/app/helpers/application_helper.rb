@@ -1,5 +1,5 @@
 module ApplicationHelper
-  def t_model(name)
-    t "model.#{name}"
+  def text_with_icon(text,icon)
+    semantic_icon(icon) + text
   end
 end
