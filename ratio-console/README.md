@@ -4,8 +4,8 @@ Este es un primer approach a la consola web de gestion del ratio escrita en ruby
 
 # Dependencias Importantes
 
-* Ruby >=2.2
-* Rails 4.2.2
+* Ruby >=2.3
+* Rails 4.2.5
 * MySql 5.5+
 
 # Instalacion
