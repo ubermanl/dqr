@@ -23,4 +23,4 @@ A partir de esto si todo sale bien, se deberia levantar WeBrick (server de rails
 
 # Stored Procedures
 * Para registrar un evento `select generate_event(module_id,module_status)` que devuelve un INT con el id de evento generado.
-* Para registrar datos de sensores de un evento `select generate_event_data(module_id,sensor_type_id,value)` no devuelve valores ya que es un SP
+* Para registrar datos de sensores de un evento `call generate_event_data(module_id,sensor_type_id,value)` no devuelve valores ya que es un SP
