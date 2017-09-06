@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  device_id: 1
+  module_id: 1
+  state: false
+
+two:
+  device_id: 1
+  module_id: 1
+  state: false
