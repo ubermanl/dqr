@@ -136,14 +136,17 @@ float ACSensor::getACValue() {
 
 
 /*----------------------------------[ Module ]----------------------------------*/
-Module::Module(byte id, byte type) {
-  _id = id;
+Module::Module(byte type) {
   _typeId = type;
   _configuredSensorsSize = 0;
   _relayStatus = 0;
 };
 
-Lux::Lux(struct luxConfig conf) : Module(conf.ID, LUX_TYPE_ID) {
+void Module::setId(byte modNumber) {
+  _id = DEVICE_NODE_ID * pow(10, (int)log10(modNumber)+1) + modNumber;
+}
+
+Lux::Lux(struct luxConfig conf) : Module(LUX_TYPE_ID) {
   _conf = conf;  
 }
 
@@ -206,7 +209,7 @@ void Lux::setDesiredState(boolean desiredState) {
 }
 
 
-Potentia::Potentia(struct potentiaConfig conf) : Module(conf.ID, POTENTIA_TYPE_ID) {
+Potentia::Potentia(struct potentiaConfig conf) : Module(POTENTIA_TYPE_ID) {
   _conf = conf;
 }
 
@@ -218,7 +221,7 @@ boolean Potentia::setup() {
   return true;
 };
 
-Omni::Omni(struct omniConfig conf) : Module(conf.ID, OMNI_TYPE_ID) {
+Omni::Omni(struct omniConfig conf) : Module(OMNI_TYPE_ID) {
   _conf = conf;
 }
 
@@ -340,6 +343,7 @@ boolean Device::addModule(Module * newModule) {
   }
   _configuredModules[_configuredModulesSize] = newModule;
   _configuredModulesSize++;
+  newModule->setId(_configuredModulesSize);
   return true;
 };
 

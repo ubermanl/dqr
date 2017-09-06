@@ -94,8 +94,9 @@ class LightSensor : public Sensor {
 // Module class and the different classes that it implements (Lux, Potentia, Omni)
 class Module {
   public:
-    Module(byte, byte);
+    Module(byte);
     byte getId() { return _id; };
+    void setId(byte);
     byte getType() { return _typeId; };
     void getSensorsData(payload_sensor sensors[]);
     byte getState() { return _state; };
@@ -106,7 +107,7 @@ class Module {
     virtual boolean setup() = 0;
     void run();
   protected:
-    byte _id;
+    int _id;
     byte _typeId;
     byte _state;
     byte _configuredSensorsSize;

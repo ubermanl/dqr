@@ -41,7 +41,6 @@
  * This variables define the structure for module configuration specified at the end of the file
  */
 struct luxConfig {
-  byte ID;
   byte TOUCH_IN;
   byte RELAY_OUT;
   byte AC_SENSOR_IN;
@@ -52,13 +51,11 @@ struct luxConfig {
 };
 
 struct potentiaConfig {
-  byte ID;
   byte RELAY_OUT;
   byte AC_SENSOR_IN;
 };
 
 struct omniConfig {
-  byte ID;
   byte AC_SENSOR_IN;
   byte LUM_SENS_SDA;
   byte LUM_SENS_SCL;
@@ -118,14 +115,12 @@ const int potSensorSensitivity = 100;
 
 // Module ID 3 - Potentia
 const struct potentiaConfig potentiaConfig1 = {
-  3,    // Module ID
   2,    // POT_RELAY_OUT
   A2    // POT_AC_SENSOR_IN
 };
 
 // Module ID 2 - Lux
 const struct luxConfig luxConfig1 = {
-  5,    // Module ID
   3,    // LUX_TOUCH_IN
   4,    // LUX_RELAY_OUT
   A3,   // LUX_AC_SENSOR_IN
