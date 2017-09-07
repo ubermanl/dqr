@@ -27,7 +27,7 @@ CCFLAGS=-Ofast -mfpu=vfp -mfloat-abi=hard -march=$(ARCH) -mtune=arm1176jzf-s -st
 endif
 
 # define all programs
-PROGRAMS = DqR_Comm_Server
+PROGRAMS = "dqrMaster dqrSender"
 SOURCES = ${PROGRAMS:=.cpp}
 
 all: ${PROGRAMS}
