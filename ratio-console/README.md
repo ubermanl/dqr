@@ -4,8 +4,8 @@ Este es un primer approach a la consola web de gestion del ratio escrita en ruby
 
 # Dependencias Importantes
 
-* Ruby >=2.2
-* Rails 4.2.2
+* Ruby >=2.3
+* Rails 4.2.5
 * MySql 5.5+
 
 # Instalacion
@@ -23,4 +23,4 @@ A partir de esto si todo sale bien, se deberia levantar WeBrick (server de rails
 
 # Stored Procedures
 * Para registrar un evento `select generate_event(module_id,module_status)` que devuelve un INT con el id de evento generado.
-* Para registrar datos de sensores de un evento `select generate_event_data(module_id,sensor_type_id,value)` no devuelve valores ya que es un SP
+* Para registrar datos de sensores de un evento `call generate_event_data(module_id,sensor_type_id,value)` no devuelve valores ya que es un SP
