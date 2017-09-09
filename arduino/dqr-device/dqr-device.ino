@@ -20,7 +20,7 @@ ACSensor potentiaACSensor(potentiaConfig1.AC_SENSOR_IN);
 
 /*** Helper Functions ***/
 void toggleRelayStatus() {
-  Serial.println("Button pressed");
+  LOG2("Button pressed for Module #",luxModule.getId());
   luxModule.touchEvent();
 }
 
@@ -65,6 +65,7 @@ void setup() {
   /**** CONFIG: Interruptions for Lux Modules ****/
   attachInterrupt(digitalPinToInterrupt(luxConfig1.TOUCH_IN), toggleRelayStatus, RISING);
 
+  LOG2("Device ID: #",DEVICE_NODE_ID);
 }
 
 void loop() {
