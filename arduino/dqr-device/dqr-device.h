@@ -18,7 +18,7 @@
 #define DEBUG
 #ifdef DEBUG
 #define LOG(m) Serial.println(m);
-#define LOG2(m1,m2) Serial.print(m1); Serial.println(m2);
+#define LOG2(m1,m2) Serial.print(millis()); Serial.print(": "); Serial.print(m1); Serial.println(m2);
 #else
 #define LOG(m)
 #define LOG2(m1,m2)
