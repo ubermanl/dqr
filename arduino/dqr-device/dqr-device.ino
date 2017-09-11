@@ -19,9 +19,13 @@ Potentia potentiaModule(potentiaConfig1);
 ACSensor potentiaACSensor(potentiaConfig1.AC_SENSOR_IN);
 
 /*** Helper Functions ***/
+unsigned long lastChange = 0;
 void toggleRelayStatus() {
   LOG2("Button pressed for Module #",luxModule.getId());
-  luxModule.touchEvent();
+  if ((millis() - lastChange) > 100) {
+    luxModule.touchEvent();
+    lastChange = millis();
+  }
 }
 
 
@@ -74,7 +78,6 @@ void loop() {
 
 
   /*************** TODO LO QUE ESTA ACA ES PARA PROBAR Y SE PUEDE BORRAR *************************/
-
   /*
   // Agregado para probar activacion del LUX por SERIAL
   if (Serial.available() > 0) {

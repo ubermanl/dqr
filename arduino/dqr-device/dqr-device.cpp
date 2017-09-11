@@ -159,7 +159,7 @@ boolean Lux::setup() {
   pinMode(_pinTouch, INPUT);
   pinMode(_pinRelay, OUTPUT);  
   _relayStatus = LUX_DEFAULT_RELAY;
-  digitalWrite(_pinRelay, ! _relayStatus);
+  digitalWrite(_pinRelay, _relayStatus);
   return true;
 };
 
