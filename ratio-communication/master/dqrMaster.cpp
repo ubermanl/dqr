@@ -165,7 +165,7 @@ int main(int argc, char** argv) {
 						payload_A req_a;
 						req_a.moduleId = operation.moduleId;
 						req_a.desiredState = operation.desiredState;
-						if ( mesh.write(&req_a,REQUEST_MESSAGE,sizeof(req_a),operation.deviceId) ) {
+						if ( mesh.write(&req_a,ACTION_MESSAGE,sizeof(req_a),operation.deviceId) ) {
 							response = 0;
 						}
 						break;
