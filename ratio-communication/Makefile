@@ -23,26 +23,26 @@ endif
 
 ifeq "$(RPI)" "1"
 # The recommended compiler flags for the Raspberry Pi
-CCFLAGS=-Ofast -mfpu=vfp -mfloat-abi=hard -march=$(ARCH) -mtune=arm1176jzf-s -std=c++0x
+CCFLAGS=-Ofast -mfpu=vfp -mfloat-abi=hard -march=$(ARCH) -mtune=arm1176jzf-s -std=c++11
 endif
 
 # define all programs
-PROGRAMS = "dqrMaster dqrSender"
+PROGRAMS = dqrMaster dqrSender
 SOURCES = ${PROGRAMS:=.cpp}
 
 all: ${PROGRAMS}
 
 ${PROGRAMS}: ${SOURCES}
-        g++ ${CCFLAGS} -Wall -I../ -lrf24-bcm -lrf24network -lrf24mesh -lmysqlcppconn $@.cpp -o $@
+	g++ ${CCFLAGS} -Wall -I../ -lrf24-bcm -lrf24network -lrf24mesh -lmysqlcppconn $@.cpp -o $@
 
 clean:
-        rm -rf $(PROGRAMS)
+	rm -rf $(PROGRAMS)
 
 install: all
-        test -d $(prefix) || mkdir $(prefix)
-        test -d $(prefix)/bin || mkdir $(prefix)/bin
-        for prog in $(PROGRAMS); do \
-          install -m 0755 $$prog $(prefix)/bin; \
-        done
+	test -d $(prefix) || mkdir $(prefix)
+	test -d $(prefix)/bin || mkdir $(prefix)/bin
+	for prog in $(PROGRAMS); do \
+	  install -m 0755 $$prog $(prefix)/bin; \
+	done
 
 .PHONY: install

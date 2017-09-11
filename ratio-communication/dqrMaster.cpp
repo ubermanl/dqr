@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
 		
 		// Setting pipe with listener in non-blocking mode
 		int retval = fcntl( chi2par[0], F_SETFL, fcntl(chi2par[0], F_GETFL) | O_NONBLOCK);
-        //printf("Ret from fcntl: %d\n", retval);
+        	//printf("Ret from fcntl: %d\n", retval);
 		
 		// Master Node => NodeID = 0
 		mesh.setNodeID(0);
@@ -100,7 +100,7 @@ int main(int argc, char** argv) {
 								printf("   . Module State: %d\n",dat.modules[i].state);
 								
 								//qry = std::string("INSERT INTO events (module_id, state, ts) VALUES (") + std::to_string(dat.modules[i].moduleId) + "," + std::to_string(dat.modules[i].state) + ",NOW() )";
-								string qry = string("select generate_event(") + to_string(dat.modules[i].moduleId) + "," + to_string(dat.modules[i].state) + ")";
+								string qry = string("select generate_event(") + std::to_string(dat.modules[i].moduleId) + "," + std::to_string(dat.modules[i].state) + ")";
 								res = stmt->executeQuery(qry);
 								//res = stmt->executeQuery("SELECT LAST_INSERT_ID()");
 								res->next();
@@ -112,7 +112,7 @@ int main(int argc, char** argv) {
 									printf("     . Sensor Value: %f\n",dat.modules[i].sensors[j].value);
 									
 									//qry = std::string("INSERT INTO event_sensors (event_id, sensor_type_id, value) VALUES (") + std::to_string(event_id) + "," + std::to_string(dat.modules[i].sensors[j].sensorType) + "," + std::to_string(dat.modules[i].sensors[j].value) + ")";
-									qry = string("call generate_event_data(") + to_string(event_id) + "," + to_string(dat.modules[i].sensors[j].sensorType) + "," + to_string(dat.modules[i].sensors[j].value) + ")";
+									qry = string("call generate_event_data(") + std::to_string(event_id) + "," + std::to_string(dat.modules[i].sensors[j].sensorType) + "," + std::to_string(dat.modules[i].sensors[j].value) + ")";
 									stmt->execute(qry);
 
 									j++;
@@ -142,7 +142,7 @@ int main(int argc, char** argv) {
 			
 			// Listener requests received?
 			ssize_t readsize = read(chi2par[0], &operation, sizeof(operation_t));
-			printf("read: %d\n", readsize);
+			//printf("read: %d\n", readsize);
 			
 			if ( readsize > 0 ) {
 				// Received message from Listener
@@ -156,8 +156,8 @@ int main(int argc, char** argv) {
 				write(par2chi[1], &resp, sizeof(resp));
             } else {
 				// No requests received - continue...
-                printf("Read nothing\n");
-                perror("Error was");
+                //printf("Read nothing\n");
+                //perror("Error was");
             }
 		
 			delay(1);

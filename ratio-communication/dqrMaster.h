@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <string>
 #include <unistd.h>
+#include <fcntl.h>
 
 /*** Includes RF24 ***/
 #include <RF24Mesh/RF24Mesh.h>
