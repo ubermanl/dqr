@@ -42,7 +42,7 @@
 enum S_subtype { all = S_SUBTYPE_ALL, state = S_SUBTYPE_STATE, sensor = S_SUBTYPE_SENSOR };
 struct __attribute__ ((__packed__)) payload_S {
   S_subtype subtype;
-  int modules[MAX_MODULES_X_DEVICE];
+  uint16_t modules[MAX_MODULES_X_DEVICE];
   byte sensors[MAX_SENSORS_X_MODULE];
 };
 struct __attribute__ ((__packed__)) payload_sensor {
@@ -50,7 +50,7 @@ struct __attribute__ ((__packed__)) payload_sensor {
   float value;
 };
 struct __attribute__ ((__packed__)) payload_module {
-  int moduleId = 0;
+  uint16_t moduleId = 0;
   byte state = 0;
   payload_sensor sensors[MAX_SENSORS_X_MODULE];
 };
@@ -60,7 +60,7 @@ struct __attribute__ ((__packed__)) payload_I {
 };
 struct __attribute__ ((__packed__)) payload_A {
   byte desiredState;
-  int moduleId;
+  uint16_t moduleId;
 };
 
 
