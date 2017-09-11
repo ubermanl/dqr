@@ -27,13 +27,14 @@ CCFLAGS=-Ofast -mfpu=vfp -mfloat-abi=hard -march=$(ARCH) -mtune=arm1176jzf-s -st
 endif
 
 # define all programs
-PROGRAMS = dqrMaster dqrSender
-SOURCES = ${PROGRAMS:=.cpp}
+PROGRAMS = dqrMaster
+SOURCES = dqrListener.cpp ${PROGRAMS:=.cpp}
 
 all: ${PROGRAMS}
 
 ${PROGRAMS}: ${SOURCES}
-	g++ ${CCFLAGS} -Wall -I../ -lrf24-bcm -lrf24network -lrf24mesh -lmysqlcppconn $@.cpp -o $@
+#	g++ ${CCFLAGS} -Wall -I../ -lrf24-bcm -lrf24network -lrf24mesh -lmysqlcppconn $@.cpp -o $@
+	g++ ${CCFLAGS} -Wall -I../ -lrf24-bcm -lrf24network -lrf24mesh -lmysqlcppconn $^ -o $@
 
 clean:
 	rm -rf $(PROGRAMS)
