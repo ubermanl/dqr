@@ -140,11 +140,12 @@ int main(int argc, char** argv) {
 			}
 			
 			// Listener requests received?
-			read(chi2par[0], &operation, sizeof(operation_t));
+			int readsize = read(chi2par[0], &operation, sizeof(operation_t));
 			
 			if ( readsize > 0 ) {
 				// Received message from Listener
 				int response = -1;
+				int count = 0;
 				
 				printf("[Master Server] Rcv request (type: %c) from listener\n",operation.type);
 				printf("[Master Server] ........ Device Id: %d\n",operation.deviceId);
@@ -154,7 +155,6 @@ int main(int argc, char** argv) {
 						payload_S req_s;
 						req_s.subtype = all;
 						
-						int count = 0;
 						while ( count < MAX_MESH_WRITE_RETRIES && response != 0 ) {
 							if ( mesh.write(&req_s,REQUEST_MESSAGE,sizeof(req_s),operation.deviceId) ) {
 								response = 0;
@@ -169,7 +169,6 @@ int main(int argc, char** argv) {
 						req_a.moduleId = operation.moduleId;
 						req_a.desiredState = operation.desiredState;
 						
-						int count = 0;
 						while ( count < MAX_MESH_WRITE_RETRIES && response != 0 ) {
 							if ( mesh.write(&req_a,ACTION_MESSAGE,sizeof(req_a),operation.deviceId) ) {
 								response = 0;

@@ -218,7 +218,7 @@ bool Listener::parse_request(string str, operation_t * operation) {
 }
 
 bool Listener::isNumber(string & str) {
-	for (int i=0;i<str.length();i++) {
+	for (unsigned int i=0;i<str.length();i++) {
 		if (!isdigit(str.at(i)))
 			return false;
 	}

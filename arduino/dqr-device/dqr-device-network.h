@@ -61,4 +61,4 @@ struct __attribute__ ((__packed__)) payload_A {
 /*
  * Max retries for sending messages to mesh
  */
- #define MAX_MESH_WRITE_RETRIES 30
+ #define MAX_MESH_WRITE_RETRIES 5
