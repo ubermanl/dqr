@@ -460,12 +460,13 @@ void Device::sendMessage(const void * data, uint8_t msg_type, size_t size) {
   bool sendStatus = false;
   while (count < MAX_MESH_WRITE_RETRIES && !sendStatus) {
     sendStatus = _mesh->write(data, msg_type, size);
-    if (sendStatus) {
-      LOG2("Send OK: ",_timer);
-    } else {
-      LOG("Send Failed!");
-      _devFSM->transitionTo(*_sPreconfigured);
-    }
+    count++;
+  }
+  if (sendStatus) {
+    LOG2("Send OK: ",_timer);
+  } else {
+    LOG("Send Failed!");
+    _devFSM->transitionTo(*_sPreconfigured);
   }
 }
 
