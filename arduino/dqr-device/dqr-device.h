@@ -95,7 +95,7 @@ class LightSensor : public Sensor {
 class Module {
   public:
     Module(byte);
-    byte getId() { return _id; };
+    int getId() { return _id; };
     void setId(byte);
     byte getType() { return _typeId; };
     void getSensorsData(payload_sensor sensors[]);
@@ -104,6 +104,7 @@ class Module {
     void setupSensors();
     void setRelayStatus(boolean);
     boolean getRelayStatus();
+    virtual void setDesiredState(boolean);
     virtual boolean setup() = 0;
     void run();
   protected:
@@ -131,6 +132,7 @@ class Potentia : public Module {
   public:
     Potentia(struct potentiaConfig conf);
     boolean setup();
+    void setDesiredState(boolean);
   private:
     struct potentiaConfig _conf;
 };
@@ -138,6 +140,7 @@ class Omni : public Module {
   public:
     Omni(struct omniConfig conf);
     boolean setup();
+    void setDesiredState(boolean);
   private:  
     struct omniConfig _conf;
 };

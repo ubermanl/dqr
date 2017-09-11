@@ -221,6 +221,16 @@ boolean Potentia::setup() {
   return true;
 };
 
+void Potentia::setDesiredState(boolean desiredState) {
+  if (desiredState) {
+    _state = MODULE_ACTIVE;
+    setRelayStatus(POTENTIA_RELAY_ON);
+  } else {
+    _state = MODULE_INACTIVE;
+    setRelayStatus(POTENTIA_RELAY_OFF);
+  }
+}
+
 Omni::Omni(struct omniConfig conf) : Module(OMNI_TYPE_ID) {
   _conf = conf;
 }
@@ -228,6 +238,14 @@ Omni::Omni(struct omniConfig conf) : Module(OMNI_TYPE_ID) {
 boolean Omni::setup() {
   return true;
 };
+
+void Omni::setDesiredState(boolean desiredState) {
+  if (desiredState) {
+    _state = MODULE_ACTIVE;
+  } else {
+    _state = MODULE_INACTIVE;
+  }
+}
 
 void Module::setRelayStatus(boolean newStatus) {
   if (_relayStatus != newStatus) {
@@ -420,7 +438,7 @@ void Device::runOperational() {
     payload.deviceId = DEVICE_NODE_ID;
     getModuleStatus(payload.modules);
     
-    sendMessage(&payload, 'I', sizeof(payload));
+    sendMessage(&payload, INFORM_MESSAGE, sizeof(payload));
   }
   
 
@@ -455,21 +473,34 @@ void Device::receive() {
       {
         payload_S payload;
         _network->read(header, &payload, sizeof(payload));
-        LOG2("Received packet #", payload.subtype);
-        break;
-      }
-      case INFORM_MESSAGE:
-      {
-        payload_I payload;
-        _network->read(header, &payload, sizeof(payload));
-        LOG2("Received packet #", payload.deviceId);
+        LOG2("Received packet type S, subtype #", payload.subtype);
+
+        // Sending response
+        payload_I response;
+        response.deviceId = DEVICE_NODE_ID;
+        getModuleStatus(response.modules);
+        sendMessage(&response, INFORM_MESSAGE, sizeof(response));
+        LOG(" - Sent Inform packet");
+        
         break;
       }
       case ACTION_MESSAGE:
       {
         payload_A payload;
         _network->read(header, &payload, sizeof(payload));
-        LOG2("Received packet #", payload.moduleId);
+        LOG2("Received packet type A for module #", payload.moduleId);
+
+        // Applying action to module
+        int i = 0;
+        while ( i < _configuredModulesSize) {
+          if (_configuredModules[i]->getId() == payload.moduleId && (_configuredModules[i]->getType() == LUX_TYPE_ID || _configuredModules[i]->getType() == POTENTIA_TYPE_ID) ) {
+            _configuredModules[i]->setDesiredState(payload.desiredState);
+            i = _configuredModulesSize;
+            LOG(" - Module desired state applied");
+          }
+          i++;
+        }
+        
         break;
       }
       default:

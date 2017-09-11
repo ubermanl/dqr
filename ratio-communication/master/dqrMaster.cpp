@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
 					stmt = con->createStatement();
 				
 					switch(header.type) {
-						case 'I': {
+						case INFORM_MESSAGE: {
 							// Received Information Type Message
 							payload_I dat;
 							network.read(header,&dat,sizeof(dat)); 
@@ -146,18 +146,40 @@ int main(int argc, char** argv) {
 			
 			if ( readsize > 0 ) {
 				// Received message from Listener
-                printf("Rcv data from child: %d\n",operation.deviceId);
-				printf("mod: %d\n",operation.moduleId);
-				printf("msg type: %c\n",operation.type);
-				printf("state: %d\n",operation.desiredState);
+				int response = -1;
+				
+				printf("[Master Server] Rcv request (type: %c) from listener\n",operation.type);
+				printf("[Master Server] ........ Device Id: %d\n",operation.deviceId);
+				
+				switch(operation.type) {
+					case REQUEST_MESSAGE:
+						payload_S req_s;
+						req_s.subtype = all;
+						if ( mesh.write(&req_s,REQUEST_MESSAGE,sizeof(req_s)) ) {
+							response = 0;
+						}
+						break;
+					case ACTION_MESSAGE:
+						printf("[Master Server] ........ Module Id: %d\n",operation.moduleId);
+						printf("[Master Server] ........ Desired State: %d\n",operation.desiredState);
+						payload_A req_a;
+						req_a.moduleId = operation.moduleId;
+						req_a.desiredState = operation.desiredState;
+						if ( mesh.write(&req_a,REQUEST_MESSAGE,sizeof(req_a)) ) {
+							response = 0;
+						}
+						break;
+					default:
+						printf("[Master Server] Rcv bad type (%c) from listener\n",operation.type);
+						break;
+				}
 				
 				// Response for current request
-				int resp = 0;
-				write(par2chi[1], &resp, sizeof(resp));
+				write(par2chi[1], &response, sizeof(response));
             } else {
 				// No requests received - continue...
-                //printf("Read nothing\n");
-                //perror("Error was");
+                //printf("Nothing read\n");
+                //perror("Error: ");
             }
 		
 			delay(1);
