@@ -37,13 +37,25 @@ void Client::close_socket() {}
 
 void Client::send_message(string msg) {
 	if (msg != "") {
+		int count = 0;
+		bool sent_ok, success = false;
+		string response = "";
+
 		msg += REQUEST_STREAM_END;
-		bool success = send_request(msg);
-		if (not success)
-			printf("[Sender] Error while sendind request\n");
-		success = get_response();
-		if (not success)
-			printf("[Sender] Error while receiving response\n");
+
+		while ( !success && count < MAX_SEND_RETRIES ) {
+			sent_ok = send_request(msg);
+			if (!sent_ok) {
+				printf("[Sender] Error while sendind request\n");
+			} else {
+				success = get_response(response);
+			}
+			count++;
+		}
+		if (success)
+			printf("%s",response.c_str());
+		else
+			printf("[Sender] Error detected while sending message to device\n");
 	}
 	
 	close_socket();
@@ -99,8 +111,7 @@ bool Client::send_request(string request) {
     return true;
 }
 
-bool Client::get_response() {
-    string response = "";
+bool Client::get_response(string & response) {
     // read until we get a newline
     while (response.find(REQUEST_STREAM_END) == string::npos) {
         int nread = recv(server_,buf_,1024,0);
@@ -110,17 +121,16 @@ bool Client::get_response() {
                 continue;
             else
                 // an error occurred, so break out
-                return "";
+                return false;
         } else if (nread == 0) {
             // the socket is closed
-            return "";
+            return false;
         }
         // be sure to use append in case we have binary data
         response.append(buf_,nread);
     }
     // a better client would cut off anything after the newline and
     // save it in a cache
-    cout << response;
     return true;
 }
 
@@ -134,7 +144,7 @@ void Client::show_help() {
 }
 
 bool Client::isNumber(char * str) {
-	for (int i=0;i<strlen(str);i++) {
+	for (unsigned int i=0;i<strlen(str);i++) {
 		if (!isdigit(str[i]))
 			return false;
 	}

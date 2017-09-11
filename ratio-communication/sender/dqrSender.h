@@ -15,6 +15,9 @@
 /*** Ratio IPC ***/
 #include "dqrIPC.h"
 
+/*** Static Config ***/
+#define MAX_SEND_RETRIES 10
+
 
 using namespace std;
 
@@ -31,9 +34,9 @@ protected:
 
     void close_socket();
     bool send_request(string);
-    bool get_response();
-	void show_help();
-	bool isNumber(char *);
+    bool get_response(string &);
+    void show_help();
+    bool isNumber(char *);
 
     int server_;
     int buflen_;
