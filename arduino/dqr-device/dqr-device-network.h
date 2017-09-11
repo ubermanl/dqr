@@ -57,3 +57,8 @@ struct __attribute__ ((__packed__)) payload_A {
  * Send to Ratio Notification period in seconds
  */
  #define SEND_TO_RATIO_PERIOD 60
+
+/*
+ * Max retries for sending messages to mesh
+ */
+ #define MAX_MESH_WRITE_RETRIES 30

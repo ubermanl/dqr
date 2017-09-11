@@ -30,6 +30,7 @@
 /*** Configuration Constants ***/
 #define MAX_SENSORS_X_MODULE 5
 #define MAX_MODULES_X_DEVICE  3
+#define MAX_MESH_WRITE_RETRIES 100
 
 /*** Communication Protocol ***/
 #define byte uint8_t

@@ -52,15 +52,14 @@ int main(int argc, char** argv) {
 		close(par2chi[0]);
 		
 		// Setting pipe with listener in non-blocking mode
-		int retval = fcntl( chi2par[0], F_SETFL, fcntl(chi2par[0], F_GETFL) | O_NONBLOCK);
-        	//printf("Ret from fcntl: %d\n", retval);
+		fcntl( chi2par[0], F_SETFL, fcntl(chi2par[0], F_GETFL) | O_NONBLOCK);
 		
 		// Master Node => NodeID = 0
 		mesh.setNodeID(0);
 		// Mesh Connection
 		printf("[Master Server] Initializing Mesh Network...\n");
 		mesh.begin();
-		//radio.printDetails();
+		radio.printDetails();
 
 		/*** Mesh Update and Message Listening ***/
 		while(1) {
@@ -141,8 +140,7 @@ int main(int argc, char** argv) {
 			}
 			
 			// Listener requests received?
-			ssize_t readsize = read(chi2par[0], &operation, sizeof(operation_t));
-			//printf("read: %d\n", readsize);
+			read(chi2par[0], &operation, sizeof(operation_t));
 			
 			if ( readsize > 0 ) {
 				// Received message from Listener
@@ -155,8 +153,13 @@ int main(int argc, char** argv) {
 					case REQUEST_MESSAGE:
 						payload_S req_s;
 						req_s.subtype = all;
-						if ( mesh.write(&req_s,REQUEST_MESSAGE,sizeof(req_s),operation.deviceId) ) {
-							response = 0;
+						
+						int count = 0;
+						while ( count < MAX_MESH_WRITE_RETRIES && response != 0 ) {
+							if ( mesh.write(&req_s,REQUEST_MESSAGE,sizeof(req_s),operation.deviceId) ) {
+								response = 0;
+							}
+							count++;
 						}
 						break;
 					case ACTION_MESSAGE:
@@ -165,8 +168,13 @@ int main(int argc, char** argv) {
 						payload_A req_a;
 						req_a.moduleId = operation.moduleId;
 						req_a.desiredState = operation.desiredState;
-						if ( mesh.write(&req_a,ACTION_MESSAGE,sizeof(req_a),operation.deviceId) ) {
-							response = 0;
+						
+						int count = 0;
+						while ( count < MAX_MESH_WRITE_RETRIES && response != 0 ) {
+							if ( mesh.write(&req_a,ACTION_MESSAGE,sizeof(req_a),operation.deviceId) ) {
+								response = 0;
+							}
+							count++;
 						}
 						break;
 					default:
