@@ -23,7 +23,7 @@ Este es un primer approach a la consola web de gestion del ratio escrita en ruby
 3. Copiar el archivo config/database.yml.example a config/database.yml
 4. En la consola de mysql crear el usuario para ratio `CREATE USER ratio_dev@localhost identified by 'ratio_dev_123';`
 5. Grantear los privilegios al usuario `GRANT ALL PRIVILEGES on *.* to ratio_dev@localhost;`
-6. Crear la db, migrar y levantar los datos de prueba `rake db:create && rake db:migrate && rake db:seed`
+6. Crear la db, migrar y levantar los datos de prueba `rake app:rebuild`
 7. Ejecutar el server `rails s`
 
 A partir de esto si todo sale bien, se deberia levantar WeBrick (server de rails) en http://localhost:3000 y al acceder redireccionar al login, donde se usa admin/admin
