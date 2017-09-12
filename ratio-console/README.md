@@ -9,7 +9,12 @@ Este es un primer approach a la consola web de gestion del ratio escrita en ruby
 * MySql 5.5+
 
 # Instalacion
-Para poder hacer andar la app
+
+* Ruby
+rvm install 2.3
+
+* Rails
+gem install rails -v 4.2.5 --no-ri --no-rdoc
 
 1. Es necesario hacer el git clone del master en este caso
 2. Una vez clonado, y situados en el dir de la app hacer un `bundle install`
