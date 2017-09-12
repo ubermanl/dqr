@@ -21,8 +21,8 @@ ACSensor potentiaACSensor(potentiaConfig1.AC_SENSOR_IN);
 /*** Helper Functions ***/
 unsigned long lastChange = 0;
 void toggleRelayStatus() {
-  LOG2("Button pressed for Module #",luxModule.getId());
   if ((millis() - lastChange) > 100) {
+    LOG2("Button pressed for Module #",luxModule.getId());
     luxModule.touchEvent();
     lastChange = millis();
   }
