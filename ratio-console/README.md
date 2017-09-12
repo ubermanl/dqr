@@ -11,9 +11,11 @@ Este es un primer approach a la consola web de gestion del ratio escrita en ruby
 # Instalacion
 
 * Ruby
+
 rvm install 2.3
 
 * Rails
+
 gem install rails -v 4.2.5 --no-ri --no-rdoc
 
 1. Es necesario hacer el git clone del master en este caso
