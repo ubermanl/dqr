@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
 								
 								int j = 0;
 								while (j < MAX_SENSORS_X_MODULE && dat.modules[i].sensors[j].sensorType != 0) {
-									if (std::isnan(dat.modules[i].sensors[j].value) || std::isinf(dat.modules[i].sensors[j].value)) {
+									if ( dat.modules[i].sensors[j].value == numeric_limits<float>::infinity() ) {
 										dat.modules[i].sensors[j].value = -1;
 									}
 									printf("     . Sensor Type: %d\n",dat.modules[i].sensors[j].sensorType);
