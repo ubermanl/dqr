@@ -96,11 +96,11 @@ const int POT_SENSOR_SENSITIVITY = 100;
  * Relay ON/OFF configuration
  * Default state for modules using relays
  */
-#define LUX_RELAY_ON LOW
-#define LUX_RELAY_OFF HIGH
+#define LUX_RELAY_ON HIGH
+#define LUX_RELAY_OFF LOW
 #define POTENTIA_RELAY_ON LOW
 #define POTENTIA_RELAY_OFF HIGH
-#define LUX_DEFAULT_RELAY HIGH
+#define LUX_DEFAULT_RELAY LOW
 #define POTENTIA_DEFAULT_RELAY LOW
 
 /*
