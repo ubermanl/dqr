@@ -10,13 +10,13 @@
  *  Device Initialization: This sample configuration has 1x Lux and 1x Potentia module
  */
 Lux luxModule(luxConfig1);
-ACSensor luxACSensor(luxConfig1.AC_SENSOR_IN);
+ACSensor luxACSensor(luxConfig1.AC_SENSOR_IN,LUX_SENSOR_SENSITIVITY);
 PIRSensor pirSensor(luxConfig1.PIR_SENS_IN);
 SoundSensor soundSensor(luxConfig1.SND_SENS_IN);
 LightSensor lightSensor(luxConfig1.LUM_SENS_SDA);
 
 Potentia potentiaModule(potentiaConfig1);
-ACSensor potentiaACSensor(potentiaConfig1.AC_SENSOR_IN);
+ACSensor potentiaACSensor(potentiaConfig1.AC_SENSOR_IN,POT_SENSOR_SENSITIVITY);
 
 /*** Helper Functions ***/
 unsigned long lastChange = 0;

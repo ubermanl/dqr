@@ -89,8 +89,8 @@ struct omniConfig {
 /*
  * Sensitivity of the Lux and Potentia AC sensors
  */
-const int luxSensorSensitivity = 100;
-const int potSensorSensitivity = 100;
+const int LUX_SENSOR_SENSITIVITY = 100;
+const int POT_SENSOR_SENSITIVITY = 100;
 
 /*
  * Relay ON/OFF configuration

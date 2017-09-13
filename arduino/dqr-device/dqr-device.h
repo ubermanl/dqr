@@ -51,7 +51,7 @@ class Sensor {
 // Classes for the different sensors
 class ACSensor : public Sensor {
   public:
-    ACSensor(byte);
+    ACSensor(byte,int);
     void senseData();
     float getACValue();
   protected:

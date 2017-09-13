@@ -26,6 +26,11 @@ void Sensor::setup() {
 }
 
 float Sensor::getAverageValue() {
+  /** Uncomment below for debugging purposes **/
+  /*
+  LOG2(" .. Sensor Sample Count: ",_sampleCount);
+  LOG2(" .. Accumulated Value: ",_accumulatedValue);
+  */
   if (_sampleCount == 0) {
     return 0;
   }
@@ -87,7 +92,9 @@ void LightSensor::senseData() {
 };
 
 // AC
-ACSensor::ACSensor(byte pin) : Sensor(AC_TYPE_ID, pin) {};
+ACSensor::ACSensor(byte pin, int sensitivity) : Sensor(AC_TYPE_ID, pin) {
+  _acSensorSensitivity = sensitivity;
+};
 
 void ACSensor::senseData() {
   _currentValue = getACValue();
