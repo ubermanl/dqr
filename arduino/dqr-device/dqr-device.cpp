@@ -154,7 +154,9 @@ void Module::setId(byte modNumber) {
 }
 
 Lux::Lux(struct luxConfig conf) : Module(LUX_TYPE_ID) {
-  _conf = conf;  
+  _conf = conf;
+  _lastTouchTime = 0;
+  _touchState = false;
 }
 
 boolean Lux::setup() {
@@ -171,24 +173,44 @@ boolean Lux::setup() {
 };
 
 void Lux::touchEvent() {
-  switch (_state) {
-    case MODULE_INACTIVE:
-      _state = MODULE_ACTIVE_OVR;
-      setRelayStatus(LUX_RELAY_ON);
-      break;
-    case MODULE_ACTIVE:
-      _state = MODULE_INACTIVE_OVR;
-      setRelayStatus(LUX_RELAY_OFF);
-      break;
-    case MODULE_INACTIVE_OVR:
-      _state = MODULE_ACTIVE;
-      setRelayStatus(LUX_RELAY_ON);
-      break;
-    case MODULE_ACTIVE_OVR:
-      _state = MODULE_INACTIVE;
-      setRelayStatus(LUX_RELAY_OFF);
-      break;
+
+  if ( digitalRead(_pinTouch) == HIGH ) {
+    // se presiono el boton (rising event)
+    if ( (millis() - _lastTouchTime) > TOUCH_DEBOUNCE_TIME ) {
+      LOG2("Touch button pressed for Module #",_id);
+      _lastTouchTime = millis(); 
+    } else
+      LOG2(" - Touch button bouncing for Module #",_id);
+  } else {
+    // se libera el boton (falling event)
+    if ( (millis() - _lastTouchTime) > TOUCH_MINIMUM_ACTIVATION_TIME ) {
+      // Se supera el tiempo de activacion => touch event exitoso!
+      LOG2("Touch button released for Module #",_id);
+      _lastTouchTime = millis();
+
+      switch (_state) {
+        case MODULE_INACTIVE:
+          _state = MODULE_ACTIVE_OVR;
+          setRelayStatus(LUX_RELAY_ON);
+          break;
+        case MODULE_ACTIVE:
+          _state = MODULE_INACTIVE_OVR;
+          setRelayStatus(LUX_RELAY_OFF);
+          break;
+        case MODULE_INACTIVE_OVR:
+          _state = MODULE_ACTIVE;
+          setRelayStatus(LUX_RELAY_ON);
+          break;
+        case MODULE_ACTIVE_OVR:
+          _state = MODULE_INACTIVE;
+          setRelayStatus(LUX_RELAY_OFF);
+          break;
+      }
+
+    }
   }
+  
+
 }
 
 void Lux::setDesiredState(boolean desiredState) {

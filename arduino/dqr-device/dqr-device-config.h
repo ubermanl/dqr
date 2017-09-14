@@ -87,6 +87,13 @@ struct omniConfig {
 #define PIR_TIMEOUT_SECONDS 60
 
 /*
+ * TOUCH_DEBOUNCE_TIME: The ammount of ms while the button pressed is ignored to avoid bouncing
+ * TOUCH_MINIMUM_ACTIVATION_TIME: The ammount of ms while the button is required to be pressed to activate touch event
+ */
+#define TOUCH_DEBOUNCE_TIME 50
+#define TOUCH_MINIMUM_ACTIVATION_TIME 150
+
+/*
  * Sensitivity of the Lux and Potentia AC sensors
  */
 const int LUX_SENSOR_SENSITIVITY = 100;
@@ -111,7 +118,7 @@ const int POT_SENSOR_SENSITIVITY = 100;
 /************************************ Device Specific Configuration - Module config ************************************/
 
 /*** RF24 Node ID (1-255) ***/
-#define DEVICE_NODE_ID 3
+#define DEVICE_NODE_ID 4
 
 // Module ID 3 - Potentia
 const struct potentiaConfig potentiaConfig1 = {

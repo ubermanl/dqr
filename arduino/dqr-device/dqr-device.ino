@@ -19,16 +19,9 @@ Potentia potentiaModule(potentiaConfig1);
 ACSensor potentiaACSensor(potentiaConfig1.AC_SENSOR_IN,POT_SENSOR_SENSITIVITY);
 
 /*** Helper Functions ***/
-unsigned long lastChange = 0;
 void toggleRelayStatus() {
-  if ((millis() - lastChange) > 100) {
-    LOG2("Button pressed for Module #",luxModule.getId());
-    luxModule.touchEvent();
-    lastChange = millis();
-  }
+  luxModule.touchEvent();
 }
-
-
 
 /**** Configure the nrf24l01 CE and CS pins ****/
 RF24 radio(RF24_CE, RF24_CSN);
@@ -67,7 +60,7 @@ void setup() {
   Device::setupModules();
 
   /**** CONFIG: Interruptions for Lux Modules ****/
-  attachInterrupt(digitalPinToInterrupt(luxConfig1.TOUCH_IN), toggleRelayStatus, RISING);
+  attachInterrupt(digitalPinToInterrupt(luxConfig1.TOUCH_IN), toggleRelayStatus, CHANGE);
 
   LOG2("Device ID: #",DEVICE_NODE_ID);
 }

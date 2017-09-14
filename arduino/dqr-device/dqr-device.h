@@ -127,6 +127,8 @@ class Lux : public Module {
   private:
     byte _pinTouch;
     struct luxConfig _conf;
+    uint32_t _lastTouchTime;
+    bool _touchState;
 };
 class Potentia : public Module {
   public:
