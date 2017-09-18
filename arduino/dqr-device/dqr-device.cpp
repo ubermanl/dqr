@@ -61,7 +61,7 @@ void PIRSensor::senseData() {
   if ( _currentValue == 1 ) {
     if ( (millis() - _timer) / 1000 > PIR_TIMEOUT_SECONDS ) {
       /* Send movement detection */
-      _notifyCurrentValue = true;
+      _notifyUrgentValue = true;
     }
     _timer = millis();
   } else {
@@ -156,7 +156,6 @@ void Module::setId(byte modNumber) {
 Lux::Lux(struct luxConfig conf) : Module(LUX_TYPE_ID) {
   _conf = conf;
   _lastTouchTime = 0;
-  _touchState = false;
 }
 
 boolean Lux::setup() {
@@ -166,9 +165,18 @@ boolean Lux::setup() {
   _pinTouch = _conf.TOUCH_IN;
   _pinRelay = _conf.RELAY_OUT;
   pinMode(_pinTouch, INPUT);
-  pinMode(_pinRelay, OUTPUT);  
-  _relayStatus = LUX_DEFAULT_RELAY;
-  digitalWrite(_pinRelay, ! _relayStatus);
+  pinMode(_pinRelay, OUTPUT);
+  _state = LUX_DEFAULT_STATE;
+  switch (_state) {
+    case MODULE_ACTIVE:
+      setRelayStatus(LUX_RELAY_ON);
+      break;
+    case MODULE_INACTIVE:
+      setRelayStatus(LUX_RELAY_OFF);
+      break;
+    default:
+      return false;
+  }
   return true;
 };
 
@@ -177,63 +185,69 @@ void Lux::touchEvent() {
   if ( digitalRead(_pinTouch) == HIGH ) {
     // se presiono el boton (rising event)
     if ( (millis() - _lastTouchTime) > TOUCH_DEBOUNCE_TIME ) {
-      LOG2("Touch button pressed for Module #",_id);
+      LOG2("Touch pressed, modId #",_id);
       _lastTouchTime = millis(); 
-    } else
-      LOG2(" - Touch button bouncing for Module #",_id);
+    }
   } else {
     // se libera el boton (falling event)
     if ( (millis() - _lastTouchTime) > TOUCH_MINIMUM_ACTIVATION_TIME ) {
       // Se supera el tiempo de activacion => touch event exitoso!
-      LOG2("Touch button released for Module #",_id);
+      LOG2("Touch released, modId #",_id);
       _lastTouchTime = millis();
 
+      // Touch Override operation
       switch (_state) {
         case MODULE_INACTIVE:
-          _state = MODULE_ACTIVE_OVR;
-          setRelayStatus(LUX_RELAY_ON);
+        case MODULE_INACTIVE_OVR:
+          transitionEvent(true,true);
           break;
         case MODULE_ACTIVE:
-          _state = MODULE_INACTIVE_OVR;
-          setRelayStatus(LUX_RELAY_OFF);
-          break;
-        case MODULE_INACTIVE_OVR:
-          _state = MODULE_ACTIVE;
-          setRelayStatus(LUX_RELAY_ON);
-          break;
         case MODULE_ACTIVE_OVR:
-          _state = MODULE_INACTIVE;
-          setRelayStatus(LUX_RELAY_OFF);
+          transitionEvent(false,true);
           break;
       }
-
     }
   }
-  
-
 }
 
-void Lux::setDesiredState(boolean desiredState) {
-  if (desiredState) {
-    switch (_state) {
-      case MODULE_INACTIVE:
-        _state = MODULE_ACTIVE;
+void Lux::transitionEvent(boolean moduleOn, boolean ovrd = false) {
+  switch (_state) {
+    case MODULE_INACTIVE:
+       if ( moduleOn ) {
+        if ( ovrd )
+          _state = MODULE_ACTIVE_OVR;
+        else
+          _state = MODULE_ACTIVE;
+          
         setRelayStatus(LUX_RELAY_ON);
-        break;
-      case MODULE_ACTIVE_OVR:
-        _state = MODULE_ACTIVE;
-        break;
-    }
-  } else {
-    switch (_state) {
-      case MODULE_INACTIVE_OVR:
-        _state = MODULE_INACTIVE;
-        break;
-      case MODULE_ACTIVE:
-        _state = MODULE_INACTIVE;
+      }
+      break;
+    case MODULE_ACTIVE:
+      if ( ! moduleOn ) {
+        if ( ovrd )
+          _state = MODULE_INACTIVE_OVR;
+        else
+          _state = MODULE_INACTIVE;
+          
         setRelayStatus(LUX_RELAY_OFF);
-        break;
-    }
+      }
+      break;
+    case MODULE_INACTIVE_OVR:
+       if ( moduleOn && ovrd ) {
+          _state = MODULE_ACTIVE;
+          setRelayStatus(LUX_RELAY_ON);
+       } else if ( ! moduleOn && ! ovrd ) {
+          _state = MODULE_INACTIVE;
+       }
+      break;
+    case MODULE_ACTIVE_OVR:
+       if ( moduleOn && ! ovrd ) {
+          _state = MODULE_ACTIVE;
+       } else if ( ! moduleOn && ovrd ) {
+          _state = MODULE_INACTIVE;
+          setRelayStatus(LUX_RELAY_OFF);
+       }
+      break;
   }
 }
 
@@ -245,13 +259,23 @@ Potentia::Potentia(struct potentiaConfig conf) : Module(POTENTIA_TYPE_ID) {
 boolean Potentia::setup() {
   _pinRelay = _conf.RELAY_OUT;
   pinMode(_pinRelay, OUTPUT);
-  _relayStatus = POTENTIA_DEFAULT_RELAY;
-  digitalWrite(_pinRelay, ! _relayStatus);  
+  _state = POTENTIA_DEFAULT_STATE;
+  switch (_state) {
+    case MODULE_ACTIVE:
+      _relayStatus = POTENTIA_RELAY_ON;
+      break;
+    case MODULE_INACTIVE:
+      _relayStatus = POTENTIA_RELAY_OFF;
+      break;
+    default:
+      return false;
+  }
+  digitalWrite(_pinRelay, _relayStatus);
   return true;
 };
 
-void Potentia::setDesiredState(boolean desiredState) {
-  if (desiredState) {
+void Potentia::transitionEvent(boolean moduleOn, boolean ovrd = false) {
+  if (moduleOn) {
     _state = MODULE_ACTIVE;
     setRelayStatus(POTENTIA_RELAY_ON);
   } else {
@@ -265,11 +289,12 @@ Omni::Omni(struct omniConfig conf) : Module(OMNI_TYPE_ID) {
 }
 
 boolean Omni::setup() {
+  _state = MODULE_ACTIVE;
   return true;
 };
 
-void Omni::setDesiredState(boolean desiredState) {
-  if (desiredState) {
+void Omni::transitionEvent(boolean moduleOn, boolean ovrd = false) {
+  if (moduleOn) {
     _state = MODULE_ACTIVE;
   } else {
     _state = MODULE_INACTIVE;
@@ -277,21 +302,9 @@ void Omni::setDesiredState(boolean desiredState) {
 }
 
 void Module::setRelayStatus(boolean newStatus) {
-  if (_relayStatus != newStatus) {
-    digitalWrite(_pinRelay, ! newStatus);
-    _relayStatus = newStatus;
-  };
+  _relayStatus = newStatus;
+  digitalWrite(_pinRelay, _relayStatus);
 };
-
-boolean Module::getRelayStatus() {
-  return _relayStatus;
-};
-
-/*
-void Module::toggleRelayStatus() {
-  setRelayStatus(!getRelayStatus());
-};
-*/
 
 void Module::setupSensors() {
   for (int i=0; i < _configuredSensorsSize; i++) {
@@ -369,7 +382,7 @@ void Device::setNetwork(RF24Network &network, RF24Mesh &mesh) {
 void Device::setup() {
   /**** Mesh setup and initialization ****/
   _mesh->setNodeID(DEVICE_NODE_ID);
-  LOG(F("Connecting to the mesh..."));
+  LOG(F("Connecting to mesh..."));
   _mesh->begin();
 
   _configuredModulesSize = 0;
@@ -400,13 +413,13 @@ void Device::setupModules() {
     _configuredModules[i]->setupSensors();
     switch (_configuredModules[i]->getType()) {
       case LUX_TYPE_ID:
-        LOG2("LUX Module Setup, id: ", _configuredModules[i]->getId());
+        LOG2("LUX ModId: ", _configuredModules[i]->getId());
         break;
       case POTENTIA_TYPE_ID:
-        LOG2("POTENTIA Module Setup, id: ", _configuredModules[i]->getId());
+        LOG2("POTENTIA ModId: ", _configuredModules[i]->getId());
         break;
       case OMNI_TYPE_ID:
-        LOG2("OMNI Module Setup, id: ", _configuredModules[i]->getId());
+        LOG2("OMNI ModId: ", _configuredModules[i]->getId());
         break;
     }
   }
@@ -415,7 +428,7 @@ void Device::setupModules() {
 /*** Device methods for different operating States ***/
 void Device::runPreconfigured() {
   _currentState = DEVICE_PRECONFIGURED;
-  LOG2("Current Device State: ",_currentState);
+  LOG2("Current Main State: ",_currentState);
   
   if (_mesh->checkConnection()) {
     _devFSM->transitionTo(*_sOperational);
@@ -426,7 +439,7 @@ void Device::runPreconfigured() {
 
 void Device::runDiscovery() {
   _currentState = DEVICE_DISCOVERY;
-  LOG2("Current Device State: ",_currentState);
+  LOG2("Current Main State: ",_currentState);
   
   _mesh->renewAddress();
   _devFSM->transitionTo(*_sAwaitingConnection);
@@ -434,7 +447,7 @@ void Device::runDiscovery() {
 
 void Device::runAwaitingConnection() {
   _currentState = DEVICE_AWAITINGCONNECTION;
-   LOG2("Current Device State: ",_currentState);
+   LOG2("Current Main State: ",_currentState);
   
   if (_mesh->checkConnection()) {
     _devFSM->transitionTo(*_sOperational);
@@ -448,7 +461,7 @@ void Device::runUnmanaged() {
   _currentState = DEVICE_UNMANAGED;
   if (millis() - _timer >= 15000) {
     _timer = millis();
-    LOG2("Current Device State: ",_currentState);
+    LOG2("Current Main State: ",_currentState);
     _devFSM->transitionTo(*_sPreconfigured);
   }
 }
@@ -461,7 +474,7 @@ void Device::runOperational() {
   // Send to the master node Information Message
   if ((millis() - _timer) / 1000 >= SEND_TO_RATIO_PERIOD ) {
     _timer = millis();
-    LOG2("Current Device State: ",_currentState);
+    LOG2("Current Main State: ",_currentState);
     
     payload_I payload;
     payload.deviceId = DEVICE_NODE_ID;
@@ -469,7 +482,6 @@ void Device::runOperational() {
     
     sendMessage(&payload, INFORM_MESSAGE, sizeof(payload));
   }
-  
 
   receive();
 }
@@ -484,6 +496,16 @@ void Device::run() {
 
 /*** Private Functions ***/
 
+int Device::getModuleIndex(uint16_t modId) {
+  int i = 0;
+  while ( i < _configuredModulesSize) {
+    if (_configuredModules[i]->getId() == modId)
+      return i;
+    i++;
+  }
+  return -1;
+}
+
 void Device::sendMessage(const void * data, uint8_t msg_type, size_t size) {
   int count = 0;
   bool sendStatus = false;
@@ -491,9 +513,7 @@ void Device::sendMessage(const void * data, uint8_t msg_type, size_t size) {
     sendStatus = _mesh->write(data, msg_type, size);
     count++;
   }
-  if (sendStatus) {
-    LOG2("Send OK: ",_timer);
-  } else {
+  if (!sendStatus) {
     LOG("Send Failed!");
     _devFSM->transitionTo(*_sPreconfigured);
   }
@@ -508,14 +528,14 @@ void Device::receive() {
       {
         payload_S payload;
         _network->read(header, &payload, sizeof(payload));
-        LOG2("Received packet type S, subtype #", payload.subtype);
+        LOG2("Received #S pkt, subtype #", payload.subtype);
 
         // Sending response
         payload_I response;
         response.deviceId = DEVICE_NODE_ID;
         getModuleStatus(response.modules);
         sendMessage(&response, INFORM_MESSAGE, sizeof(response));
-        LOG(" - Sent Inform packet");
+        LOG(" - Sent #I pkt");
         
         break;
       }
@@ -523,19 +543,14 @@ void Device::receive() {
       {
         payload_A payload;
         _network->read(header, &payload, sizeof(payload));
-        LOG2("Received packet type A for module #", payload.moduleId);
+        LOG2("Received #A pkt, modId #", payload.moduleId);
 
         // Applying action to module
-        int i = 0;
-        while ( i < _configuredModulesSize) {
-          if (_configuredModules[i]->getId() == payload.moduleId && (_configuredModules[i]->getType() == LUX_TYPE_ID || _configuredModules[i]->getType() == POTENTIA_TYPE_ID) ) {
-            _configuredModules[i]->setDesiredState(payload.desiredState);
-            i = _configuredModulesSize;
-            LOG(" - Module desired state applied");
-          }
-          i++;
+        int modIdx = getModuleIndex(payload.moduleId);
+        if ( modIdx != -1 && (_configuredModules[modIdx]->getType() == LUX_TYPE_ID || _configuredModules[modIdx]->getType() == POTENTIA_TYPE_ID) ) {
+          _configuredModules[modIdx]->transitionEvent(payload.desiredState,payload.overrideSet);
+          LOG2(" - Action applied, modId #", payload.moduleId);
         }
-        
         break;
       }
       default:

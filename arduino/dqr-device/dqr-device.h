@@ -35,16 +35,15 @@ class Sensor {
     byte getType() { return _typeId; };
     virtual float getAverageValue();
     virtual void senseData() = 0;
-    void setPin(int);
-    boolean isUrgentNotification() { return _notifyCurrentValue; };
-    void resetUrgentNotification() { _notifyCurrentValue = false; };
+    boolean isUrgentNotification() { return _notifyUrgentValue; };
+    void resetUrgentNotification() { _notifyUrgentValue = false; };
   protected:
     byte _typeId;
     float _accumulatedValue;
     float _currentValue;
     long _sampleCount;
     int _pinSensor;
-    boolean _notifyCurrentValue = false;
+    boolean _notifyUrgentValue = false;
 };
 
 
@@ -104,7 +103,7 @@ class Module {
     void setupSensors();
     void setRelayStatus(boolean);
     boolean getRelayStatus();
-    virtual void setDesiredState(boolean);
+    virtual void transitionEvent(boolean, boolean);
     virtual boolean setup() = 0;
     void run();
   protected:
@@ -113,7 +112,7 @@ class Module {
     byte _state;
     byte _configuredSensorsSize;
     Sensor * _configuredSensors[MAX_SENSORS_X_MODULE];
-    int _pinRelay;      
+    int _pinRelay;
     boolean _relayStatus;
 };
 
@@ -121,20 +120,18 @@ class Lux : public Module {
   public:
     Lux(struct luxConfig conf);
     boolean setup();
-    byte getPinTouch() { return _pinTouch; }; 
     void touchEvent();
-    void setDesiredState(boolean);
+    void transitionEvent(boolean, boolean);
   private:
     byte _pinTouch;
     struct luxConfig _conf;
     uint32_t _lastTouchTime;
-    bool _touchState;
 };
 class Potentia : public Module {
   public:
     Potentia(struct potentiaConfig conf);
     boolean setup();
-    void setDesiredState(boolean);
+    void transitionEvent(boolean, boolean);
   private:
     struct potentiaConfig _conf;
 };
@@ -142,7 +139,7 @@ class Omni : public Module {
   public:
     Omni(struct omniConfig conf);
     boolean setup();
-    void setDesiredState(boolean);
+    void transitionEvent(boolean, boolean);
   private:  
     struct omniConfig _conf;
 };
@@ -172,11 +169,6 @@ class Device {
     static void run();
 
     /*
-     * Send Message to Ratio
-     */
-    static void sendMessage(const void * data, uint8_t msg_type, size_t size);
-
-    /*
      * Preconfigured State Operation
      */
     static void runPreconfigured();
@@ -201,6 +193,11 @@ class Device {
      */
     static void runOperational();
 
+    /*
+     * Send Message to Ratio
+     */
+    static void sendMessage(const void * data, uint8_t msg_type, size_t size);
+
   private:
     /*** Variables ***/
     static Module * _configuredModules[MAX_MODULES_X_DEVICE];
@@ -217,6 +214,7 @@ class Device {
     static RF24Mesh * _mesh;
 
     /*** Methods ***/
+    static int getModuleIndex(uint16_t);
     static void receive();
 };
 

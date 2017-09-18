@@ -69,22 +69,5 @@ void loop() {
   
   Device::run();
 
-
-  /*************** TODO LO QUE ESTA ACA ES PARA PROBAR Y SE PUEDE BORRAR *************************/
-  /*
-  // Agregado para probar activacion del LUX por SERIAL
-  if (Serial.available() > 0) {
-    Serial.print("Processing messages...");
-    String msg = Serial.readString();
-    if ( msg == "ON") {
-      luxModule.setDesiredState(true);
-    } else if (msg == "OFF") {
-      luxModule.setDesiredState(false);
-    }
-    Serial.println(" Complete!");
-  }
-  */
-
- /*************** TODO LO QUE ESTA ACA ES PARA PROBAR Y SE PUEDE BORRAR *************************/
 }
 

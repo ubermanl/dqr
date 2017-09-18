@@ -78,8 +78,10 @@ struct omniConfig {
  */
 #define MODULE_INACTIVE     0
 #define MODULE_ACTIVE       1
-#define MODULE_INACTIVE_OVR 2 
+#define MODULE_INACTIVE_OVR 2
 #define MODULE_ACTIVE_OVR   3
+#define LUX_DEFAULT_STATE 0
+#define POTENTIA_DEFAULT_STATE 1
 
 /*
  * The ammount of seconds a PIR detection window lasts
@@ -103,12 +105,10 @@ const int POT_SENSOR_SENSITIVITY = 100;
  * Relay ON/OFF configuration
  * Default state for modules using relays
  */
-#define LUX_RELAY_ON HIGH
-#define LUX_RELAY_OFF LOW
-#define POTENTIA_RELAY_ON LOW
-#define POTENTIA_RELAY_OFF HIGH
-#define LUX_DEFAULT_RELAY LOW
-#define POTENTIA_DEFAULT_RELAY LOW
+#define LUX_RELAY_ON LOW
+#define LUX_RELAY_OFF HIGH
+#define POTENTIA_RELAY_ON HIGH
+#define POTENTIA_RELAY_OFF LOW
 
 /*
  * Maximum value stored for accumulated sensing
