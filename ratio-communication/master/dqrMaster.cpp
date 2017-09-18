@@ -171,6 +171,7 @@ int main(int argc, char** argv) {
 						payload_A req_a;
 						req_a.moduleId = operation.moduleId;
 						req_a.desiredState = operation.desiredState;
+						req_a.overrideSet = operation.overrideSet;
 						
 						while ( count < MAX_MESH_WRITE_RETRIES && response != 0 ) {
 							if ( mesh.write(&req_a,ACTION_MESSAGE,sizeof(req_a),operation.deviceId) ) {

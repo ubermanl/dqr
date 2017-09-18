@@ -60,7 +60,8 @@ struct __attribute__ ((__packed__)) payload_I {
   payload_module modules[MAX_MODULES_X_DEVICE];
 };
 struct __attribute__ ((__packed__)) payload_A {
-  byte desiredState;
+  bool desiredState;
+  bool overrideSet;
   uint16_t moduleId;
 };
 

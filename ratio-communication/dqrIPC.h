@@ -5,7 +5,8 @@ struct operation_t {
     int deviceId;
     int moduleId;
     char type;
-    int desiredState;
+    bool desiredState;
+	bool overrideSet;
 };
 #define REQUEST_STREAM_END "\n"
 #define RESPONSE_OK "0"
@@ -16,4 +17,6 @@ struct operation_t {
 #define A_REQUEST_COD "A"
 #define STATE_ON "1"
 #define STATE_OFF "0"
+#define OVERRIDE_ON "1"
+#define OVERRIDE_OFF "0"
 #endif

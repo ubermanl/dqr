@@ -70,12 +70,14 @@ string Client::parse_args(int argc, char ** argv) {
 		msg = S_REQUEST_MSG + std::string(" ");
 		msg += argv[2];
 	}
-	if ( argc == 5 && strcmp(argv[1],A_REQUEST_COD) == 0 && (strcmp(argv[4],STATE_ON) == 0 || strcmp(argv[4],STATE_OFF) == 0) ) {
+	if ( argc == 6 && strcmp(argv[1],A_REQUEST_COD) == 0 && 
+		( strcmp(argv[4],STATE_ON) == 0 || strcmp(argv[4],STATE_OFF) == 0) && (strcmp(argv[5],OVERRIDE_ON) == 0 || strcmp(argv[5],OVERRIDE_OFF) == 0) ) {
 		valid = isNumber(argv[2]) && isNumber(argv[3]);
 		msg = A_REQUEST_MSG + std::string(" ");
 		msg += argv[2] + std::string(" ");
 		msg += argv[3] + std::string(" ");
-		msg += argv[4];
+		msg += argv[4] + std::string(" ");
+		msg += argv[5];
 	}
 	if (!valid) {
 		perror("[Sender] Invalid arguments!\n");
@@ -141,6 +143,7 @@ void Client::show_help() {
 	printf("  - device_id (positive integer)\n");
 	printf("  - [module_id] (positive integer - only valid with type = A)\n");
 	printf("  - [desired_state] (0 | 1 - only valid with type = A)\n");
+	printf("  - [override] (0 | 1 - only valid with type = A)\n");
 }
 
 bool Client::isNumber(char * str) {
@@ -160,6 +163,7 @@ int main(int argc, char ** argv)
 			- device_id: int
 			- module_id: int		(solo con type = A)
 			- desired_state: 0 | 1	(solo con type = A)
+			- override: 0 | 1		(solo con type = A)
 	**/
 	
 	Client client = Client();

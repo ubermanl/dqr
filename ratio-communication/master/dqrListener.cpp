@@ -204,11 +204,18 @@ bool Listener::parse_request(string str, operation_t * operation) {
 				operation->moduleId = atoi(aux.c_str());
 				i = ++j;
 				j = str.find(delimiter, j);
-				aux = str.substr(i, str.length()-i-1);
+				aux = str.substr(i, j-i);
 				if (aux == STATE_ON || aux == STATE_OFF) {
-					// word #4 in request is valid state => request OK
+					// word #4 in request is valid state
 					operation->desiredState = atoi(aux.c_str());
-					return true;
+					i = ++j;
+					j = str.find(delimiter, j);
+					aux = str.substr(i, str.length()-i-1);
+					if (aux == OVERRIDE_ON || aux == OVERRIDE_OFF) {
+						// word #5 in request is valid override condition => request OK
+						operation->overrideSet = atoi(aux.c_str());
+						return true;
+					}
 				}
 			}
 		}
