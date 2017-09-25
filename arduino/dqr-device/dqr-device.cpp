@@ -181,32 +181,38 @@ boolean Lux::setup() {
 };
 
 void Lux::touchEvent() {
-
-  if ( digitalRead(_pinTouch) == HIGH ) {
-    // se presiono el boton (rising event)
-    if ( (millis() - _lastTouchTime) > TOUCH_DEBOUNCE_TIME ) {
-      LOG2("Touch pressed, modId #",_id);
-      _lastTouchTime = millis(); 
-    }
-  } else {
-    // se libera el boton (falling event)
-    if ( (millis() - _lastTouchTime) > TOUCH_MINIMUM_ACTIVATION_TIME ) {
-      // Se supera el tiempo de activacion => touch event exitoso!
-      LOG2("Touch released, modId #",_id);
-      _lastTouchTime = millis();
-
-      // Touch Override operation
-      switch (_state) {
-        case MODULE_INACTIVE:
-        case MODULE_INACTIVE_OVR:
-          transitionEvent(true,true);
-          break;
-        case MODULE_ACTIVE:
-        case MODULE_ACTIVE_OVR:
-          transitionEvent(false,true);
-          break;
+  bool newStatus = digitalRead(_pinTouch);
+  if (newStatus != _lastStatus ) {
+    if ( newStatus == HIGH ) {
+      // se presiono el boton (rising event)
+      if ( (millis() - _lastTouchTime) > TOUCH_DEBOUNCE_TIME ) {
+        LOG2("Touch pressed, modId #",_id);
+      }
+      else {
+        LOG("Bounce detected");
       }
     }
+    else {
+      // se libera el boton (falling event)
+      if ( (millis() - _lastTouchTime) > TOUCH_MINIMUM_ACTIVATION_TIME ) {
+        // Se supera el tiempo de activacion => touch event exitoso!
+        LOG2("Touch released, modId #",_id);
+   
+        // Touch Override operation
+        switch (_state) {
+          case MODULE_INACTIVE:
+          case MODULE_INACTIVE_OVR:
+            transitionEvent(true,true);
+            break;
+          case MODULE_ACTIVE:
+          case MODULE_ACTIVE_OVR:
+            transitionEvent(false,true);
+            break;
+          }
+        }
+      }
+      _lastStatus = newStatus;
+      _lastTouchTime = millis();
   }
 }
 
