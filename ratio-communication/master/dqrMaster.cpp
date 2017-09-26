@@ -20,6 +20,10 @@ using namespace std;
 /**************************************** MAIN ****************************************/
 int main(int argc, char** argv) {
 	
+	/*** Disable buffered output ***/
+	setbuf(stdout, NULL);
+	setbuf(stderr, NULL);
+
 	/*** Fork Ratio Listener ***/
 	int chi2par[2], par2chi[2];
 	pid_t   listenerPid;
