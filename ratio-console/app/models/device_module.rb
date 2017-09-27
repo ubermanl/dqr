@@ -53,6 +53,11 @@ class DeviceModule < ActiveRecord::Base
     result = `#{cmd}`
     Rails.logger.info result
     result
+    cmd = "dqrSender S #{self.device_id}"
+    Rails.logger.info cmd
+    result = `#{cmd}`
+    Rails.logger.info result
+    result
   end
   
 end
