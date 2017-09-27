@@ -48,7 +48,7 @@ class DeviceModule < ActiveRecord::Base
   
   private
   def perform_toggle(status,override)
-    cmd = "dqrSender A #{self.id} #{status} #{override}"
+    cmd = "dqrSender A #{self.device_id} #{self.id} #{status} #{override}"
     Rails.logger.info cmd
     result = `#{cmd}`
     Rails.logger.info result
