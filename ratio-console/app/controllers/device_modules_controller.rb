@@ -10,7 +10,7 @@ class DeviceModulesController < ApplicationController
   end
   
   def activate 
-    @module.deactivate
+    @module.activate
     respond_to do |format|
       format.js {}
       format.html { redirect_to device_url(@module.device_id)}
