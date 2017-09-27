@@ -1,0 +1,14 @@
+[Unit]
+Description=DqR master server 
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/dqrMaster
+ExecStop=/bin/kill ${MAINPID}
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=dqrMaster
+
+[Install]
+WantedBy=multi-user.target

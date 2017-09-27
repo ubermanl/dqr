@@ -1,0 +1,7 @@
+/var/log/dqr/* {
+  rotate 12
+  monthly
+  compress
+  missingok
+  notifempty
+}
