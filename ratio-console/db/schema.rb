@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170926201013) do
+ActiveRecord::Schema.define(version: 20170927204055) do
 
   create_table "ambiences", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false
@@ -40,14 +40,14 @@ ActiveRecord::Schema.define(version: 20170926201013) do
   end
 
   create_table "device_events_view", id: false, force: :cascade do |t|
-    t.integer  "id",              limit: 4,                         default: 0,     null: false
-    t.integer  "device_id",       limit: 4,                                         null: false
-    t.integer  "module_id",       limit: 4,                                         null: false
-    t.boolean  "state",                                             default: false, null: false
-    t.datetime "ts",                                                                null: false
-    t.integer  "device_event_id", limit: 4,                                         null: false
-    t.integer  "sensor_type_id",  limit: 4,                                         null: false
-    t.decimal  "value",                     precision: 8, scale: 4,                 null: false
+    t.integer  "id",              limit: 4,                         default: 0, null: false
+    t.integer  "device_id",       limit: 4,                                     null: false
+    t.integer  "module_id",       limit: 4,                                     null: false
+    t.integer  "state",           limit: 4,                         default: 0, null: false
+    t.datetime "ts",                                                            null: false
+    t.integer  "device_event_id", limit: 4,                                     null: false
+    t.integer  "sensor_type_id",  limit: 4,                                     null: false
+    t.decimal  "value",                     precision: 8, scale: 4,             null: false
   end
 
   create_table "device_modules", force: :cascade do |t|

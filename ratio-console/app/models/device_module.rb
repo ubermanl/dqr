@@ -10,6 +10,26 @@ class DeviceModule < ActiveRecord::Base
     self.events.order(ts: :desc).first
   end
   
+  def last_status
+    @last_status ||= events.order(ts: :desc).first
+    @last_status
+  end
+  
+  def active?
+    last_status.state == 1
+  end
+  def inactive?
+    last_status.state == 0
+  end
+  
+  def override_active?
+    last_status.state == 3
+  end
+  
+  def override_inactive?
+    last_status.state == 4
+  end
+  
   def activate
     perform_toggle(1,0)
   end
@@ -29,7 +49,10 @@ class DeviceModule < ActiveRecord::Base
   private
   def perform_toggle(status,override)
     cmd = "dqrSender #{self.id} #{status} #{override}"
+    Rails.logger.info cmd
     result = `#{cmd}`
+    Rails.logger.info result
+    result
   end
   
 end

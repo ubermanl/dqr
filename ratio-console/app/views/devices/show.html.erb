@@ -4,7 +4,7 @@
 <% @device.modules.each do |m| %>
   <div data-module-id="<%= m.id %>">
     <div class="ui header top attached basic">
-      <%= m.module_type.name %>
+      <%= m.module_type.name %> <%= m.last_status.state %>
     </div>
     <div class="ui attached segment top blue">
       <% m.sensors.each do |s| %>
@@ -26,10 +26,10 @@
       <% end %>
     </div>
     <div class="ui buttons bottom attached">
-      <%= link_to 'ON', device_module_activate_url(m), class:'ui button' %>
-      <%= link_to 'OFF', device_module_deactivate_url(m), class:'ui button' %>
-      <%= link_to 'OVR ON', device_module_activate_url(m,override:1), class:'ui button' %>
-      <%= link_to 'OVR OFF', device_module_deactivate_url(m,override:1), class:'ui button' %>
+      <%= link_to 'ON', device_module_activate_url(m), class:"ui button #{' disabled' if m.active? }" %>
+      <%= link_to 'OFF', device_module_deactivate_url(m), class:"ui button #{' disabled' if m.inactive? }" %>
+      <%= link_to 'OVR ON', device_module_activate_url(m,override:1), class:"ui button #{' disabled' if m.override_active? }" %>
+      <%= link_to 'OVR OFF', device_module_deactivate_url(m,override:1), class:"ui button #{' disabled' if m.override_inactive? }" %>
     </div>
   </div>
   <br />
