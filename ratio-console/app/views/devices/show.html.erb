@@ -1,0 +1,37 @@
+<div class="ui header dividing blue">
+  <%= @device.name %> Status
+</div>
+<% @device.modules.each do |m| %>
+  <div data-module-id="<%= m.id %>">
+    <div class="ui header top attached basic">
+      <%= m.module_type.name %>
+    </div>
+    <div class="ui attached segment top blue">
+      <% m.sensors.each do |s| %>
+        <h5 class="ui header">
+          <i class="icon <%= s.sensor_type.icon %>"></i>
+          <div class="content">
+            <%= s.sensor_type.name %>
+          </div>
+        </h5>
+        <div class="ui segment basic">
+          <div class="sgp-<%= m.id %>-<%= s.sensor_type_id %>" 
+                data-sensor-graph="graph" 
+                data-module-id="<%= m.id %>" 
+                data-sensor-type-id="<%= s.sensor_type_id %>"
+                data-sensor-unit="<%= s.sensor_type.unit %>">
+            
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="ui buttons bottom attached">
+      <%= link_to 'ON', device_module_activate_url(m), class:'ui button' %>
+      <%= link_to 'OFF', device_module_deactivate_url(m), class:'ui button' %>
+      <%= link_to 'OVR ON', device_module_activate_url(m,override:1), class:'ui button' %>
+      <%= link_to 'OVR OFF', device_module_deactivate_url(m,override:1), class:'ui button' %>
+    </div>
+  </div>
+  <br />
+<% end %>
+  

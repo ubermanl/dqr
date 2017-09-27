@@ -1,0 +1,15 @@
+<tr>
+  <td><%= event.id %></td>
+  <td>
+      <table>
+        <tbody>
+          <% event.sensor_events.each do |s| %>
+          <tr>
+            <td><%= s.sensor_type.name %></td>
+            <td><%= s.value %> <%= s.sensor_type.unit %></td>
+          </tr>  
+          <% end %>
+        </tbody>
+      </table>
+  </td>
+</tr>

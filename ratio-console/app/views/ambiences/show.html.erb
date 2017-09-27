@@ -1,14 +1,21 @@
-<p id="notice"><%= notice %></p>
+<h1><%= @ambience.name %></h1>
 
-<p>
-  <strong>Name:</strong>
-  <%= @ambience.name %>
-</p>
-
-<p>
-  <strong>Is deleted:</strong>
-  <%= @ambience.is_deleted %>
-</p>
-
-<%= link_to 'Edit', edit_ambience_path(@ambience) %> |
-<%= link_to 'Back', ambiences_path %>
+<table class="ui table unstackable">
+  <thead>
+    <tr>
+      <th>Device Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @ambience.devices.each do |a| %>
+      <tr>
+        <td><% a.name %></td>
+      </tr>
+    <% end %>
+    <% if @ambience.devices.none? %>
+      <tr>
+        <td>No devices here!</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

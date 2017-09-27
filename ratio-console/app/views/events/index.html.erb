@@ -1,0 +1,19 @@
+<h1>Events</h1>
+<table class="ui table unstackable" data-identifier="events-table">
+  <thead>
+    <tr>
+      <th>EID</th>
+      <th>Module</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @events.each do |e| %>
+      <%= render partial:'event', locals:{ event:e } %>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th colspan="2"><div class="ui button primary fluid" data-behavior="load-more">Mas...</div></th>
+    </tr>
+  </tfoot>
+</table>

@@ -1,25 +1,20 @@
 <%= form_for(@ambience) do |f| %>
-  <% if @ambience.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@ambience.errors.count, "error") %> prohibited this ambience from being saved:</h2>
-
-      <ul>
-      <% @ambience.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+  <%= render partial:'shared/errors', locals: {model: @ambience} %>
+  
+  <div class="ui form">
+    <div class="one required field">
+      <%= f.label :name %>
+      <%= f.text_field :name %>  
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :is_deleted %><br>
-    <%= f.check_box :is_deleted %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+    <div class="one field">
+      <div class="ui toggle checkbox">
+        <%= f.check_box :is_deleted %>
+        <%= f.label :is_deleted %>
+      </div>
+    </div>
+    <div class="ui buttons">
+      <%= f.submit nil, class:'ui button primary' %>
+      <%= link_to 'Cancel', ambiences_url, class:'ui button' %>
+    </div>
   </div>
 <% end %>

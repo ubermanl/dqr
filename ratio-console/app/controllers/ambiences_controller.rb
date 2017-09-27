@@ -59,6 +59,12 @@ class AmbiencesController < ApplicationController
       format.html { redirect_to ambiences_url, notice: 'Ambience was successfully destroyed.' }
       format.json { head :no_content }
     end
+  rescue ActiveRecord::DeleteRestrictionError => er
+    respond_to do |format|
+      flash[:error] = 'Cannot be deleted, some devices depend on it'
+      format.html { redirect_to ambiences_url }
+      format.json { head :no_content }
+    end
   end
 
   private

@@ -11,13 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170905164710) do
+ActiveRecord::Schema.define(version: 20170926201013) do
 
   create_table "ambiences", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false
     t.boolean  "is_deleted",             default: false, null: false
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
+  end
+
+  create_table "device_definition_view", id: false, force: :cascade do |t|
+    t.integer "device_id",      limit: 4, null: false
+    t.integer "module_id",      limit: 4, null: false
+    t.integer "sensor_type_id", limit: 4, null: false
   end
 
   create_table "device_event_sensors", id: false, force: :cascade do |t|
@@ -33,6 +39,17 @@ ActiveRecord::Schema.define(version: 20170905164710) do
     t.datetime "ts",                                  null: false
   end
 
+  create_table "device_events_view", id: false, force: :cascade do |t|
+    t.integer  "id",              limit: 4,                         default: 0,     null: false
+    t.integer  "device_id",       limit: 4,                                         null: false
+    t.integer  "module_id",       limit: 4,                                         null: false
+    t.boolean  "state",                                             default: false, null: false
+    t.datetime "ts",                                                                null: false
+    t.integer  "device_event_id", limit: 4,                                         null: false
+    t.integer  "sensor_type_id",  limit: 4,                                         null: false
+    t.decimal  "value",                     precision: 8, scale: 4,                 null: false
+  end
+
   create_table "device_modules", force: :cascade do |t|
     t.integer  "device_id",      limit: 4
     t.integer  "module_type_id", limit: 4
@@ -43,6 +60,10 @@ ActiveRecord::Schema.define(version: 20170905164710) do
 
   add_index "device_modules", ["device_id"], name: "index_device_modules_on_device_id", using: :btree
   add_index "device_modules", ["module_type_id"], name: "index_device_modules_on_module_type_id", using: :btree
+
+  create_table "device_states", force: :cascade do |t|
+    t.string "name", limit: 255, null: false
+  end
 
   create_table "devices", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -65,6 +86,10 @@ ActiveRecord::Schema.define(version: 20170905164710) do
   add_index "module_sensors", ["device_module_id"], name: "index_module_sensors_on_device_module_id", using: :btree
   add_index "module_sensors", ["sensor_type_id"], name: "index_module_sensors_on_sensor_type_id", using: :btree
 
+  create_table "module_states", force: :cascade do |t|
+    t.string "name", limit: 255, null: false
+  end
+
   create_table "module_types", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.datetime "created_at",             null: false
@@ -73,6 +98,8 @@ ActiveRecord::Schema.define(version: 20170905164710) do
 
   create_table "sensor_types", force: :cascade do |t|
     t.string   "name",       limit: 255
+    t.string   "icon",       limit: 255
+    t.string   "unit",       limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end

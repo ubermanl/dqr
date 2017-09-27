@@ -1,0 +1,14 @@
+<% if flash.any? %>
+<div class="ui container fluid closable">
+<% flash.each do |name, msg| %>
+  <% if msg.is_a?(String) %>
+  <div class="ui message <%= name.to_s == 'notice' ? 'success' : 'error' %>">
+    <i class="close icon"></i>
+    <%= content_tag :div, msg %>
+    <% msg = nil %>
+  </div>
+  <% end %>
+  <% end %>
+</div>
+<br />
+<% end %>

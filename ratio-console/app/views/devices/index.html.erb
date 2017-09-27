@@ -1,0 +1,4 @@
+<h1>Devices</h1>
+<% @devices.each do |d| %>
+  <%= render partial:'device', locals:{ device: d } %>
+<% end %>

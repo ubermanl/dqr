@@ -1,10 +1,21 @@
 Rails.application.routes.draw do
+  
   resources :ambiences
+  resources :devices
+  resources :device_modules do 
+    get 'activate'
+    get 'deactivate'
+  end
+  
+  get 'module_sensors/get_events' => 'module_sensors#get_events'
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
+  
+  get 'events' => 'events#index'
   
   resources :user_sessions, only: [:create, :destroy]
   get '/logout', to: 'user_sessions#destroy', as: :logout

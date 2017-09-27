@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/doabit/semantic-ui-sass.git
-  revision: bd6e6fbc10093833e9d517c5fb29422fc617d657
+  revision: ddb56eebc86ec4c2d9d634b6b6b16d561cacdc84
   specs:
-    semantic-ui-sass (2.2.12.0)
+    semantic-ui-sass (2.2.11.0)
       sass (>= 3.2)
 
 GEM
@@ -44,11 +44,11 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.4)
-    authlogic (3.5.0)
-      activerecord (>= 3.2, < 5.1)
-      activesupport (>= 3.2, < 5.1)
+    authlogic (3.4.6)
+      activerecord (>= 3.2)
+      activesupport (>= 3.2)
       request_store (~> 1.0)
-      scrypt (>= 1.2, < 4.0)
+      scrypt (>= 1.2, < 3.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.2.3)
@@ -91,7 +91,7 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.2.0)
     minitest (5.10.3)
-    multi_json (1.12.2)
+    multi_json (1.12.1)
     mysql2 (0.3.18)
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
@@ -122,7 +122,7 @@ GEM
       activesupport (= 4.2.5)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (12.1.0)
+    rake (12.0.0)
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
@@ -139,8 +139,9 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
-    scrypt (3.0.5)
-      ffi-compiler (>= 1.0, < 2.0)
+    scrypt (2.1.1)
+      ffi-compiler (>= 0.0.2)
+      rake
     sdoc (0.4.2)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -149,7 +150,7 @@ GEM
     sprockets (3.7.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
-    sprockets-rails (3.2.1)
+    sprockets-rails (3.2.0)
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
@@ -173,7 +174,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  authlogic (= 3.5.0)
+  authlogic (= 3.4.6)
   byebug
   coffee-rails (~> 4.1.0)
   jbuilder (~> 2.0)

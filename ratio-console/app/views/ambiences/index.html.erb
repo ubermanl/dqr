@@ -1,12 +1,9 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Ambiences</h1>
-
-<table>
+<h1>Ambiences</h1>
+<table class="ui table unstackable">
   <thead>
     <tr>
       <th>Name</th>
-      <th>Is deleted</th>
+      <th>Deleted</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -15,10 +12,14 @@
     <% @ambiences.each do |ambience| %>
       <tr>
         <td><%= ambience.name %></td>
-        <td><%= ambience.is_deleted %></td>
-        <td><%= link_to 'Show', ambience %></td>
-        <td><%= link_to 'Edit', edit_ambience_path(ambience) %></td>
-        <td><%= link_to 'Destroy', ambience, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= human_bool ambience.is_deleted %></td>
+        <td class="right aligned">
+          <div class="ui buttons">
+            <%= link_to semantic_icon('unhide'), ambience, class:'ui button icon compact' %>
+            <%= link_to semantic_icon('edit'), edit_ambience_path(ambience), class:'ui icon button compact' %>
+            <%= link_to semantic_icon('remove'), ambience, method: :delete, data: { confirm: 'Are you sure?' }, class:'ui icon button compact' %>
+          </div>
+        </td>
       </tr>
     <% end %>
   </tbody>
@@ -26,4 +27,4 @@
 
 <br>
 
-<%= link_to 'New Ambience', new_ambience_path %>
+<%= link_to 'New Ambience', new_ambience_path, class:'ui button primary' %>

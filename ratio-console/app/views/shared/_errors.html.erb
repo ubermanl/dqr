@@ -1,13 +1,16 @@
-<% if object.errors.any? %>
-    <div class="panel panel-warning errors">
-      <div class="panel-heading">
-        <h5><i class="glyphicon glyphicon-exclamation-sign"></i> Found errors while saving</h5>
-      </div>
-
-      <ul class="panel-body">
-        <% object.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
+<div id="error-container">
+<% if model.errors.any? %>
+<div class="ui error icon message">
+  <i class="frown icon"></i>
+	<i class="close icon"></i>
+  <div class="content">
+    <div class="header">Oops!</div>
+      <ul class="list">
+        <% model.errors.each do |field,message| %>
+          <li><strong><%= field %></strong>&nbsp;<%= message %></li>
         <% end %>
       </ul>
     </div>
+  </div>
 <% end %>
+</div>
