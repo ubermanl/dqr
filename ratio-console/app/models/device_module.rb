@@ -16,10 +16,10 @@ class DeviceModule < ActiveRecord::Base
   end
   
   def active?
-    last_status.state == 1
+    last_status.state == 1 || last_status.state == 3
   end
   def inactive?
-    last_status.state == 0
+    last_status.state == 0 || last_status.state == 2
   end
   
   def override_active?
@@ -30,6 +30,30 @@ class DeviceModule < ActiveRecord::Base
     last_status.state == 4
   end
   
+  def fsm_activate
+    case last_status.state
+      when 0  # de inactivo a activo override
+        activate_override
+      when 2 # de inactivo override a activo
+        activate
+      else
+        [1,'Estado Inconsistente']
+    end
+  end
+
+  def fsm_deactivate
+    case last_status.state 
+      when 1 # de activo a inactivo en override
+        deactivate_override
+      when 3 # de activo override a inactivo
+        deactivate
+      else
+        [1,'Estado Inconsistente']
+    end
+  end
+        
+  
+  private
   def activate
     perform_toggle(1,0)
   end
@@ -46,18 +70,12 @@ class DeviceModule < ActiveRecord::Base
     perform_toggle(0,1)
   end
   
-  private
   def perform_toggle(status,override)
     cmd = "dqrSender A #{self.device_id} #{self.id} #{status} #{override}"
-    Rails.logger.info cmd
+    Rails.logger.info "Will Perform #{cmd}"
     result = `#{cmd}`
-    Rails.logger.info result
-    result
-    cmd = "dqrSender S #{self.device_id}"
-    Rails.logger.info cmd
-    result = `#{cmd}`
-    Rails.logger.info result
-    result
+    Rails.logger.info "Perform Result was: #{result}"
+    [$?.exitstatus, result]
   end
   
 end

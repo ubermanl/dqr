@@ -2,25 +2,17 @@ class DeviceModulesController < ApplicationController
   before_action :set_module, only: [:activate,:deactivate]
   
   def deactivate
-    if params[:override].present? && params[:override] == 1
-      @module.deactivate_override
-    else
-      @module.deactivate
-    end
+    @result = @module.fsm_deactivate
     respond_to do |format|
-      format.js {}
+      format.json
       format.html { redirect_to device_url(@module.device_id)}
     end
   end
   
   def activate 
-    if params[:override].present? && params[:override] == 1
-      @module.activate_override
-    else
-      @module.activate
-    end
+    @result = @module.fsm_activate
     respond_to do |format|
-      format.js {}
+      format.json
       format.html { redirect_to device_url(@module.device_id)}
     end
   end

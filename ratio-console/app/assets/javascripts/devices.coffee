@@ -5,31 +5,41 @@ App.Device = do ->
   
   selectors =
     sensorGraph: 'sensor-graph'
-  
+    commandPalette: 'command-palette'
+    toggleButton: '[data-behavior*="toggle"]'
+    toggleOn: '[data-behavior*="toggle-on"]'
+    toggleOff: '[data-behavior*="toggle-off"]'
+
   buildChart: (chid,container,data)->
-    chartData = []
+    
+    chartDataSeries = []
+    
+    Fwk.log data.isBinary
     
     for datum in data.events
-      chartData.push { x: Date.parse(datum.ts), y: datum.value }
+      chartDataSeries.push { x: Date.parse(datum.ts), y: datum.value }
       true
-      
-    chart = new Chartist.Line ".#{chid}",
-                              series: [
-                                { name:'', data: chartData }
-                              ],
-                              { axisX:
-                                  type: Chartist.FixedScaleAxis,
-                                  divisor: 15,
-                                  labelInterpolationFnc: (value)->
-                                    return Fwk.formatDate(new Date(value),'%H:%N')
-                              }
-                              
-                                
-                              
-      
-                
     
+    cssClass = ".#{chid}"
+    
+    chartData =
+      series: [ 
+                { name:'', data: chartDataSeries }
+              ]
+    
+    options =
+      axisX:
+        type: Chartist.FixedScaleAxis
+        divisor: 10
+        labelInterpolationFnc: (value, index, chart) ->
+          Fwk.formatDate(new Date(value),'%H:%N')
+      axisY:
+        type: Chartist.AutoScaleAxis
+      lineSmooth: if data.isBinary == true then Chartist.Interpolation.step() else Chartist.Interpolation.simple({ divisor: 2, fillHoles: false })
+      showPoint: false
 
+    chart = new Chartist.Line cssClass, chartData, options
+                              
   updateGraphs: ->
     Fwk.log selectors
     graphContainers = Fwk.getByData(selectors.sensorGraph,'graph')
@@ -53,9 +63,37 @@ App.Device = do ->
           alert('Error al obtener datos')
         complete: ->
       true
+
+  updateButtons: (selector, eventData, action) ->
+    if action == 0 
+      button = selectors.toggleOn 
+    else 
+      button = selectors.toggleOff
+    
+    if eventData.status == 0
+      selector.addClass('disabled').removeClass('loading')
+      selector.siblings(button).removeClass('disabled')
+    else
+      selector.removeClass('disabled loading')
+      alert('El dispositivo no esta respondiendo, o bien aun no ha reportado su estado')
+      
+  bindAjax: ->
+    
+    Fwk.getByBehavior(selectors.commandPalette).on 'ajax:beforeSend', selectors.toggleButton, (event,data,status,xhr)->
+      Fwk.get(this).addClass('disabled loading')
+    
+    Fwk.getByBehavior(selectors.commandPalette).on 'ajax:success', selectors.toggleButton, (event,data,status,xhr)->
+      App.Device.updateButtons Fwk.get(this), data, 0
+    
+    Fwk.getByBehavior(selectors.commandPalette).on 'ajax:error', selectors.toggleButton, (event,data,status,xhr)->
+      App.Device.updateButtons Fwk.get(this), data, 0
+    
       
   init: ->
-    App.Device.updateGraphs()    
+    App.Device.updateGraphs()
+    App.Device.bindAjax()
+    
+    
     
     
 Fwk.onLoadPage App.Device.init,'devices','show'

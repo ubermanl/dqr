@@ -138,7 +138,13 @@
     @include ct-align-justify(flex-start, flex-start);
     // Fallback for browsers that don't support foreignObjects
     text-anchor: start;
-    transform: rotate(-90deg);
+    //transform: rotate(-90deg);
+    position: relative;
+    justify-content: flex-end;
+    text-align: right;
+    transform-origin: 100% 0;
+    transform: translate(-100%) rotate(-90deg);
+    white-space:nowrap;
   }
 
   .#{$ct-class-label}.#{$ct-class-vertical}.#{$ct-class-start} {

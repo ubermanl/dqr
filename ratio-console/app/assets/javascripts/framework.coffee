@@ -162,7 +162,7 @@ class Fwk
   
   # obtiene elementos en base al atributo data-behaviour
   Fwk::getByBehavior = (selector) ->
-    $("[data-behavior='#{selector}']")
+    $("[data-behavior*='#{selector}']")
   
   Fwk::getByIdentifier = (selector) ->
     $("[data-identifier='#{selector}']")
