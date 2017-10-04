@@ -65,7 +65,7 @@ App.Device = do ->
       true
 
   updateButtons: (selector, eventData, action) ->
-    if action == 0 
+    if selector.data('behavior').search('off') > 0 
       button = selectors.toggleOn 
     else 
       button = selectors.toggleOff
@@ -83,10 +83,10 @@ App.Device = do ->
       Fwk.get(this).addClass('disabled loading')
     
     Fwk.getByBehavior(selectors.commandPalette).on 'ajax:success', selectors.toggleButton, (event,data,status,xhr)->
-      App.Device.updateButtons Fwk.get(this), data, 0
+      App.Device.updateButtons Fwk.get(this), data
     
     Fwk.getByBehavior(selectors.commandPalette).on 'ajax:error', selectors.toggleButton, (event,data,status,xhr)->
-      App.Device.updateButtons Fwk.get(this), data, 0
+      App.Device.updateButtons Fwk.get(this), data
     
       
   init: ->

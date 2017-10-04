@@ -74,8 +74,14 @@ class DeviceModule < ActiveRecord::Base
     cmd = "dqrSender A #{self.device_id} #{self.id} #{status} #{override}"
     Rails.logger.info "Will Perform #{cmd}"
     result = `#{cmd}`
+    exitStatus = $?.exitstatus
+    
     Rails.logger.info "Perform Result was: #{result}"
-    [$?.exitstatus, result]
+    # force device report status
+    cmd = "dqrSender S #{self.device_id}"
+    `#{cmd}`
+    
+    [exitStatus, result]
   end
   
 end
