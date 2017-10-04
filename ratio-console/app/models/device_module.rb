@@ -35,7 +35,7 @@ class DeviceModule < ActiveRecord::Base
       when 0  # de inactivo a activo override
         activate_override
       when 2 # de inactivo override a activo
-        activate
+        activate_override
       else
         [1,'Estado Inconsistente']
     end
@@ -46,7 +46,7 @@ class DeviceModule < ActiveRecord::Base
       when 1 # de activo a inactivo en override
         deactivate_override
       when 3 # de activo override a inactivo
-        deactivate
+        deactivate_override
       else
         [1,'Estado Inconsistente']
     end
