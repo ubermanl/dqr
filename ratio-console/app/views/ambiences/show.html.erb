@@ -1,20 +1,22 @@
-<h1><%= @ambience.name %></h1>
+<h1><%= @ambience.name %> <%= link_to text_with_icon('Edit','edit'),edit_ambience_url(@ambience), class:'ui button icon compact tiny' %> </h1>
 
-<table class="ui table unstackable">
+<table class="ui table unstackable selectable">
   <thead>
     <tr>
       <th>Device Name</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <% @ambience.devices.each do |a| %>
       <tr>
-        <td><% a.name %></td>
+        <td><%= a.name %></td>
+        <td class="right aligned"><%= link_to semantic_icon('unhide'), a, class:"ui button icon compact primary" %></td>
       </tr>
     <% end %>
     <% if @ambience.devices.none? %>
       <tr>
-        <td>No devices here!</td>
+        <td colspan="2">No devices here!</td>
       </tr>
     <% end %>
   </tbody>

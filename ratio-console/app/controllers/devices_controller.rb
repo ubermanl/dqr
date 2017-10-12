@@ -5,6 +5,10 @@ class DevicesController < ApplicationController
     @devices = Device.includes(:ambience,modules:[:module_type]).all
   end
   
+  def new 
+    @device = Device.new
+  end
+  
   def show
     
   end

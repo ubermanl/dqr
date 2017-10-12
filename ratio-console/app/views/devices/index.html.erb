@@ -1,4 +1,33 @@
 <h1>Devices</h1>
-<% @devices.each do |d| %>
-  <%= render partial:'device', locals:{ device: d } %>
-<% end %>
+<%= link_to text_with_icon('Register Device','plus'), new_device_url, class:'ui button primary' %>
+<table class="ui table unstackable">
+  <thead>
+    <tr>
+      <th>Device Name</th>
+      <th>Ambience</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @devices.each do |d| %>
+    <tr>
+      <td><%= link_to d.name, d %></td>
+      <td><%= d.ambience.name %></td>
+      <td class="right aligned">
+        <div class="ui buttons">
+          <%= link_to semantic_icon('unhide'), d, class:"ui button icon compact" %>
+          <%= link_to semantic_icon('edit'), edit_device_url(d), class:"ui button icon compact" %>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+  <% if @devices.none? %>
+    <tr>
+      <td colspan="3">
+        No devices yet!
+      </td>
+    </tr>
+  <% end %>    
+  </tbody>
+
+</table>
