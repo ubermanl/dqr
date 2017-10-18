@@ -207,6 +207,10 @@ class Fwk
       @getByBehavior behavior
         .on 'click', func
     
+  Fwk::setTimeout = (interval,routine)->
+    @warn 'Setting Timout'
+    setTimeout routine,interval
+
 # attach de la instancia de la clase
 # a la ventana del navegador
 window.Fwk = new Fwk()

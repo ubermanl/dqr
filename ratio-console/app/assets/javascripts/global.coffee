@@ -6,6 +6,7 @@ window.App = do ->
     sidebarMenu: '.ui.sidebar'
     sidebarMenuButton: 'sidebar-toggle'
     sidebarContext: '.bottom.segment'
+    messageSelector: '.message .close'
     
     
   toggleSidebar = ->
@@ -26,4 +27,9 @@ window.App = do ->
       # muestra el sidebar
       toggleSidebar()
    
-
+    #d dismissable messages
+    Fwk.get(selectors.messageSelector).on 'click', ->
+      Fwk.get(this)
+        .closest('.message')
+        .transition('fade')
+  

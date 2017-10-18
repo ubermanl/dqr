@@ -36,9 +36,21 @@ App.Device = do ->
       axisY:
         type: Chartist.AutoScaleAxis
       lineSmooth: if data.isBinary == true then Chartist.Interpolation.step() else Chartist.Interpolation.simple({ divisor: 2, fillHoles: false })
+      showArea: data.isBinary == false
       showPoint: false
 
     chart = new Chartist.Line cssClass, chartData, options
+
+    chart.on 'draw', (data) ->
+      if data.type == 'line' or data.type == 'area'
+        data.element.animate d:
+          begin: data.index
+          dur: 2000
+          from: data.path.clone().translate(data.chartRect.width() * 0.05, 0).stringify()
+          to: data.path.clone().stringify()
+          easing: Chartist.Svg.Easing.easeOutQuint
+      return
+
                               
   updateGraphs: ->
     Fwk.log selectors
@@ -63,6 +75,8 @@ App.Device = do ->
           alert('Error al obtener datos')
         complete: ->
       true
+      
+    Fwk.setTimeout 60000, App.Device.updateGraphs
 
   updateButtons: (selector, eventData, action) ->
     if selector.data('behavior').search('off') > 0 
