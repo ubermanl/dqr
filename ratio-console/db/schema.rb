@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171017161552) do
+ActiveRecord::Schema.define(version: 20171018200051) do
 
   create_table "ambiences", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false
@@ -96,6 +96,36 @@ ActiveRecord::Schema.define(version: 20171017161552) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "schedule_days", force: :cascade do |t|
+    t.integer  "schedule_id", limit: 4
+    t.integer  "day",         limit: 4
+    t.string   "start_hour",  limit: 7, null: false
+    t.string   "end_hour",    limit: 7, null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  add_index "schedule_days", ["schedule_id"], name: "index_schedule_days_on_schedule_id", using: :btree
+
+  create_table "schedule_modules", force: :cascade do |t|
+    t.integer  "device_module_id", limit: 4
+    t.integer  "desired_status",   limit: 4, null: false
+    t.integer  "schedule_id",      limit: 4
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "schedule_modules", ["device_module_id"], name: "index_schedule_modules_on_device_module_id", using: :btree
+  add_index "schedule_modules", ["schedule_id"], name: "index_schedule_modules_on_schedule_id", using: :btree
+
+  create_table "schedules", force: :cascade do |t|
+    t.string   "description", limit: 255
+    t.boolean  "inactive"
+    t.boolean  "enabled"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
   create_table "sensor_types", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.string   "icon",       limit: 255
@@ -118,4 +148,7 @@ ActiveRecord::Schema.define(version: 20171017161552) do
   add_foreign_key "device_modules", "module_types"
   add_foreign_key "module_sensors", "device_modules"
   add_foreign_key "module_sensors", "sensor_types"
+  add_foreign_key "schedule_days", "schedules"
+  add_foreign_key "schedule_modules", "device_modules"
+  add_foreign_key "schedule_modules", "schedules"
 end

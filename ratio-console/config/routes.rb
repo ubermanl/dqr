@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   
+  resources :schedules
+  resources :schedule_days
   resources :ambiences
   resources :devices
   resources :device_modules do 

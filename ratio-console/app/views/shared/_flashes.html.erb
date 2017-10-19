@@ -1,5 +1,4 @@
 <% if flash.any? %>
-<div class="ui container fluid closable">
 <% flash.each do |name, msg| %>
   <% if msg.is_a?(String) %>
   <div class="ui message <%= name.to_s == 'notice' ? 'success' : 'error' %>">
@@ -9,6 +8,4 @@
   </div>
   <% end %>
   <% end %>
-</div>
-<br />
 <% end %>

@@ -1,12 +1,4 @@
-module ApplicationHelper
-  def text_with_icon(text,icon)
-    semantic_icon(icon) + text
-  end
-  
-  def human_bool(value)
-    value ? 'Yes' : 'No'
-  end
-  
+class ScheduleDaysController < ApplicationController
   def day_names_helper
     day_names = {
       '0' => 'Every Day',
@@ -18,6 +10,6 @@ module ApplicationHelper
       '6' => 'Saturday',
       '7' => 'Sunday'
     }
-    options_from_collection_for_select day_names, :first,:last
+    options_for_select day_names, :first,:last
   end
 end

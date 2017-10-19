@@ -1,0 +1,27 @@
+<h1>Schedules</h1>
+<%= link_to 'New Schedule', new_schedule_path, class:'ui button primary'  %>
+<table class="ui table striped unstackable">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Enabled</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @schedules.each do |schedule| %>
+      <tr>
+        <td><%= schedule.description %></td>
+        <td><%= schedule.enabled ? 'Yes' : 'No' %></td>
+        <td class="right aligned">
+          <div class="ui buttons">
+            <%= link_to 'Show', schedule, class:'ui icon button compact' %>
+            <%= link_to 'Edit', edit_schedule_path(schedule), class:'ui icon button compact' %>
+            <%= link_to 'Destroy', schedule, method: :delete, data: { confirm: 'Are you sure?' },class:'ui icon button compact'  %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

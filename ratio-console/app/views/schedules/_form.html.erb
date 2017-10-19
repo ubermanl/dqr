@@ -1,0 +1,14 @@
+<%= form_for(@schedule) do |f| %>
+ <%= render partial:'shared/errors', locals: {model: @schedule} %>
+  <div class="ui form">
+    <div class="sixteen wide field">
+      <%= f.label :description %>
+      <%= f.text_field :description %>
+    </div>
+  </div>
+  <br />
+  <div class="ui buttons">
+    <%= f.submit nil, class:'ui button primary' %>
+    <%= link_to 'Cancel', schedules_url, class:'ui button' %>
+  </div>
+<% end %>

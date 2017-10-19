@@ -8,7 +8,6 @@ window.App = do ->
     sidebarContext: '.bottom.segment'
     messageSelector: '.message .close'
     
-    
   toggleSidebar = ->
     $(selectors.sidebarMenu).sidebar('toggle')
     
@@ -33,3 +32,42 @@ window.App = do ->
         .closest('.message')
         .transition('fade')
   
+    # init dropdowns
+    Fwk.get('select').each ->
+      select = $(this)
+      isFullTextSearch = select.hasClass('fullTextSearch')
+      allowAdd = select.hasClass('allowAdd')
+      isDropdown = select.hasClass('is-dd')
+      isClearable = select.hasClass('clearable')
+      isCompact = select.hasClass('compact')
+      clearValue = select.data('clear-value')
+      searchable = select.hasClass('searchable')
+      
+      if isFullTextSearch
+        searchType = 'exact'
+      else
+        searchType = false
+      
+      if searchable
+        select.addClass('ui search')  
+      
+      select.dropdown
+        showOnFocus: !isFullTextSearch
+        fullTextSearch: searchType
+        selectOnKeydown: false
+        allowAdditions: allowAdd
+      
+      if isCompact
+        select.closest('.dropdown').addClass('compact')
+        
+      if isClearable
+        dropdown = select.closest('.dropdown')
+        # agrega el boton de remove
+        dropdown.find('i.dropdown').after('<i class="remove icon" title="Limpiar"></i>')
+        dropdown.find('.remove.icon').on 'click', (e)->
+          if clearValue?
+            dropdown.dropdown('set selected',clearValue)
+          else
+            dropdown.dropdown('clear')
+          e.stopPropagation()
+      true

@@ -9,6 +9,13 @@ App.Device = do ->
     toggleButton: '[data-behavior*="toggle"]'
     toggleOn: '[data-behavior*="toggle-on"]'
     toggleOff: '[data-behavior*="toggle-off"]'
+    errorMessageUpdate: 'error-message-update'
+    errorMessageToggle: 'error-message-toggle'
+
+  setUpdateErrorVisibility: (value)->
+    message = Fwk.getByData('id',selectors.errorMessageUpdate)
+    message.toggleClass('hidden',!value)
+
 
   buildChart: (chid,container,data)->
     
@@ -69,14 +76,17 @@ App.Device = do ->
         dataType: "json"
         url: "/module_sensors/get_events?device_module_id=#{mid}&sensor_type_id=#{stid}"
         success: (data)->
+          App.Device.setUpdateErrorVisibility(false)
           App.Device.buildChart chid, container, data
           
         error: ->
-          alert('Error al obtener datos')
+          App.Device.setUpdateErrorVisibility(true)
+          
         complete: ->
+          #App.Device.setUpdateErrorVisibility(false)
       true
       
-    Fwk.setTimeout 60000, App.Device.updateGraphs
+    Fwk.setTimeout 10000, App.Device.updateGraphs
 
   updateButtons: (selector, eventData, action) ->
     if selector.data('behavior').search('off') > 0 
@@ -89,7 +99,7 @@ App.Device = do ->
       selector.siblings(button).removeClass('disabled')
     else
       selector.removeClass('disabled loading')
-      alert('El dispositivo no esta respondiendo, o bien aun no ha reportado su estado')
+      
       
   bindAjax: ->
     
