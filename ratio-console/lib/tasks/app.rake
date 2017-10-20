@@ -57,4 +57,27 @@ namespace :app do
       puts '-----------------------------------------------------------------------------------------'
     end
   end
+  desc "Genera un dispositivo en la tabla de dispositivos"
+  task :generate_device_lux, [:device_id] => :environment do |t,args|
+    device_id = args[:device_id].to_i
+    puts 'Verificando...'
+    if Device.where(:id => device_id).any?
+      puts 'El Device que intenta generar ya existe'
+    else
+      puts 'Creando el dispositivo...'
+      module_id = "#{device_id}1".to_i
+      # ------------ CREA EL DISPOSITIVO CON ID 3
+      Device.create(id: device_id, name: "DQR TestDrive ID#{device_id}",ambience_id: 2, network_identifier:'0x0000',deleted: false, disabled: false)
+      DeviceModule.create(id: module_id, device_id: device_id, module_type_id: 2, disabled: false)
+          .sensors
+          .create([
+              { sensor_type_id: 1}  # un acs
+          ])
+          
+      puts '-----------------------------------------------------------------------------------------'
+      puts 'HOUSTON'
+      puts "                   hemos recibido el dispositivo 'DQR TestDrive ID#{device_id}', esperando ordenes!"
+      puts '-----------------------------------------------------------------------------------------'
+    end
+  end
 end
