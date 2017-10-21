@@ -9,19 +9,12 @@
 /*
  *  Device Initialization: This sample configuration has 1x Lux and 1x Potentia module
  */
-Lux luxModule(luxConfig1);
-ACSensor luxACSensor(luxConfig1.AC_SENSOR_IN,LUX_SENSOR_SENSITIVITY);
-PIRSensor pirSensor(luxConfig1.PIR_SENS_IN);
-SoundSensor soundSensor(luxConfig1.SND_SENS_IN);
-LightSensor lightSensor(luxConfig1.LUM_SENS_SDA);
-
-Potentia potentiaModule(potentiaConfig1);
-ACSensor potentiaACSensor(potentiaConfig1.AC_SENSOR_IN,POT_SENSOR_SENSITIVITY);
-
-/*** Helper Functions (ONLY IF LUX AVAILABE) ***/
-void toggleRelayStatus() {
-  luxModule.touchEvent();
-}
+Omni omniModule(omniConfig1);
+ACSensor omniACSensor(omniConfig1.AC_SENSOR_IN,OMNI_SENSOR_SENSITIVITY);
+PIRSensor pirSensor(omniConfig1.PIR_SENS_IN);
+SoundSensor soundSensor(omniConfig1.SND_SENS_IN);
+LightSensor lightSensor(omniConfig1.LUM_SENS_SDA);
+TempSensor tempSensor(omniConfig1.TEMP_SENS_IN);
 /**** END DEVICE INITIALIZATION ****/
 
 
@@ -50,19 +43,15 @@ void setup() {
   Device::setup();
 
   // Sensors Config
-  luxModule.addSensor(& luxACSensor);
-  luxModule.addSensor(& pirSensor);
-  luxModule.addSensor(& soundSensor);
-  luxModule.addSensor(& lightSensor);
-  potentiaModule.addSensor(& potentiaACSensor);
+  omniModule.addSensor(& omniACSensor);
+  omniModule.addSensor(& pirSensor);
+  omniModule.addSensor(& soundSensor);
+  omniModule.addSensor(& lightSensor);
+  omniModule.addSensor(& tempSensor);
 
   // Modules Config
-  Device::addModule(& luxModule);
-  Device::addModule(& potentiaModule);
+  Device::addModule(& omniModule);
   Device::setupModules();
-
-  /**** CONFIG: Interruptions for Lux Modules (ONLY IF LUX AVAILABE) ****/
-  attachInterrupt(digitalPinToInterrupt(luxConfig1.TOUCH_IN), toggleRelayStatus, CHANGE);
 
   LOG2("Device ID: #",DEVICE_NODE_ID);
 }

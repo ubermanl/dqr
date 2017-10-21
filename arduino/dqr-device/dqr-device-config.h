@@ -33,7 +33,7 @@
 /*
  * These constants define max number of sensors per module, and max number of modules per devices
  */
-#define MAX_SENSORS_X_MODULE 5
+#define MAX_SENSORS_X_MODULE 6
 #define MAX_MODULES_X_DEVICE  3
 
 /*
@@ -100,6 +100,7 @@ struct omniConfig {
  */
 const int LUX_SENSOR_SENSITIVITY = 100;
 const int POT_SENSOR_SENSITIVITY = 100;
+const int OMNI_SENSOR_SENSITIVITY = 100;
 
 /*
  * Relay ON/OFF configuration
@@ -120,13 +121,13 @@ const int POT_SENSOR_SENSITIVITY = 100;
 /*** RF24 Node ID (1-255) ***/
 #define DEVICE_NODE_ID <your node id here>
 
-// Module ID 3 - Potentia
+// Module - Potentia
 const struct potentiaConfig potentiaConfig1 = {
   2,    // POT_RELAY_OUT
   A2    // POT_AC_SENSOR_IN
 };
 
-// Module ID 2 - Lux
+// Module - Lux
 const struct luxConfig luxConfig1 = {
   3,    // LUX_TOUCH_IN
   4,    // LUX_RELAY_OUT
@@ -136,5 +137,16 @@ const struct luxConfig luxConfig1 = {
   5,    // LUX_PIR_SENS_IN
   A0    // LUX_SND_SENS_IN
 };
+
+// Module - Omni
+const struct omniConfig omniConfig1 = {
+  A3,   // OMNI_AC_SENSOR_IN
+  A4,   // OMNI_LUM_SENS_SDA
+  A5,   // OMNI_LUM_SENS_SCL
+  5,    // OMNI_PIR_SENS_IN
+  A0,   // OMNI_SND_SENS_IN
+  A1    // OMNI_TEMP_SENS_IN
+};
+
 
 #endif

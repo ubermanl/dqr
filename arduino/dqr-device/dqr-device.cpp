@@ -75,6 +75,20 @@ float PIRSensor::getAverageValue() {
   return _currentValue;
 };
 
+// Temperature
+TempSensor::TempSensor(byte pin) : Sensor(TEMP_TYPE_ID, pin) {};
+
+void TempSensor::senseData() {
+  dht DHT;
+  DHT.read11(_pinSensor);
+  _currentValue = DHT.temperature;
+  if (_accumulatedValue + _currentValue > MAX_ACCUMULATED_VALUE) {
+    _accumulatedValue = getAverageValue();
+  }
+  _accumulatedValue += _currentValue;
+  _sampleCount += 1;
+};
+
 // Light
 LightSensor::LightSensor(byte pin) : Sensor(LUM_TYPE_ID, pin) {};
 
