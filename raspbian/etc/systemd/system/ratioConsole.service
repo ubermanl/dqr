@@ -1,6 +1,6 @@
 [Unit]
 Description=Ratio Console
-After=network-online.target
+After=network-online.target mysql.service
 
 [Service]
 Type=simple
