@@ -10,7 +10,7 @@ namespace :app do
   task update_units: :environment do
      # pega todos los updates en los modelos
     updates = {
-      1 => { unit: 'mAmp'},
+      1 => { unit: 'Amp'},
       2 => { unit: 'lux'},
       3 => { unit: ''},
       4 => { unit: 'dB'},
