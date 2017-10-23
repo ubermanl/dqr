@@ -11,7 +11,7 @@ namespace :app do
      # pega todos los updates en los modelos
     updates = {
       1 => { unit: 'mAmp'},
-      2 => { unit: 'lum'},
+      2 => { unit: 'lux'},
       3 => { unit: ''},
       4 => { unit: 'dB'},
       5 => { unit: 'C'}
