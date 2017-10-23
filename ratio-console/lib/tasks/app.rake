@@ -7,6 +7,24 @@ namespace :app do
     Rake::Task['db:seed'].invoke
   end
   
+  task update_units: :environment do
+     # pega todos los updates en los modelos
+    updates = {
+      1 => { unit: 'mAmp'},
+      2 => { unit: 'lum'},
+      3 => { unit: ''},
+      4 => { unit: 'dB'},
+      5 => { unit: 'C'}
+    }
+    
+    updates.each do |k,v|
+      s = SensorType.find(k)
+      if s.present?
+        s.update_column(:unit,v[:unit])
+      end
+    end
+  end
+  
   task :destroy_device, [:device_id] => :environment do |t,args|
     puts "Houston, vamos a aterrizar forzosamente, please fasten your seatbealts"
     device_id = args[:device_id].to_i
