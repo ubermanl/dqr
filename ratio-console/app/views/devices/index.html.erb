@@ -1,5 +1,9 @@
-<h1>Devices</h1>
-<%= link_to text_with_icon('Register Device','plus'), new_device_url, class:'ui button primary' %>
+<div class="ui menu borderless">
+  <div class="item header">Devices</div>
+  <div class="right menu">
+    <%= link_to text_with_icon('Register Device','plus'), new_device_url, class:'item main-link' %>    
+  </div>
+</div>
 <table class="ui table unstackable striped">
   <thead>
     <tr>
@@ -11,7 +15,7 @@
   <tbody>
   <% @devices.each do |d| %>
     <tr>
-      <td><%= link_to d.name, d %></td>
+      <td><%= link_to d.name, d, class:'main-link' %></td>
       <td><%= d.ambience.name %></td>
       <td class="right aligned">
         <div class="ui buttons">

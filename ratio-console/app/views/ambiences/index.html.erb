@@ -1,5 +1,9 @@
-<h1>Ambiences</h1>
-<%= link_to 'New Ambience', new_ambience_path, class:'ui button primary' %>
+<div class="ui menu borderless">
+  <div class="item header">Ambiences</div>
+  <div class="right menu">
+    <%= link_to text_with_icon('New Ambience','plus'), new_ambience_url, class:'item main-link' %>    
+  </div>
+</div>
 <table class="ui table unstackable striped">
   <thead>
     <tr>

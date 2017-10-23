@@ -1,7 +1,11 @@
-<div class="ui header dividing teal" data-behavior="settings"
+<div class="ui menu borderless" data-behavior="settings"
   data-graph-refresh-interval="<%= @preferences.graphic_refresh_interval %>"
   data-graph-interval="<%= @preferences.graphic_interval %>">
-  <%= @device.name %> Status
+  <div class="item"><%= @device.name %> Status</div>
+  <div class="right menu">
+      <%= link_to text_with_icon('Edit','edit'), edit_device_url, class:'item' %>    
+  </div>
+  
 </div>
 <% @device.modules.each do |m| %>
    <%= render partial:'device', locals: {m: m} %>

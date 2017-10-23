@@ -1,5 +1,9 @@
-<h1>Schedules</h1>
-<%= link_to 'New Schedule', new_schedule_path, class:'ui button primary'  %>
+<div class="ui menu borderless">
+  <div class="item header">Schedules</div>
+  <div class="right menu">
+    <%= link_to text_with_icon('New Schedule','plus'), new_schedule_path, class:'ui item main-link'  %>
+  </div>
+</div>
 <table class="ui table striped unstackable">
   <thead>
     <tr>
@@ -15,9 +19,9 @@
         <td><%= schedule.enabled ? 'Yes' : 'No' %></td>
         <td class="right aligned">
           <div class="ui buttons">
-            <%= link_to 'Show', schedule, class:'ui icon button compact' %>
-            <%= link_to 'Edit', edit_schedule_path(schedule), class:'ui icon button compact' %>
-            <%= link_to 'Destroy', schedule, method: :delete, data: { confirm: 'Are you sure?' },class:'ui icon button compact'  %>
+            <%= link_to semantic_icon('unhide'), schedule, class:'ui icon button compact' %>
+            <%= link_to semantic_icon('edit'), edit_schedule_path(schedule), class:'ui icon button compact' %>
+            <%= link_to semantic_icon('delete'), schedule, method: :delete, data: { confirm: 'Are you sure?' },class:'ui icon button compact'  %>
           </div>
         </td>
       </tr>

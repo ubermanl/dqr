@@ -20,7 +20,7 @@ $import-google-fonts: false !default;
 @import "chartist/chartist";
 
 /* overrides */
-.top.menu{
+.top.menu, .menu{
     border-radius:0 !important;
 }
 div.vertical-center{
@@ -39,6 +39,27 @@ div.vertical-center{
   }
 }
 
+.primary{
+  background-color:#0b7542 !important;
+  color: white !important;
+}
+
+.main-link{
+  color:#0b7542 !important;
+}
+
 .ui.dropdown.compact{
   width:auto !important;
+}
+
+[data-role="container"]{
+  background-color: #FAFAFA !important;
+}
+
+[data-role="segment-header"]{
+  border-bottom: 3px solid #0b7542 !important;
+}
+
+[data-role="segment-content"]{
+  background-color: white !important;
 }
