@@ -9,6 +9,7 @@
 
 #include "Arduino.h"
 #include <BH1750.h>
+#include <dht.h>
 #include <FiniteStateMachine.h>
 #include "dqr-device-config.h"
 #include "dqr-device-network.h"
