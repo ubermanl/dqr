@@ -1,0 +1,13 @@
+[Unit]
+Description=Ratio Console
+After=network-online.target mysql.service
+
+[Service]
+Type=simple
+ExecStart=/etc/init.d/ratio start
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=ratioConsole
+
+[Install]
+WantedBy=multi-user.target
