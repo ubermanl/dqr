@@ -80,4 +80,8 @@ namespace :app do
       puts '-----------------------------------------------------------------------------------------'
     end
   end
+  
+  task :purge_device_events, [:device_id] => :environment do |t,args|
+    
+  end
 end

@@ -9,23 +9,22 @@ App.Device = do ->
     toggleButton: '[data-behavior*="toggle"]'
     toggleOn: '[data-behavior*="toggle-on"]'
     toggleOff: '[data-behavior*="toggle-off"]'
-    errorMessageUpdate: 'error-message-update'
-    errorMessageToggle: 'error-message-toggle'
-
-  setUpdateErrorVisibility: (value)->
-    message = Fwk.getByData('id',selectors.errorMessageUpdate)
-    message.toggleClass('hidden',!value)
-
+    graphRefreshRate: 'graph-refresh-interval'
+    graphDivisors: 'graph-interval'
+    lastMeasure: '[data-behavior="last-measure"]'
 
   buildChart: (chid,container,data)->
     
     chartDataSeries = []
-    
-    Fwk.log data.isBinary
+    dataInterval = Number(Fwk.getByBehavior('settings').data(selectors.graphDivisors))
     
     for datum in data.events
       chartDataSeries.push { x: Date.parse(datum.ts), y: datum.value }
       true
+
+    if data.events.length > 0
+      Fwk.log 'Events'
+      container.closest('.column').find(selectors.lastMeasure).text("#{data.events[0].value} #{data.unit}")
     
     cssClass = ".#{chid}"
     
@@ -37,7 +36,7 @@ App.Device = do ->
     options =
       axisX:
         type: Chartist.FixedScaleAxis
-        divisor: 10
+        divisor: dataInterval
         labelInterpolationFnc: (value, index, chart) ->
           Fwk.formatDate(new Date(value),'%H:%N')
       axisY:
@@ -45,7 +44,22 @@ App.Device = do ->
       lineSmooth: if data.isBinary == true then Chartist.Interpolation.step() else Chartist.Interpolation.simple({ divisor: 2, fillHoles: false })
       showArea: data.isBinary == false
       showPoint: false
-
+      plugins: [ Chartist.plugins.ctAxisTitle(
+                  axisX:
+                    axisTitle: 'Time'
+                    axisClass: 'ct-axis-title'
+                    offset:
+                      x: 0
+                      y: 50
+                    textAnchor: 'middle'
+                  axisY:
+                    axisTitle: data.unit
+                    axisClass: 'ct-axis-title'
+                    offset:
+                      x: 0
+                      y: -1
+                    flipTitle: false) ]
+    
     chart = new Chartist.Line cssClass, chartData, options
 
     chart.on 'draw', (data) ->
@@ -76,17 +90,19 @@ App.Device = do ->
         dataType: "json"
         url: "/module_sensors/get_events?device_module_id=#{mid}&sensor_type_id=#{stid}"
         success: (data)->
-          App.Device.setUpdateErrorVisibility(false)
+          Fwk.clearMessages()
           App.Device.buildChart chid, container, data
           
         error: ->
-          App.Device.setUpdateErrorVisibility(true)
+          Fwk.showMessage 'negative',true,'Graph Update','Update operation failed'
           
         complete: ->
           #App.Device.setUpdateErrorVisibility(false)
       true
       
-    Fwk.setTimeout 10000, App.Device.updateGraphs
+    refreshInterval = Fwk.getByBehavior('settings').data(selectors.graphRefreshRate)
+      
+    Fwk.setTimeout Number(refreshInterval) * 1000, App.Device.updateGraphs
 
   updateButtons: (selector, eventData, action) ->
     if selector.data('behavior').search('off') > 0 

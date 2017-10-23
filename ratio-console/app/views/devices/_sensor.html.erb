@@ -1,0 +1,17 @@
+<div class="column">
+  <h5 class="ui header">
+    <i class="icon <%= s.sensor_type.icon %>"></i>
+    <div class="content">
+      <%= s.sensor_type.name %>
+      <div class="sub header">
+        Last Measure: <span data-behavior="last-measure">N/A</span>
+      </div>
+    </div>
+  </h5>
+  <div class="sgp-<%= m.id %>-<%= s.sensor_type_id %>" 
+        data-sensor-graph="graph" 
+        data-module-id="<%= m.id %>" 
+        data-sensor-type-id="<%= s.sensor_type_id %>"
+        data-sensor-unit="<%= s.sensor_type.unit %>">
+  </div>
+</div>

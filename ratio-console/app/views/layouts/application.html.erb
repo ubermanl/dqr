@@ -18,7 +18,9 @@
       <%= render partial:'shared/topmenu' %>
     </div>
     <div class="ui basic segment">
-      <%= render partial:'shared/flashes' %>
+      <div data-behavior="flashes-container">
+        <%= render partial:'shared/flashes' %>  
+      </div>
       <%= yield %>
     </div>
   </div>

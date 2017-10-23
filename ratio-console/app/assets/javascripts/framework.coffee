@@ -211,6 +211,41 @@ class Fwk
     @warn 'Setting Timout'
     setTimeout routine,interval
 
+  Fwk::clearMessages = ->
+     @getByBehavior('flashes-container').empty()
+
+  Fwk::showMessage = (type, closable, title, message, clean_existing)->
+    icon = switch type
+           when 'negative' then 'frown'
+           when 'positive' then 'smile'
+           when 'error' then 'remove circle'
+           when 'info' then 'info circle'
+           when 'warning' then 'warning sign'
+    
+    if closable 
+      close_icon = '<i class="icon close"></i>'
+    else
+      close_icon = ''
+    
+    markup = """
+      <div class="ui message icon #{type}">
+        <i class="icon #{icon}"></i>
+        #{close_icon}
+        <div class="content">
+          <div class="header">#{title}</div>
+            #{message}
+          </div>
+        </div>
+      </div>
+    """
+    flashesContainer =  @getByBehavior('flashes-container')
+    # clean up existing messages?
+    if !clean_existing? || (clean_existing? && clean_existing == true)
+      flashesContainer.empty()
+      
+    # add the content
+    flashesContainer.prepend(markup)
+
 # attach de la instancia de la clase
 # a la ventana del navegador
 window.Fwk = new Fwk()

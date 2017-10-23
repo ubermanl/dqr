@@ -1,0 +1,25 @@
+<%= form_for(@console_preferences, url: console_preferences_url, method: :post) do |f| %>
+ <%= render partial:'shared/errors', locals: {model: @console_preferences} %>
+  <div class="ui form">
+    <div class="fields">
+      <div class="four wide field">
+        <%= f.label :graphic_refresh_interval %>
+        <div class="ui input right labeled">
+          <%= f.number_field :graphic_refresh_interval %>
+          <div class="ui label">seconds</div>
+        </div>
+      </div>
+        <div class="four wide field">
+        <%= f.label :graphic_interval %>
+        <div class="ui input right labeled">
+          <%= f.number_field :graphic_interval %>
+          <div class="ui label">minutes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br/>
+  <div class="ui buttons">
+    <%= f.submit 'Update', class:'ui button primary' %>
+  </div>
+<% end %>

@@ -1,22 +1,20 @@
-<div class="ui raised stackable fluid card">
-  <div class="content">
-    <div class="header"><%= device.name %></div>
-    <div class="meta">
-      <span class="right floated time">2 days ago</span>
-      <span class="category"><%= device.ambience.name %></span>
+<div data-module-id="<%= m.id %>">
+  <div class="ui menu top attached">
+    <div class="header item teal">
+      <%= m.module_type.name %>
     </div>
-    <div class="description">
-      <% device.modules.each do |m| %>
-      <p><%= m.module_type.name %></p>
-      <div class="ui relaxed divided list">
-        <% m.sensors.each do |s| %>
-          <%= render partial:'sensor_stats', locals:{ s: s } %>
-        <% end %>
+    <div class="right menu" data-behavior="command-palette">
+      <div class="item relaxed">
+        <div class="ui buttons">
+          <%= link_to 'ON', device_module_activate_url(m), remote: true, data:{ behavior:'toggle toggle-on' }, class:"ui button #{' disabled' if m.active? }" %>
+          <%= link_to 'OFF', device_module_deactivate_url(m), remote: true, data:{ behavior:'toggle toggle-off' }, class:"ui button #{' disabled' if m.inactive? }" %>    
+        </div>
       </div>
+    </div>
+  </div>
+  <div class="ui stackable two column grid celled padded">
+      <% m.sensors.each do |s| %>
+        <%= render partial:'sensor', locals:{ s: s, m: m } %>
       <% end %>
     </div>
-  </div>
-  <div class="extra content">
-    <%= link_to text_with_icon('View Detail','unhide'), device_url(device), class:'ui button' %>
-  </div>
 </div>

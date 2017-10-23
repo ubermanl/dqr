@@ -4,3 +4,4 @@ json.events @events do |e|
   json.value e.value
 end
 json.isBinary @isBinary
+json.unit @unit

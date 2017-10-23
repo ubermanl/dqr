@@ -1,58 +1,10 @@
-<div class="ui message icon error hidden" data-id="error-message-update">
-  <i class="frown icon"></i>
-  <i class="icon close"></i>
-  <div class="content">
-    <div class="header">Oops!</div>
-    Graph update operation failed  
-  </div>
-</div>
-<div class="ui message icon error hidden" data-id="error-message-toggle">
-  <i class="frown icon"></i>
-  <i class="icon close"></i>
-  <div class="content">
-    <div class="header">Oops!</div>
-    Cannot perform toggle, device is not responding
-  </div>
-</div>
-<div class="ui header dividing blue">
+<div class="ui header dividing teal" data-behavior="settings"
+  data-graph-refresh-interval="<%= @preferences.graphic_refresh_interval %>"
+  data-graph-interval="<%= @preferences.graphic_interval %>">
   <%= @device.name %> Status
 </div>
 <% @device.modules.each do |m| %>
-  <div data-module-id="<%= m.id %>">
-    <div class="ui menu top attached">
-      <div class="header item">
-        <%= m.module_type.name %> <%= m.last_status.state %>
-      </div>
-      <div class="right menu" data-behavior="command-palette">
-        <div class="item relaxed">
-          <div class="ui buttons">
-            <%= link_to 'ON', device_module_activate_url(m), remote: true, data:{ behavior:'toggle toggle-on' }, class:"ui button #{' disabled' if m.active? }" %>
-            <%= link_to 'OFF', device_module_deactivate_url(m), remote: true, data:{ behavior:'toggle toggle-off' }, class:"ui button #{' disabled' if m.inactive? }" %>    
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="ui stackable two column grid celled padded">
-      <% m.sensors.each do |s| %>
-        <div class="column">
-          <h5 class="ui header">
-            <i class="icon <%= s.sensor_type.icon %>"></i>
-            <div class="content">
-              <%= s.sensor_type.name %>
-            </div>
-          </h5>
-          <div class="sgp-<%= m.id %>-<%= s.sensor_type_id %>" 
-                data-sensor-graph="graph" 
-                data-module-id="<%= m.id %>" 
-                data-sensor-type-id="<%= s.sensor_type_id %>"
-                data-sensor-unit="<%= s.sensor_type.unit %>">
-            
-          </div>
-        </div>
-      <% end %>
-    </div>
-    
-  </div>
+   <%= render partial:'device', locals: {m: m} %>
   <br />
 <% end %>
   

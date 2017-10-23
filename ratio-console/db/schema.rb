@@ -11,13 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171018200051) do
+ActiveRecord::Schema.define(version: 20171023164305) do
 
   create_table "ambiences", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false
     t.boolean  "is_deleted",             default: false, null: false
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
+  end
+
+  create_table "console_preferences", id: false, force: :cascade do |t|
+    t.integer  "graphic_refresh_interval", limit: 4
+    t.integer  "graphic_interval",         limit: 4
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
   end
 
   create_table "device_definition_view", id: false, force: :cascade do |t|

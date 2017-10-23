@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   
+  get 'console_preferences' => 'console_preferences#edit'
+  post 'console_preferences' => 'console_preferences#update'
+  
   resources :schedules
   resources :schedule_days
   resources :ambiences

@@ -2,6 +2,7 @@ class ModuleSensorsController < ApplicationController
   before_action :set_module
   def get_events
     @events = @module.events.order(ts: :desc).take(50)
+    @unit = @module.sensor_type.unit
     @isBinary = @module.sensor_type_id == 3
   end
   

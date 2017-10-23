@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Graphic refresh interval:</strong>
+  <%= @console_preference.graphic_refresh_interval %>
+</p>
+
+<p>
+  <strong>Graphic interval:</strong>
+  <%= @console_preference.graphic_interval %>
+</p>
+
+<%= link_to 'Edit', edit_console_preference_path(@console_preference) %> |
+<%= link_to 'Back', console_preferences_path %>

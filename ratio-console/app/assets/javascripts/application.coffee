@@ -9,6 +9,7 @@
 #= require semantic-ui
 #= require turbolinks
 #= require chartist
+#= require chartist.axis
 #= require framework
 #= require global
 #= require_tree .

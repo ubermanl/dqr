@@ -28,6 +28,7 @@ class DevicesController < ApplicationController
   private
   def set_device
     @device = Device.find(params[:id])
+    @preferences = ConsolePreference.first
   end
   
   def device_params
