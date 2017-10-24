@@ -45,5 +45,6 @@ install: all
 	for prog in $(PROGRAMS); do \
 	  install -m 0755 $$prog $(prefix)/bin; \
 	done
+	rm -f $(PROGRAMS)
 
 .PHONY: install

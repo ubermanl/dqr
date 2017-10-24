@@ -413,7 +413,10 @@ void Device::getModuleStatus(payload_module modules[]) {
   for (int i=0; i < _configuredModulesSize; i++) {
      modules[i].moduleId = _configuredModules[i]->getId();
      modules[i].state = _configuredModules[i]->getState();
-     _configuredModules[i]->getSensorsData(modules[i].sensors);
+     if ( ! _configuredModules[i]->getType() == OMNI_TYPE_ID || modules[i].state == MODULE_ACTIVE ) {
+        // Won't send sensor data if module is Omni and
+        _configuredModules[i]->getSensorsData(modules[i].sensors);
+     }
   }
 };
 
@@ -567,7 +570,7 @@ void Device::receive() {
 
         // Applying action to module
         int modIdx = getModuleIndex(payload.moduleId);
-        if ( modIdx != -1 && (_configuredModules[modIdx]->getType() == LUX_TYPE_ID || _configuredModules[modIdx]->getType() == POTENTIA_TYPE_ID) ) {
+        if ( modIdx != -1 ) {
           _configuredModules[modIdx]->transitionEvent(payload.desiredState,payload.overrideSet);
           LOG2(" - Action applied, modId #", payload.moduleId);
         }

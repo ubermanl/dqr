@@ -33,7 +33,7 @@
 /*
  * These constants define max number of sensors per module, and max number of modules per devices
  */
-#define MAX_SENSORS_X_MODULE 6
+#define MAX_SENSORS_X_MODULE 5
 #define MAX_MODULES_X_DEVICE  3
 
 /*
@@ -86,7 +86,7 @@ struct omniConfig {
 /*
  * The ammount of seconds a PIR detection window lasts
  */
-#define PIR_TIMEOUT_SECONDS 60
+#define PIR_TIMEOUT_SECONDS 300
 
 /*
  * TOUCH_DEBOUNCE_TIME: The ammount of ms while the button pressed is ignored to avoid bouncing
