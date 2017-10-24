@@ -1,6 +1,6 @@
 [Unit]
 Description=Ratio Console
-After=network-online.target mysql.service
+After=network-online.target dqrMaster.service
 
 [Service]
 Type=simple
