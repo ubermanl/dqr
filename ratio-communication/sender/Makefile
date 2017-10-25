@@ -42,7 +42,7 @@ install: all
 	test -d $(prefix) || mkdir $(prefix)
 	test -d $(prefix)/bin || mkdir $(prefix)/bin
 	for prog in $(PROGRAMS); do \
-	  install -m 0755 $$prog $(prefix)/bin; \
+	  install -m 4755 $$prog $(prefix)/bin; \
 	done
 	rm -f $(PROGRAMS)
 
