@@ -71,12 +71,14 @@ class TempSensor : public Sensor {
   public:
     TempSensor(byte);
     void senseData();
+    float getAverageValue();
   protected:
 };
 
 class SoundSensor : public Sensor {
   public:
     SoundSensor(byte);
+    float getdBs();
     void senseData();
   protected:    
 };
