@@ -71,3 +71,5 @@ window.App = do ->
             dropdown.dropdown('clear')
           e.stopPropagation()
       true
+
+    Fwk.get('.accordion').accordion()
