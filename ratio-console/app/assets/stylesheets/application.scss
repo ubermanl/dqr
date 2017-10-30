@@ -20,7 +20,14 @@ $import-google-fonts: false !default;
 @import "chartist/chartist";
 
 /* overrides */
-.top.menu, .menu{
+.top.menu, 
+.menu, 
+.segment, 
+.accordion, 
+.table, 
+.button,
+.dropdown,
+.input{
     border-radius:0 !important;
 }
 div.vertical-center{

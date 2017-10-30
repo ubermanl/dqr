@@ -1,35 +1,41 @@
-<h1>Schedule</h1>
-<h3><%= @schedule.description %></h3>
-
-<div class="ui header dividing small">
-  Define Interval
+<div class="ui menu borderless">
+  <div class="item header"><%= @schedule.description %></div>
+  <div class="right menu">
+    <%= link_to semantic_icon('edit'), edit_schedule_path(@schedule), class:'item' %>
+    <%= link_to semantic_icon('remove'), @schedule, method: :delete, data: { confirm: 'Are you sure?' },class:'item'  %>
+  </div>
 </div>
 
-<%= form_for ScheduleDay.new do |f| %>
-<div class="ui form">
-  <div class="fields">
-    <div class="one field">
-      <%= f.label :day %>
-      <%= f.select :day, day_names_helper,class:'compact' %>
+<%= form_for ScheduleDay.new, remote: true, format: :json do |f| %>
+  <div class="ui styled accordion fluid">
+    <div class="active title">
+      <i class="dropdown icon"></i>
+      TimeSheet
     </div>
-    <div class="field">
-      <%= f.label :start_hour %>
-      <%= f.time_select :start_hour, {default: { hour:0, minute:0 } }, class:'compact' %>
+    <div class="active content">
+      <div class="ui form">
+      <div class="fields">
+        <%= f.hidden_field :schedule_id, value: @schedule.id %>
+        <div class="field">
+          <%= f.label :day %>
+          <%= f.select :day, day_names_helper,class:'compact' %>
+        </div>
+        <div class="field">
+          <%= f.label :start_hour %>
+          <%= f.time_select :start_hour, {default: { hour:0, minute:0 } }, class:'compact' %>
+        </div>
+        <div class="field">
+          <%= f.label :end_hour %>
+          <%= f.time_select :end_hour, {default: { hour:0, minute:0 } },class:'compact' %>
+        </div>
+        <div class="field">
+          <label for="none">&nbsp;</label>
+          <%= f.submit 'Add', class:'ui button primary'%>
+          <%= f.submit 'Clear', type: 'reset', class:'ui button reset' %>
+        </div>
+      </div>
     </div>
-    <div class="field">
-      <%= f.label :end_hour %>
-      <%= f.time_select :end_hour, {default: { hour:0, minute:0 } },class:'compact' %>
     </div>
-    <div class="field">
-      <label for="none">&nbsp;</label>
-      <%= f.submit 'Add', class:'ui button primary'%>
-      <%= f.submit 'Clear', type: 'reset', class:'ui button' %>
-    </div>
-  </div>  
-</div>
-<% end %>
-<div class="ui buttons">
-  <%= link_to 'Rename', edit_schedule_path(@schedule), class:'ui button' %> |
-  <%= link_to 'Delete', @schedule, method: :delete, data: { confirm: 'Are you sure?' },class:'ui button red'  %>
-  <%= link_to 'Cancel', schedules_path, class:'ui button' %>
-</div>
+  </div>
+  <div class="timetable"></div>
+<% end %>  
