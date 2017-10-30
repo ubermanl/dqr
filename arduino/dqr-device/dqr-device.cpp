@@ -53,7 +53,7 @@ void SoundSensor::senseData() {
 };
 
 float SoundSensor::getdBs() {
-  int numberOfPeriods = 25; // We are measuring 50 cicles of a 255Hz function
+  int numberOfPeriods = 25; // We are measuring 25 cicles of a 255Hz function
   int maxValue = 0;
   int minValue = 1023;
   int rVal = 0;
@@ -64,8 +64,8 @@ float SoundSensor::getdBs() {
     minValue = min(minValue, rVal);
   }
   /*
-   * In order to return ratio in dB, I need to calculate the reference parameters, which seem to be in the order of:
-   * amplitud of reference = ~1 == ~33dB
+   * In order to return ratio in dB, I need to use the reference parameters, which seem to be in the order of
+   * ~1 step measured of amplitud on the sensor when there's ~33dB on the reference device (Cellphone)
    */
   int ampReference = 1;
   int dBReference = 33;
