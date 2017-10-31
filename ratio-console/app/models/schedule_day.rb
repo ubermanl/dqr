@@ -8,8 +8,13 @@ class ScheduleDay < ActiveRecord::Base
   
   
   def cronology
-    if start_hour > end_hour
-      errors.add(:start_hour, 'A schedule can\'t begin after it starts')
+    if start_hour.present? && end_hour.present?
+      if start_hour > end_hour
+        errors.add(:start_hour, 'A schedule can\'t begin after it starts')
+      end
+      if start_hour == end_hour
+        errors.add(:start_hour, 'A schedule can\'t have same start and end hour')
+      end
     end
   end
   
