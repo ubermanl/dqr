@@ -10,7 +10,7 @@ class ScheduleDaysController < ApplicationController
     Rails.logger.warn schedule_params
     respond_to do |format|
       if @schedule_day.save
-        format.json { render json: @schedule_day, status: :ok }
+        format.json { }
         format.html { redirect_to @schedule, notice: 'Schedule Created successfully' }
       else
         format.json { render json: @schedule_day.errors, status: :unprocessable_entity }

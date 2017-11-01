@@ -3,7 +3,11 @@ Rails.application.routes.draw do
   get 'console_preferences' => 'console_preferences#edit'
   post 'console_preferences' => 'console_preferences#update'
   
-  resources :schedules
+  resources :schedules do
+    member do 
+      get 'schedules'
+    end
+  end
   resources :schedule_days
   resources :ambiences
   resources :devices
