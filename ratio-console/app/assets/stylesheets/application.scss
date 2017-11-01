@@ -10,7 +10,7 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *=require timetable.css
+ *
  * require_tree .
  * site
  * require_self
@@ -47,13 +47,15 @@ div.vertical-center{
   }
 }
 
+$primary-color: #0b7542;
+
 .primary{
-  background-color:#0b7542 !important;
+  background-color:$primary-color !important;
   color: white !important;
 }
 
 .main-link{
-  color:#0b7542 !important;
+  color:$primary-color !important;
 }
 
 .ui.dropdown.compact{
@@ -65,9 +67,77 @@ div.vertical-center{
 }
 
 [data-role="segment-header"]{
-  border-bottom: 3px solid #0b7542 !important;
+  border-bottom: 3px solid $primary-color !important;
 }
 
 [data-role="segment-content"]{
   background-color: white !important;
+}
+
+.ui.timeline{
+  overflow-x:scroll;
+  overflow-y:hidden;
+  border:1px solid $primary-color;
+  box-sizing:border-box;
+}
+.ui.timeline ul.scale{
+  padding:0;
+  margin:0 0 0 0;
+  display: flex;
+  min-width: 768px;
+  min-height:1.5em;
+  background-color: lighten($primary-color,5%);
+  border:1px solid $primary-color;
+  box-sizing:border-box;
+  position:relative;
+  width:100%;
+}
+.ui.timeline .mark{
+  display:inline-block;
+  border-left:1px solid $primary-color;
+  background-color: lighten($primary-color,5%);
+  box-sizing:border-box;
+  height:100% !important;
+  position: absolute;
+  text-align:center;
+  color:white;
+  font-size:0.6em;
+}
+.ui.timeline ul.scale .mark:first-of-type{
+  border-left:none;
+}
+.ui.timeline ul.day .mark{
+  border-right:1px solid $primary-color;
+}
+
+.ui.timeline ul.day{
+  padding:0;
+  margin:0 0 0 0;
+  display: flex;
+  min-width: 768px;
+  min-height:1.5em;
+  background:gainsboro;
+  box-sizing:border-box;
+  position:relative;
+  width:100%;
+}
+.ui.timeline ul.day .event{
+  display:inline-block;
+  background-color:$primary-color;
+  height:100% !important;
+  position: absolute;
+  box-sizing:border-box;
+}
+
+.ui.table caption{
+  padding: 0.5em;
+  border-top: 1px solid lightgray;
+  border-right: 1px solid lightgray;
+  border-left: 1px solid lightgray;
+  background-color: #e4e4e4;
+  font-weight: bold;
+}
+
+.ui.toggle.checkbox label::before{
+  background-color:rgba(0,0,0,0.15);
 }
