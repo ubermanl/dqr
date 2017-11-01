@@ -44,13 +44,36 @@ float Sensor::getAverageValue() {
 SoundSensor::SoundSensor(byte pin) : Sensor(SND_TYPE_ID, pin) {};
 
 void SoundSensor::senseData() {
-  _currentValue = analogRead(_pinSensor);
+  _currentValue = getdBs();
   if (_accumulatedValue + _currentValue > MAX_ACCUMULATED_VALUE) {
     _accumulatedValue = getAverageValue();
   }
   _accumulatedValue += _currentValue;
   _sampleCount += 1;
 };
+
+float SoundSensor::getdBs() {
+  int numberOfPeriods = 25; // We are measuring 25 cicles of a 255Hz function
+  int maxValue = 0;
+  int minValue = 1023;
+  int rVal = 0;
+  uint32_t startTime = millis();
+  while ((millis() - startTime) < 4*numberOfPeriods) {
+    rVal = analogRead(_pinSensor);
+    maxValue = max(maxValue, rVal);
+    minValue = min(minValue, rVal);
+  }
+  /*
+   * In order to return ratio in dB, I need to use the reference parameters, which seem to be in the order of
+   * ~1 step measured of amplitud on the sensor when there's ~33dB on the reference device (Cellphone)
+   */
+  int ampReference = 1;
+  int dBReference = 33;
+
+  float ampRms = (maxValue - minValue)*sqrt(2)/2;
+  float dBs = 20*log10(ampRms/ampReference)+dBReference;
+  return dBs;
+}
 
 // PIR
 PIRSensor::PIRSensor(byte pin) : Sensor(PIR_TYPE_ID, pin) {};
@@ -88,6 +111,22 @@ void TempSensor::senseData() {
   _accumulatedValue += _currentValue;
   _sampleCount += 1;
 };
+
+float TempSensor::getAverageValue() {
+  /** Uncomment below for debugging purposes **/
+  /*
+  LOG2(" .. Sensor Sample Count: ",_sampleCount);
+  LOG2(" .. Accumulated Value: ",_accumulatedValue);
+  */
+  if (_sampleCount == 0) {
+    return 0;
+  }
+  float avg = _accumulatedValue / _sampleCount;
+  _accumulatedValue = 0;
+  _sampleCount = 0;
+  return round(avg*10)/10;
+};
+
 
 // Light
 LightSensor::LightSensor(byte pin) : Sensor(LUM_TYPE_ID, pin) {};
@@ -140,7 +179,7 @@ float ACSensor::getACValue() {
   if (steps <= 7) return 0;
   
   /* The number of steps should be multiplied by 5 and divided by 1024 to convert to volts, then divided by 2 to get
-   * just one side of the sin function. Then it should be multiplied by sqrt(2)/2 to get RMS Volts, and multiply by 1000 
+   * just one side of the sin function. Then it should be multiplied by sqrt(2)/2 to get RMS Volts, and multiplied by 1000 
    * to convert  to mVs. Finally, divide by sensorSensitivity, which is expressed in mV/A.
    *
    * Instead of doing that, I'm going to multiply first, then divide, so that decimals are not lost in the calculation.
