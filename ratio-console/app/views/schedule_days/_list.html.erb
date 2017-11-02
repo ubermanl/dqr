@@ -1,0 +1,14 @@
+  <ul class="scale">
+    <li class="mark">Day</li>
+  <% (0..23).to_a.each do |a| %>
+    <li class="mark" data-mark="<%= a %>"><%= a %></li>
+  <% end %>
+  </ul>
+<% prepare_days(@schedule).schedule_days.group_by(&:day).sort_by{|t| t[0]}.each do |k,values| %>
+   <ul class="day">
+     <li class="mark"><%= week_day(k) %></li>
+     <% values.each do |v| %>
+    <li class="event" data-span-start="<%= v.start_hour %>" data-span-end="<%= v.end_hour %>" title="<%= schedule_tooltip(v) %>"></li>
+     <% end %>
+   </ul>
+<% end %>

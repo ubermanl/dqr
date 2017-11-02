@@ -6,4 +6,6 @@ class Device < ActiveRecord::Base
   validates :id, uniqueness: true, presence: true
   validates :name, uniqueness: true, presence: true
   validates :ambience_id, presence: true
+  
+  accepts_nested_attributes_for :modules
 end

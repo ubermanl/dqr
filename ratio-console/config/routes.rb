@@ -10,7 +10,11 @@ Rails.application.routes.draw do
   end
   resources :schedule_days
   resources :ambiences
-  resources :devices
+  resources :devices do
+    member do 
+      get 'detect'
+    end
+  end
   resources :device_modules do 
     get 'activate'
     get 'deactivate'
