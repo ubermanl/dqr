@@ -53,25 +53,21 @@ void SoundSensor::senseData() {
 };
 
 float SoundSensor::getdBs() {
-  int numberOfPeriods = 25; // We are measuring 25 cicles of a 255Hz function
+  int numberOfPeriods = 2; // We are measuring 2 cicles of a 20Hz function
   int maxValue = 0;
-  int minValue = 1023;
-  int rVal = 0;
   uint32_t startTime = millis();
-  while ((millis() - startTime) < 4*numberOfPeriods) {
-    rVal = analogRead(_pinSensor);
-    maxValue = max(maxValue, rVal);
-    minValue = min(minValue, rVal);
-  }
+  while ((millis() - startTime) < 50*numberOfPeriods)
+    maxValue = max(maxValue, analogRead(_pinSensor));
   /*
-   * In order to return ratio in dB, I need to use the reference parameters, which seem to be in the order of
-   * ~1 step measured of amplitud on the sensor when there's ~33dB on the reference device (Cellphone)
+   * In order to return ratio in dB, we will use the top limit of 680 steps reported by the sensor, and a 
+   * matching limit of 110 dBs. The lowe limit is set to 30 dBs.
    */
-  int ampReference = 1;
-  int dBReference = 33;
-
-  float ampRms = (maxValue - minValue)*sqrt(2)/2;
-  float dBs = 20*log10(ampRms/ampReference)+dBReference;
+  int maxAmp = 680;
+  int maxdBs = 110;
+  int preLogFactor = 24;
+  float dBs = 30;
+  if (maxValue != 0)
+    dBs = preLogFactor*(log10(maxValue) - log10(maxAmp))+maxdBs;
   return dBs;
 }
 
