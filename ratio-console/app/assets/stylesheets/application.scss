@@ -48,6 +48,7 @@ div.vertical-center{
 }
 
 $primary-color: #0b7542;
+$primary-border: rgba(34,36,38,0.15);
 
 .primary{
   background-color:$primary-color !important;
@@ -75,58 +76,52 @@ $primary-color: #0b7542;
 }
 
 .ui.timeline{
+  @extend .segment;
   overflow-x:scroll;
   overflow-y:hidden;
-  border:1px solid $primary-color;
-  box-sizing:border-box;
+  padding:0;
 }
-.ui.timeline ul.scale{
+.ui.timeline ul{
   padding:0;
   margin:0 0 0 0;
   display: flex;
   min-width: 768px;
   min-height:1.5em;
-  background-color: lighten($primary-color,5%);
-  border:1px solid $primary-color;
   box-sizing:border-box;
   position:relative;
   width:100%;
 }
-.ui.timeline .mark{
+.ui.timeline ul li{
   display:inline-block;
-  border-left:1px solid $primary-color;
-  background-color: lighten($primary-color,5%);
-  box-sizing:border-box;
   height:100% !important;
   position: absolute;
-  text-align:center;
-  color:white;
-  font-size:0.6em;
-}
-.ui.timeline ul.scale .mark:first-of-type{
-  border-left:none;
-}
-.ui.timeline ul.day .mark{
-  border-right:1px solid $primary-color;
+  box-sizing:border-box;
 }
 
-.ui.timeline ul.day{
-  padding:0;
-  margin:0 0 0 0;
-  display: flex;
-  min-width: 768px;
-  min-height:1.5em;
-  background:gainsboro;
-  box-sizing:border-box;
-  position:relative;
-  width:100%;
+.ui.timeline .mark{
+  width:4%;
+  border-right:1px solid $primary-border;
+  color:black;
+  font-family:"Lato", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  text-align:center;
+  font-size: 0.82857143em;
+  font-weight: bold;
 }
-.ui.timeline ul.day .event{
-  display:inline-block;
-  background-color:$primary-color;
-  height:100% !important;
-  position: absolute;
-  box-sizing:border-box;
+
+.ui.timeline .scale .mark:last-of-type{
+  border-right: none;
+}
+.ui.timeline .event-detail{
+  height: 100%;
+  width:100%;
+  position:absolute;
+}
+
+.ui.timeline .event{
+  background-color:gainsboro;
+}
+.ui.timeline .event.selected{
+  background-color: $primary-color;
 }
 
 .ui.table caption{
@@ -140,4 +135,7 @@ $primary-color: #0b7542;
 
 .ui.toggle.checkbox label::before{
   background-color:rgba(0,0,0,0.15);
+}
+.ui.hidden.segment{
+  display:none;
 }

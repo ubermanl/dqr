@@ -1,5 +1,5 @@
 class ScheduleDaysController < ApplicationController
-  before_action :set_schedule
+  before_action :set_schedule, only:[:create]
 
   def create
     @schedule_day = ScheduleDay.new :schedule_id => schedule_params[:schedule_id],
@@ -15,6 +15,19 @@ class ScheduleDaysController < ApplicationController
       else
         format.json { render json: @schedule_day.errors, status: :unprocessable_entity }
         format.html { redirect_to @schedule, notice: 'Something went wrong'}
+      end
+    end
+  end
+  
+  def destroy 
+    @schedule_day = ScheduleDay.find(params[:id])
+    respond_to do |format|
+      if @schedule_day.destroy
+        format.json { }
+        format.html { redirect_to @schedule_day.schedule, notice: 'Schedule day removed successfully' }
+      else
+        format.json { render json: @schedule_day.errors, status: :unprocessable_entity }
+        format.html { redirect_to @schedule_day, notice: 'Something went wrong'}
       end
     end
   end

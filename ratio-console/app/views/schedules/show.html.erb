@@ -5,7 +5,6 @@
     <%= link_to semantic_icon('remove'), @schedule, method: :delete, data: { confirm: 'Are you sure?' },class:'item'  %>
   </div>
 </div>
-
 <%= form_for ScheduleDay.new, remote: true, format: :json do |f| %>
   <div class="ui styled accordion fluid">
     <div class="active title">
@@ -35,10 +34,19 @@
         </div>
       </div>
     </div>
+    <div class="ui timeline">
+      <div class="ui dimmer" data-behavior="event-detail">
+        <div class="ui segment event-detail">
+          <div class="ui header">Event Detail</div>
+          <p data-behavior="event-content"></p>
+          <div class="ui button negative" data-behavior="delete-event">Delete Schedule</div>
+          <div class="ui button" data-behavior="close-detail">Close</div>
+        </div>  
+      </div>
+      <%= render partial: 'schedule_days/list' %>    
+    </div>
     </div>
   </div>
-  <div class="ui timeline">
-    <%= render partial: 'schedule_days/list' %>    
-  </div>
+ 
 <% end %>
 <br />

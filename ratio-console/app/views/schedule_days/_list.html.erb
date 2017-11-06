@@ -1,3 +1,11 @@
+  <div class="ui dimmer" data-behavior="event-detail">
+    <div class="ui segment event-detail">
+      <div class="ui header">Event Detail</div>
+      <p data-behavior="event-content"></p>
+      <div class="ui button negative" data-behavior="delete-event">Delete Schedule</div>
+      <div class="ui button" data-behavior="close-detail">Close</div>
+    </div>  
+  </div>
   <ul class="scale">
     <li class="mark">Day</li>
   <% (0..23).to_a.each do |a| %>
@@ -8,7 +16,7 @@
    <ul class="day">
      <li class="mark"><%= week_day(k) %></li>
      <% values.each do |v| %>
-    <li class="event" data-span-start="<%= v.start_hour %>" data-span-end="<%= v.end_hour %>" title="<%= schedule_tooltip(v) %>"></li>
+    <li class="event" data-event-id="<%= v.id %>" data-span-start="<%= v.start_hour %>" data-span-end="<%= v.end_hour %>" data-text="<%= schedule_tooltip(v) %>"></li>
      <% end %>
    </ul>
 <% end %>

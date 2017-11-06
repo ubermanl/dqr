@@ -13,7 +13,49 @@ App.Schedules = do ->
     schedId: '#schedule_day_schedule_id'
     timeline: '.timeline'
     timelineEvent: '.timeline .event'
+    timelineEventSelected: '.timeline .event.selected'
     timelineMark: '.timeline .mark'
+    eventDetail: 'event-detail'
+    eventContent: 'event-content'
+    event:'.event'
+    deleteEvent: '[data-behavior="delete-event"]'
+    closeEvent:'[data-behavior="close-detail"]'
+    
+  toggleSelection: (schedule)->
+    if schedule?
+      isSelected = schedule.hasClass('selected')
+      eventId = schedule.data('event=id')
+    else
+      isSelected = true
+      
+    dimmer = Fwk.getByBehavior(selectors.eventDetail)
+    
+    Fwk.get(selectors.timelineEvent).removeClass('selected')
+    if !isSelected
+      schedule.addClass('selected')
+      Fwk.getByBehavior(selectors.eventContent).text(schedule.data('text'))
+      dimmer.dimmer('show')
+    else
+      dimmer.dimmer('hide')
+      
+  deleteEvent: ->
+    selectedEvent = Fwk.get(selectors.timelineEventSelected)
+    eventId = selectedEvent.data('eventId')
+    $.ajax
+      type: "DELETE"
+      dataType: "json"
+      url: "/schedule_days/#{eventId}"
+      success: (data)->
+        selectedEvent.remove()
+        App.Schedules.toggleSelection()
+        
+      error: ->
+        Fwk.showMessage 'negative',true,'Delete Schedule','Delete operation failed'
+        
+      complete: ->
+        
+    true
+  
   getPosition: (start, end) ->
     initMinutes = Number(start.substring(0,2)) * 60 + Number(start.substring(3))
     endMinutes = Number(end.substring(0,2)) * 60 + Number(end.substring(3))
@@ -29,6 +71,8 @@ App.Schedules = do ->
     container = Fwk.get(selectors.timeline)
     container.empty().append(events.html)
     @initTimeline()
+    lastEvent = Fwk.getByData('event-id',events.lastId)
+    lastEvent.transition('jiggle')
     
   initTimeline: ->
     Fwk.get(selectors.timelineMark).each ->
@@ -39,11 +83,10 @@ App.Schedules = do ->
       true
       
     Fwk.get(selectors.timelineEvent).each ->
-      event = Fwk.get(this)
-      props = App.Schedules.getPosition(event.data('span-start'),event.data('span-end'))
-      console.log props
-      event.width(props.width + '%')
-      event.css('left',props.left + 4 + '%')
+      schedule = Fwk.get(this)
+      props = App.Schedules.getPosition(schedule.data('span-start'),schedule.data('span-end'))
+      schedule.width(props.width + '%')
+      schedule.css('left',props.left + 4 + '%')
       true
   init: ->
     
@@ -65,7 +108,18 @@ App.Schedules = do ->
       .on selectors.reset, ->
         Fwk.clearMessages()
         Fwk.get('select').dropdown('restore defaults')
+        
+      
+    Fwk.get(selectors.timeline)
+      .on 'click', selectors.event, ->
+        App.Schedules.toggleSelection(Fwk.get(this))
     
+      .on 'click', selectors.deleteEvent, ->
+        App.Schedules.deleteEvent()
+    
+      .on 'click', selectors.closeEvent, ->
+        App.Schedules.toggleSelection()
+      
     App.Schedules.initTimeline()
     
 Fwk.onLoadPage App.Schedules.init,'schedules','show'
