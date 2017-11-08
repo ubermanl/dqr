@@ -1,0 +1,16 @@
+[Unit]
+Description=DqR RNA Engine
+After=network-online.target mysql.service
+
+[Service]
+User=pi
+Group=pi
+Type=simple
+ExecStart=/home/pi/rnaEngine/bin/service.sh
+ExecStop=/bin/kill ${MAINPID}
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=rnaEngine
+
+[Install]
+WantedBy=multi-user.target
