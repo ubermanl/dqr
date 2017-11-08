@@ -1,0 +1,15 @@
+<div class="ui menu borderless" data-behavior="settings">
+  <div class="item header" data-behavior="head-container" data-device-id="<%= @device.id %>">Detecting <%= @device.name %></div>
+  <div class="right menu">
+      <%= link_to text_with_icon('Edit','edit'), edit_device_url, class:'item' %>    
+  </div>
+</div>
+<div class="ui icon message positive">
+  <i class="spinner loading icon"></i>
+  <div class="content">
+    <div class="header">
+      Waiting for Device
+    </div>
+    <p>Waiting for device data, please make sure device is powered on. <br />This process may take a few minutes.</p>
+  </div>
+</div>

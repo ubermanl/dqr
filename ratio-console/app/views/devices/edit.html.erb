@@ -31,7 +31,11 @@
     <tbody>
       <%= f.fields_for :modules do |d| %>
         <tr>
+          <% if @device.detection_pending %>
+          <td><%= d.select :module_type_id, options_from_collection_for_select(ModuleType.all,:id,:name, d.object.module_type_id) %></td></td>
+          <% else %>
           <td><%= d.object.module_type.name %></td>
+          <% end %>
           <td><%= d.text_field :name %></td>
           <td>
             <div class="ui toggle checkbox">

@@ -12,6 +12,8 @@ App.Device = do ->
     graphRefreshRate: 'graph-refresh-interval'
     graphDivisors: 'graph-interval'
     lastMeasure: '[data-behavior="last-measure"]'
+    headContainer: 'head-container'
+    yLabels: ['No','Yes']
 
   buildChart: (chid,container,data)->
     
@@ -33,14 +35,23 @@ App.Device = do ->
                 { name:'', data: chartDataSeries }
               ]
     
+    # options for y axis when data is binary
+    axisYOptions = {}
+    if data.isBinary
+      axisYOptions.onlyInteger = true
+      axisYOptions.labelInterpolationFnc = (value, index)->
+          return selectors.yLabels[index]
+      axisYOptions.stretch = true
+    else
+      axisYOptions.type = Chartist.AutoScaleAxis
+        
     options =
       axisX:
         type: Chartist.FixedScaleAxis
         divisor: dataInterval
         labelInterpolationFnc: (value, index, chart) ->
           Fwk.formatDate(new Date(value),'%H:%N')
-      axisY:
-        type: Chartist.AutoScaleAxis
+      axisY: axisYOptions
       lineSmooth: if data.isBinary == true then Chartist.Interpolation.step() else Chartist.Interpolation.simple({ divisor: 2, fillHoles: false })
       showArea: data.isBinary == false
       showPoint: false
@@ -129,6 +140,27 @@ App.Device = do ->
       App.Device.updateButtons Fwk.get(this), data
     
       
+  detectData: ->
+    device_id = Fwk.getByBehavior(selectors.headContainer).data('device-id')
+    $.ajax
+      type: "GET"
+      dataType: "json"
+      url: "/devices/#{device_id}/has_data"
+      success: (data)->
+        if data.detection_status = 'ok'
+          window.location = data.goto
+        else
+          Fwk.setTimeout 30000, App.Device.detectData
+        
+      error: ->
+        Fwk.showMessage 'negative',true,'Detect ','Device could not be detected'
+        
+      complete: ->
+        #App.Device.setUpdateErrorVisibility(false)
+    
+    
+    
+  
   init: ->
     App.Device.updateGraphs()
     App.Device.bindAjax()
@@ -137,3 +169,4 @@ App.Device = do ->
     
     
 Fwk.onLoadPage App.Device.init,'devices','show'
+Fwk.onLoadPage App.Device.detectData,'devices','detect'

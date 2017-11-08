@@ -8,4 +8,13 @@ class Device < ActiveRecord::Base
   validates :ambience_id, presence: true
   
   accepts_nested_attributes_for :modules
+  
+  after_commit :mark_detected, on: :update
+  
+  
+  def mark_detected
+    if self.detection_pending
+      update_column(:detection_pending, false)
+    end
+  end
 end

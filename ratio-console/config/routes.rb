@@ -13,11 +13,13 @@ Rails.application.routes.draw do
   resources :devices do
     member do 
       get 'detect'
+      get 'has_data'
     end
   end
   resources :device_modules do 
     get 'activate'
     get 'deactivate'
+    get 'set_status'
   end
   
   get 'module_sensors/get_events' => 'module_sensors#get_events'

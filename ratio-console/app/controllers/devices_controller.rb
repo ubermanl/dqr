@@ -1,5 +1,5 @@
 class DevicesController < ApplicationController
-  before_action :set_device, only: [:show,:edit,:update]
+  before_action :set_device, only: [:show,:edit,:update, :detect, :has_data]
   
   def index
     @devices = Device.includes(:ambience,modules:[:module_type]).all
@@ -15,6 +15,16 @@ class DevicesController < ApplicationController
   
   def detect
     
+  end
+  
+  def has_data
+    respond_to do |format|
+      if @device.events.any?
+        format.json { render json: { :detection_staus => 'ok', :goto => edit_device_url(@device) }, status: :ok }
+      else
+        format.json { render json: { :detection_staus => 'pending' }, status: :ok }
+      end
+    end
   end
   
   def show
@@ -52,6 +62,6 @@ class DevicesController < ApplicationController
   end
   
   def device_params
-    params.require(:device).permit(:id,:name,:ambience_id,modules_attributes: [:id, :name, :show_in_dashboard ])
+    params.require(:device).permit(:id,:name,:ambience_id,modules_attributes: [:id, :name, :module_type_id, :show_in_dashboard ])
   end
 end

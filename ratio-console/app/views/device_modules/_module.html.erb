@@ -1,0 +1,15 @@
+<div data-module-id="<%= m.id %>">
+  <div class="ui menu top attached borderless" data-role="segment-header">
+    <div class="header item">
+      <%= device_module_name(m) %>
+    </div>
+    <div class="right menu" data-behavior="command-palette">
+      <div class="item relaxed">
+        <div class="ui buttons">
+          <%= link_to 'ON', device_module_activate_url(m), remote: true, data:{ behavior:'toggle toggle-on' }, class:"ui button primary #{ ' disabled' if m.active? }" %>
+          <%= link_to 'OFF', device_module_deactivate_url(m), remote: true, data:{ behavior:'toggle toggle-off' }, class:"ui button #{' disabled' if m.inactive? }" %>    
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -10,80 +10,103 @@ class DeviceModule < ActiveRecord::Base
     self.events.order(ts: :desc).first
   end
   
+  scope :pinned, ->{ where(show_in_dashboard:true)}
+  
+  def build_status
+    @last_status ||= events.order(ts: :desc)
+  end
+  
   def last_status
-    @last_status ||= events.order(ts: :desc).first
-    @last_status
+    if !@last_status.nil?
+      @last_status.first
+    else
+      []
+    end
+  end
+  
+  def unknown_state?
+    @last_status.nil?
   end
   
   def active?
-    last_status.state == 1 || last_status.state == 3
+    [1,3].include?(last_known_status)
   end
   def inactive?
-    last_status.state == 0 || last_status.state == 2
+    [0,2].include?(last_known_status)
   end
   
   def override_active?
-    last_status.state == 3
+    last_known_status == 3
   end
   
   def override_inactive?
-    last_status.state == 4
+    last_known_status == 4
   end
   
-  def fsm_activate
-    case last_status.state
-      when 0  # de inactivo a activo override
-        activate_override
-      when 2 # de inactivo override a activo
-        activate_override
-      else
-        [1,'Estado Inconsistente']
-    end
+  def is_overriden?
+    last_tatus.state > 2
   end
-
-  def fsm_deactivate
-    case last_status.state 
-      when 1 # de activo a inactivo en override
-        deactivate_override
-      when 3 # de activo override a inactivo
-        deactivate_override
-      else
-        [1,'Estado Inconsistente']
-    end
-  end
-        
   
-  private
   def activate
-    perform_toggle(1,0)
+    send_toggle_status(1,0)
   end
   
   def activate_override
-    perform_toggle(1,1)
+    send_toggle_status(1,1)
   end
   
   def deactivate
-    perform_toggle(0,0)
+    send_toggle_status(0,0)
   end
   
   def deactivate_override
-    perform_toggle(0,1)
+    send_toggle_status(0,1)
   end
   
-  def perform_toggle(status,override)
+  private
+  # run DqR Sender on OS to perform toggle
+  def send_toggle_status(status,override, force_report = true)
     cmd = "dqrSender A #{self.device_id} #{self.id} #{status} #{override}"
-    Rails.logger.info "Will Perform #{cmd}"
+    Rails.logger.info "DqRSender Perform #{cmd}"
     result = `#{cmd}`
     exitStatus = $?.exitstatus
     
-    Rails.logger.info "Perform Result was: #{result}"
-    # force device report status
-    cmd = "dqrSender S #{self.device_id}"
-    Rails.logger.info "Will Perform #{cmd}"
-     result2 = `#{cmd}`
-    Rails.logger.info "Perform Result was: #{result2}"
+    # device should report back
+    if force_report
+      send_status_query
+    end
     
     [exitStatus, result]
+  end
+  
+  # run DqR Sender on OS to query device status
+  def send_status_query
+    cmd = "dqrSender S #{self.device_id}"
+    Rails.logger.info "DqRSender Perform #{cmd}"
+    result = `#{cmd}`
+    exitStatus = $?.exitstatus
+    Rails.logger.info "Perform Result was: #{result}"
+    [exitStatus, result]
+  end
+  
+  def inconsistent_status
+    [-1,'Inconsistent Status']
+  end
+  
+  # validate state machine transition
+  def fsm_validate(from_state, to_state)
+    valid_states = case from_state
+      # from inactive to active or active override
+      when 0 then [1,3]
+      # from active to inative or inactive override
+      when 1 then [0,2]
+      # from inactive override to active or inactive
+      when 2 then [0,1]
+      # from active override to inactive or active
+      when 3 then [0,1]
+    end
+    # true if transition is allowed, false otherwise
+    valid_states.include?(to_state)
   end
   
 end

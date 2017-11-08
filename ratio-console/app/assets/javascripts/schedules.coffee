@@ -36,7 +36,10 @@ App.Schedules = do ->
       Fwk.getByBehavior(selectors.eventContent).text(schedule.data('text'))
       dimmer.dimmer('show')
     else
-      dimmer.dimmer('hide')
+      dimmer.dimmer('hide dimmer')
+      if dimmer.dimmer('is active')
+        dimmer.dimmer('show')
+        dimmer.dimmer('hide')
       
   deleteEvent: ->
     selectedEvent = Fwk.get(selectors.timelineEventSelected)
@@ -46,8 +49,9 @@ App.Schedules = do ->
       dataType: "json"
       url: "/schedule_days/#{eventId}"
       success: (data)->
-        selectedEvent.remove()
+        Fwk.log 'Removed'
         App.Schedules.toggleSelection()
+        selectedEvent.remove()
         
       error: ->
         Fwk.showMessage 'negative',true,'Delete Schedule','Delete operation failed'
@@ -73,6 +77,7 @@ App.Schedules = do ->
     @initTimeline()
     lastEvent = Fwk.getByData('event-id',events.lastId)
     lastEvent.transition('jiggle')
+    Fwk.log 'timetable Updated'
     
   initTimeline: ->
     Fwk.get(selectors.timelineMark).each ->
@@ -110,14 +115,14 @@ App.Schedules = do ->
         Fwk.get('select').dropdown('restore defaults')
         
       
-    Fwk.get(selectors.timeline)
-      .on 'click', selectors.event, ->
+    timeline = Fwk.get(selectors.timeline)
+    timeline.on 'click', selectors.event, ->
         App.Schedules.toggleSelection(Fwk.get(this))
     
-      .on 'click', selectors.deleteEvent, ->
+    timeline.on 'click', selectors.deleteEvent, ->
         App.Schedules.deleteEvent()
     
-      .on 'click', selectors.closeEvent, ->
+    timeline.on 'click', selectors.closeEvent, ->
         App.Schedules.toggleSelection()
       
     App.Schedules.initTimeline()
