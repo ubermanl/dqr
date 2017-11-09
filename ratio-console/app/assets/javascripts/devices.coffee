@@ -12,6 +12,7 @@ App.Device = do ->
     graphRefreshRate: 'graph-refresh-interval'
     graphDivisors: 'graph-interval'
     lastMeasure: '[data-behavior="last-measure"]'
+    lastTime: '[data-behavior="last-time"]'
     headContainer: 'head-container'
     yLabels: ['No','Yes']
 
@@ -27,6 +28,7 @@ App.Device = do ->
     if data.events.length > 0
       Fwk.log 'Events'
       container.closest('.column').find(selectors.lastMeasure).text("#{data.events[0].value} #{data.unit}")
+      container.closest('.column').find(selectors.lastTime).text("#{Fwk.formatDate(new Date(data.events[0].ts),'%H:%N')} hs")
     
     cssClass = ".#{chid}"
     
@@ -147,8 +149,8 @@ App.Device = do ->
       dataType: "json"
       url: "/devices/#{device_id}/has_data"
       success: (data)->
-        if data.detection_status = 'ok'
-          window.location = data.goto
+        if data.detection_status == 'ok'
+          window.location.replace = data.goto
         else
           Fwk.setTimeout 30000, App.Device.detectData
         

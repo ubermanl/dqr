@@ -7,7 +7,7 @@
 #= require jquery.turbolinks
 #= require jquery_ujs
 #= require semantic-ui
-#= require turbolinks
+#  require turbolinks
 #= require chartist
 #= require chartist.axis
 #= require framework
@@ -15,5 +15,4 @@
 #= require_tree .
 
 # unica linea que inicia la aplicacion
-$(document).on 'turbolinks:load', ->
-  App.init()
+Fwk.onLoadPage App.init

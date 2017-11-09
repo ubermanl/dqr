@@ -191,13 +191,16 @@ class Fwk
     @log 'Register onLoadPage Function'
     #
     self = @
-    $(document).on 'turbolinks:load', ->
+    $(document).ready ->
       self.log 'Turbolinks Load'
       # se hace el matching de controller y action
-      if self.inPage controller, actions...
-        self.log 'Running PageLoad Function for ' + controller + ' controller'
+      if controller? && actions?
+        if self.inPage controller, actions...
+          self.log 'Running PageLoad Function for ' + controller + ' controller'
+          f()
+      else
         f()
-  
+        
   # attach de una funcion a un elemento con ese comportamiento
   Fwk::attachClick = (behavior, func, container)->
     if container?
