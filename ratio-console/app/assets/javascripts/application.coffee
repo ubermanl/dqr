@@ -4,7 +4,7 @@
 # codigo
 # -------------------------------------------
 #= require jquery
-#= require jquery.turbolinks
+# require jquery.turbolinks
 #= require jquery_ujs
 #= require semantic-ui
 #  require turbolinks

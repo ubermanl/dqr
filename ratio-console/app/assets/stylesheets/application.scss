@@ -143,6 +143,9 @@ $primary-border: rgba(34,36,38,0.15);
 .dqr.colored{
   color: $primary-color;
 }
+.dqr.inverted{
+  background-color :$primary-color;
+}
 .bold{
   font-weight:bold;
 }

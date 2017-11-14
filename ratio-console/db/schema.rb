@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171106214829) do
+ActiveRecord::Schema.define(version: 20171110164956) do
 
   create_table "ambiences", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false
@@ -38,6 +38,9 @@ ActiveRecord::Schema.define(version: 20171106214829) do
     t.integer "sensor_type_id",  limit: 4,                         null: false
     t.decimal "value",                     precision: 8, scale: 4, null: false
   end
+
+  add_index "device_event_sensors", ["device_event_id"], name: "index_device_event_sensors_on_device_event_id", using: :btree
+  add_index "device_event_sensors", ["sensor_type_id"], name: "index_device_event_sensors_on_sensor_type_id", using: :btree
 
   create_table "device_events", force: :cascade do |t|
     t.integer  "device_id", limit: 4,                 null: false

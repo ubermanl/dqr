@@ -1,6 +1,9 @@
 <% if @pinned_modules.any? %>
-  <div class="ui header">Pinned Devices</div>
-  <div class="ui middle aligned divided list">
+  <div class="ui header dqr colored">
+    <i class="icon pin"></i>
+    Pinned Devices
+  </div>
+  <div class="ui list">
      <% @pinned_modules.each do |m| %>
       <%= render partial: 'device_modules/module', locals:{ m: m} %>
     <% end %>
