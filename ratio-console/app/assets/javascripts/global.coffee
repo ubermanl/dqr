@@ -7,6 +7,15 @@ window.App = do ->
     sidebarMenuButton: 'sidebar-toggle'
     sidebarContext: '.bottom.segment'
     messageSelector: '.message .close'
+    waitPopup: '#modal-wait'
+    
+  hideWaitPopup = ->
+    modal = Fwk.get(selectors.waitPopup)
+    modal.modal({ transition:'fade',duration:250, closable: false }).modal('hide').modal('hide dimmer')
+    
+  showWaitPopup = ->
+    modal = Fwk.get(selectors.waitPopup)
+    modal.modal({closable: false, duration:0}).modal('show')
     
   toggleSidebar = ->
     $(selectors.sidebarMenu).sidebar('toggle')
@@ -73,3 +82,9 @@ window.App = do ->
       true
 
     Fwk.get('.accordion').accordion()
+    
+    Fwk.get(document).ajaxStart ->
+      showWaitPopup()
+    
+    Fwk.get(document).ajaxComplete ->
+      hideWaitPopup()
