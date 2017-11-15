@@ -1,35 +1,54 @@
 class ScheduleModulesController < ApplicationController
-  before_action :set_schedule, only:[:create]
+  before_action :set_schedule, only:[:update,:destroy]
   
   def create
-    if schedule_module_params[:include] == 0 && schedule_module_params[:device_module_id].present?
-      @schedule.schedule_modules.where(:device_module_id => schedule_module_params[:device_module_id]).delete
-    else
-      @schedule_module = @schedule.schedule_modules.where(device_module_id: schedule_module_params[:device_module_id])
-      if @schedule_module.any?
-        @schedule_module.update(schedule_module_params)
+    @schedule_module = ScheduleModule.new(schedule_module_params)
+    @schedule_module.schedule_id = params[:schedule_id]
+    respond_to do |format|
+      if @schedule_module.save 
+        format.json { render json:{ status: 'OK', schedule_module_id: @schedule_module.id }, status: :ok }
+        format.html { redirect_to @schedule_module.schedule }
       else
-        @schedule_module = ScheduleModule.create(schedule_module_params)
-        @schedule_module.save
+        format.json { render json:{ status: 'Error', errors: @schedule_module.errors }, status: :unprocessable_entity }
+        format.html { redirect_to @schedule_module.schedule, notice: 'Error' }
       end
     end
+  end
+  
+  
+  def destroy
     respond_to do |format|
-      if @schedule_module.errors.none?
-        format.json { render json: { status: 'ok' }, status: :ok }
-        format.html { redirect_to @schedule, notice: 'Successfully Included' }
+      if @schedule_module.destroy 
+        format.json { render json:{ status: 'OK' }, status: :ok }
+        format.html { redirect_to @schedule_module.schedule }
       else
-        format.json { render json: { status: @schedule_module.errors }, status: :unprocessable_entity }
-        format.html { redirect_to @schedule }
-      end  
+        format.json { render json:{ status: 'Error', errors: @schedule_module.errors }, status: :unprocessable_entity }
+        format.html { redirect_to @schedule_module.schedule, notice: 'Error' }
+      end
     end
   end
   
+  def update
+    respond_to do |format|
+      @schedule_module.desired_status = schedule_module_params[:desired_status]
+      if @schedule_module.save
+        format.json { render json:{ status: 'OK', schedule_module_id: @schedule_module.id, new_status: @schedule_module.desired_status }, status: :ok }
+        format.html { redirect_to @schedule_module.schedule }
+      else
+        format.json { render json:{ status: 'Error', errors: @schedule_module.errors }, status: :unprocessable_entity }
+        format.html { redirect_to @schedule_module.schedule, notice: 'Error' }
+      end
+    end
+  end
   
-  private 
+  private
   def set_schedule
-    @schedule = Schedule.find(schedule_module_params[:schedule_id])
+    @schedule = Schedule.find(params[:schedule_id])
+    @schedule_module = ScheduleModule.find(params[:id])
   end
+  
   def schedule_module_params
-    params.require(:schedule_module).permit(:schedule_id, :device_module_id, :desired_state,:include)
+    params.require(:schedule_module).permit(:desired_status,:device_module_id,:include)
   end
+  
 end

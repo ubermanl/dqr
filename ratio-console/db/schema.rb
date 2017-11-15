@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171113151615) do
+ActiveRecord::Schema.define(version: 20171115155352) do
 
   create_table "ambiences", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false
@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(version: 20171113151615) do
     t.datetime "updated_at",                 null: false
   end
 
+  add_index "schedule_modules", ["device_module_id", "schedule_id"], name: "index_schedule_modules_on_device_module_id_and_schedule_id", unique: true, using: :btree
   add_index "schedule_modules", ["device_module_id"], name: "index_schedule_modules_on_device_module_id", using: :btree
   add_index "schedule_modules", ["schedule_id"], name: "index_schedule_modules_on_schedule_id", using: :btree
 
