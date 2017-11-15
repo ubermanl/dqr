@@ -91,8 +91,8 @@ App.Schedules = do ->
       url: url
       data: parameters
       success: (data)->
-        if action == 'DELETE' && data.status == 'ok'
-          deviceRow.removeData('schedule-module-id')
+        if action == 'DELETE' && data.status == 'OK'
+          deviceRow.data('schedule-module-id',0)
         else if data.status == 'OK'
           deviceRow.data('schedule-module-id',data.schedule_module_id)
         else
