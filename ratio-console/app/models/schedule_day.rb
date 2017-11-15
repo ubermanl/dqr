@@ -30,13 +30,16 @@ class ScheduleDay < ActiveRecord::Base
   
   def overlap
     if start_hour.present? && end_hour.present?
-      start_overlap = self.schedule.schedule_days.where('start_hour >= ? and end_hour <= ? and day = ?', self.start_hour, self.start_hour, self.day).any?
-      end_overlap = self.schedule.schedule_days.where('start_hour >= ? and end_hour <= ? and day = ?', self.end_hour, self.end_hour,self.day).any?
+      start_overlap = self.schedule.schedule_days.where('start_hour <= ? and end_hour >= ? and day = ?', self.start_hour, self.start_hour, self.day).any?
+      end_overlap = self.schedule.schedule_days.where('start_hour <= ? and end_hour >= ? and day = ?', self.end_hour, self.end_hour,self.day).any?
       if start_overlap || end_overlap
         errors.add(:day,'Another schedule overlaps with this definition')
       end
     end
   end
+  
+  # scope returning all schedule_days containing the time gap desired for the day or everyday
+  scope :containing, ->(day,time){ where('(day = ? or day = 0) and start_hour <= ? and end_hour >= ?',day,time,time)}
   
   
 end

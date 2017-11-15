@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171110164956) do
+ActiveRecord::Schema.define(version: 20171113151615) do
 
   create_table "ambiences", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 20171110164956) do
     t.boolean  "show_in_dashboard",                      default: false, null: false
     t.integer  "last_known_status",          limit: 4,   default: 0,     null: false
     t.datetime "last_known_status_datetime"
+    t.integer  "previous_state",             limit: 4,   default: 0,     null: false
   end
 
   add_index "device_modules", ["device_id"], name: "index_device_modules_on_device_id", using: :btree
@@ -137,8 +138,9 @@ ActiveRecord::Schema.define(version: 20171110164956) do
     t.string   "description", limit: 255
     t.boolean  "inactive"
     t.boolean  "enabled"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "is_running",              default: false, null: false
   end
 
   create_table "sensor_types", force: :cascade do |t|

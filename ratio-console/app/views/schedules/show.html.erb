@@ -46,6 +46,32 @@
       <%= render partial: 'schedule_days/list' %>    
     </div>
     </div>
+    <div class="title">
+      <i class="dropdown icon"></i>
+        Devices
+    </div>
+    <div class="content" data-behavior="modules-content">
+      <table class="ui table striped compact unstackable">
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th title="If ticked this device will follow this schedule">Include</th>
+            <th>Desired Status</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% @available_modules.each do |m| %>
+          <%= render partial:'device_module', locals:{f: m} %>
+        <% end %>    
+        <% if @available_modules.none? %>
+        <tr>
+          <td colspan="3">No devices configured.</td>
+        </tr>
+        <% end %>
+        </tbody>
+      </table>
+      
+    </div>
   </div>
  
 <% end %>

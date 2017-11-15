@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     end
   end
   resources :schedule_days
+  post 'schedule_modules' => 'schedule_modules#create'
+  
   resources :ambiences
   resources :devices do
     member do 

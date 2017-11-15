@@ -40,11 +40,20 @@ class DeviceModule < ActiveRecord::Base
   end
   
   def override_inactive?
-    last_known_status == 4
+    last_known_status == 2
   end
   
   def is_overriden?
-    last_tatus.state > 2
+    last_known_status > 1
+  end
+  
+  def transition_to(state)
+    case state
+      when 0 then deactivate
+      when 1 then activate
+      when 2 then deactivate_override
+      when 3 then activate_override
+    end
   end
   
   def activate
@@ -61,6 +70,18 @@ class DeviceModule < ActiveRecord::Base
   
   def deactivate_override
     send_toggle_status(0,1)
+  end
+  
+  def save_status_and_mark
+    self.previous_state = self.last_known_status
+    self.in_schedule = true
+    save
+  end
+  
+  def restore_status_and_unmark
+    self.previous_state = self.last_known_status
+    self.in_schedule = false
+    save
   end
   
   private
@@ -95,6 +116,9 @@ class DeviceModule < ActiveRecord::Base
   
   # validate state machine transition
   def fsm_validate(from_state, to_state)
+    # if no transition then valid
+    return true if from_state == to_state
+    # otherwise
     valid_states = case from_state
       # from inactive to active or active override
       when 0 then [1,3]

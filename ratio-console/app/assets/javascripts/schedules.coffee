@@ -19,7 +19,11 @@ App.Schedules = do ->
     eventContent: 'event-content'
     event:'.event'
     deleteEvent: '[data-behavior="delete-event"]'
-    closeEvent:'[data-behavior="close-detail"]'
+    closeEvent: '[data-behavior="close-detail"]'
+    statusCheck: 'input[type="checkbox"][name="status"]'
+    includeCheck: 'input[type="checkbox"][name="include"]'
+    scheduleId: 'input[name="schedule_day[schedule_id]"]'
+    modulesContent: 'modules-content'
     
   toggleSelection: (schedule)->
     if schedule?
@@ -40,6 +44,43 @@ App.Schedules = do ->
       if dimmer.dimmer('is active')
         dimmer.dimmer('show')
         dimmer.dimmer('hide')
+  
+  saveDeviceStatus: (toggle)->
+    
+   
+    deviceRow = toggle.closest('tr')
+    module_id = deviceRow.data('module-id')
+    schedule_id = Fwk.get(selectors.scheduleId).val()
+    status = deviceRow.find(selectors.statusCheck)
+    include = deviceRow.find(selectors.includeCheck)
+
+    parameters =         
+      'schedule_module[schedule_id]': schedule_id
+      'schedule_module[device_module_id]': module_id, 
+      'schedule_module[desired_status]': status.val()
+      'schedule_module[include]': include.val()
+       
+    Fwk.log 'ran'
+    $.ajax
+      type: "POST"
+      dataType: "json"
+      url: "/schedule_modules/"
+      data: parameters
+      success: (data)->
+        if data.status = 'ok'
+        else
+          Fwk.showMessage 'negative',true,'Include Device',data.error
+          include.prop('checked', false)
+        
+      error: ->
+        Fwk.showMessage 'negative',true,'Include Device','Operation has failed'
+        include.prop('checked', false)
+        
+      complete: ->
+        
+    true
+      
+    
       
   deleteEvent: ->
     selectedEvent = Fwk.get(selectors.timelineEventSelected)
@@ -126,5 +167,8 @@ App.Schedules = do ->
         App.Schedules.toggleSelection()
       
     App.Schedules.initTimeline()
+    
+    Fwk.getByBehavior(selectors.modulesContent).on 'click', 'input', ->
+      App.Schedules.saveDeviceStatus(Fwk.get(this))
     
 Fwk.onLoadPage App.Schedules.init,'schedules','show'

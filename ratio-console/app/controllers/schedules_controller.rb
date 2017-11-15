@@ -14,6 +14,7 @@ class SchedulesController < ApplicationController
   # GET /schedules/1
   # GET /schedules/1.json
   def show
+    @available_modules = DeviceModule.all.order(:name)
   end
 
   # GET /schedules/new
