@@ -9,6 +9,14 @@
 </head>
 
 <body data-controller="<%= controller_name %>" data-action="<%= action_name %>">
+<div class="ui basic modal small" id="modal-wait">
+  <div class="ui icon header white">
+    <i class="wait outline up pulsed icon colored white"></i>
+    <div class="content">
+    Please Wait 
+    </div>
+  </div>
+</div>
 <div class="ui bottom attached segment pushable">
   <div class="ui inverted black labeled icon left inline vertical sidebar menu" style="">
     <%= render partial:'shared/sidebar' %>

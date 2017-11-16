@@ -19,7 +19,11 @@ App.Schedules = do ->
     eventContent: 'event-content'
     event:'.event'
     deleteEvent: '[data-behavior="delete-event"]'
-    closeEvent:'[data-behavior="close-detail"]'
+    closeEvent: '[data-behavior="close-detail"]'
+    statusCheck: 'input[type="checkbox"][name="status"]'
+    includeCheck: 'input[type="checkbox"][name="include"]'
+    scheduleId: 'input[name="schedule_day[schedule_id]"]'
+    modulesContent: 'modules-content'
     
   toggleSelection: (schedule)->
     if schedule?
@@ -40,6 +44,70 @@ App.Schedules = do ->
       if dimmer.dimmer('is active')
         dimmer.dimmer('show')
         dimmer.dimmer('hide')
+  
+  saveDeviceStatus: (toggle)->
+    
+   
+    deviceRow = toggle.closest('tr')
+    module_id = deviceRow.data('module-id')
+    schedule_id = Fwk.get(selectors.scheduleId).val()
+    
+    status = deviceRow.find(selectors.statusCheck)
+    status_value = status.prop('checked')
+    
+    include = deviceRow.find(selectors.includeCheck)
+    include_value = include.prop('checked')
+    
+    schedule_module_id = deviceRow.data('schedule-module-id') || 0
+
+    parameters =
+      'utf8': '✓'
+      'authenticity_token': Fwk.get('meta[name="csrf-token"]').attr('content')
+      'schedule_module[device_module_id]': module_id, 
+      'schedule_module[desired_status]': if status_value then 1 else 0
+      'id': schedule_module_id
+      'schedule_id': schedule_id
+      'commit': 'Create ScheduleModule'
+       
+    url = ''
+    action = ''
+    if schedule_module_id > 0 && !include_value
+      # delete
+      url = "/schedule_modules/#{schedule_module_id}"
+      action = 'DELETE'
+    else if schedule_module_id > 0 && include_value
+      # update
+      url = "/schedule_modules/#{schedule_module_id}"
+      action = 'PUT'
+    else
+      # create
+      url = '/schedule_modules'
+      action = 'POST'
+       
+    Fwk.log 'ran'
+    $.ajax
+      type: action
+      dataType: "json"
+      url: url
+      data: parameters
+      success: (data)->
+        if action == 'DELETE' && data.status == 'OK'
+          deviceRow.data('schedule-module-id',0)
+        else if data.status == 'OK'
+          deviceRow.data('schedule-module-id',data.schedule_module_id)
+        else
+          Fwk.showMessage 'negative',true,'Include Device',data.error
+          include.prop('checked', false)
+        
+      error: ->
+        Fwk.showMessage 'negative',true,'Include Device','Operation has failed'
+        include.prop('checked', false)
+        
+      complete: ->
+        
+    true
+      
+    
       
   deleteEvent: ->
     selectedEvent = Fwk.get(selectors.timelineEventSelected)
@@ -126,5 +194,8 @@ App.Schedules = do ->
         App.Schedules.toggleSelection()
       
     App.Schedules.initTimeline()
+    
+    Fwk.getByBehavior(selectors.modulesContent).on 'click', 'input', ->
+      App.Schedules.saveDeviceStatus(Fwk.get(this))
     
 Fwk.onLoadPage App.Schedules.init,'schedules','show'

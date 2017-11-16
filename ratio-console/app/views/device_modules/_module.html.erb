@@ -1,18 +1,22 @@
 <div class="item" data-module-id="<%= m.id %>">
   <div class="ui segment">
     <div class="right floated content">
-      <div class="ui buttons small">
+      <div class="ui buttons small" data-behavior="command-palette">
         <%= link_to 'ON', device_module_activate_url(m), remote: true, data:{ behavior:'toggle toggle-on' }, class:"ui button primary #{ ' disabled' if m.active? }" %>
         <%= link_to 'OFF', device_module_deactivate_url(m), remote: true, data:{ behavior:'toggle toggle-off' }, class:"ui button #{' disabled' if m.inactive? }" %>    
       </div>
     </div>
     <div class="content">
       <h4 class="ui header"><%= link_to  device_module_name(m), m.device %></h4><br />
-      <div class="ui mini labels">
+      <div class="ui tiny mini statistics computer only">
       <% m.sensors.each do |s| %>
-        <div class="ui label basic">
-          <%= s.last_event.value.round(2) %>
-          <div class="detail"><%= s.sensor_type.unit %></div>
+        <div class="statistic">
+          <div class="value" style="font-size:1.3em !important;">
+            <%= s.last_event.value.round(2) %>
+          </div>
+          <div class="label dqr colored">
+            <%= s.sensor_type.unit %>
+          </div>
         </div>
       <% end %>
       </div>

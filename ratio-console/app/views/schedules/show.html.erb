@@ -46,6 +46,47 @@
       <%= render partial: 'schedule_days/list' %>    
     </div>
     </div>
+    <div class="title">
+      <i class="dropdown icon"></i>
+        Devices
+    </div>
+    <div class="content" data-behavior="modules-content">
+      <table class="ui table striped compact unstackable">
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th title="If ticked this device will follow this schedule">Include</th>
+            <th>Desired Status</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% @available_modules.each do |m| %>
+          <% @included = @included_modules.select{ |t| t[0] == m.id } %>
+          <tr data-module-id="<%= m.id %>" data-schedule-module-id="<%= if @included.any? then @included[0][1].to_s else '0' end %>">
+            <td><%= device_module_name(m) %></td>
+            <td>
+              <div class="ui toggle checkbox">
+                  <%= check_box_tag :include, @included.any? ? 1 : 0, @included.any?  %>
+                <label></label>
+              </div>
+            </td>
+            <td>
+              <div class="ui toggle checkbox">
+                <%= check_box_tag :status, @included.any? ? @included[0][1] : 0, @included.any? && @included[0][1] == 1  %>
+                <label></label>
+              </div>
+            </td>
+          </tr>
+        <% end %>    
+        <% if @available_modules.none? %>
+        <tr>
+          <td colspan="3">No devices configured.</td>
+        </tr>
+        <% end %>
+        </tbody>
+      </table>
+      
+    </div>
   </div>
  
 <% end %>

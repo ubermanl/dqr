@@ -29,15 +29,15 @@ App.Welcome = do ->
       
       
   bindAjax: ->
-    
+    Fwk.log 'binding ajax'
     Fwk.getByBehavior(selectors.commandPalette).on 'ajax:beforeSend', selectors.toggleButton, (event,data,status,xhr)->
       Fwk.get(this).addClass('disabled loading')
     
     Fwk.getByBehavior(selectors.commandPalette).on 'ajax:success', selectors.toggleButton, (event,data,status,xhr)->
-      App.Device.updateButtons Fwk.get(this), data
+      App.Welcome.updateButtons Fwk.get(this), data
     
     Fwk.getByBehavior(selectors.commandPalette).on 'ajax:error', selectors.toggleButton, (event,data,status,xhr)->
-      App.Device.updateButtons Fwk.get(this), data
+      App.Welcome.updateButtons Fwk.get(this), data
     
 
 Fwk.onLoadPage App.Welcome.bindAjax,'welcome','index'

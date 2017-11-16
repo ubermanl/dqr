@@ -34,6 +34,8 @@ gem 'authlogic', '3.6.0'
 # Use Unicorn as the app server
 # gem 'unicorn'
 
+gem 'rufus-scheduler'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

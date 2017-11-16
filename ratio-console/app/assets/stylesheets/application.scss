@@ -15,6 +15,10 @@
  * site
  * require_self
  */
+.ui.statistics:last-child{
+  margin-bottom:none !important;
+};
+
 @import "semantic-ui";
 $import-google-fonts: false !default;
 
@@ -148,4 +152,11 @@ $primary-border: rgba(34,36,38,0.15);
 }
 .bold{
   font-weight:bold;
+}
+
+.statistic .label{
+  text-transform: none !important;
+}
+.statistic .detail{
+  font-size:1em !important;  
 }

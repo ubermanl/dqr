@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     end
   end
   resources :schedule_days
+  resources :schedule_modules
+  
   resources :ambiences
   resources :devices do
     member do 

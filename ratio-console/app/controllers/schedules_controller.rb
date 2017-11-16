@@ -14,6 +14,8 @@ class SchedulesController < ApplicationController
   # GET /schedules/1
   # GET /schedules/1.json
   def show
+    @available_modules = DeviceModule.includes(:module_type).all.order(:name)
+    @included_modules = @schedule.schedule_modules.collect{ |t| [t.device_module_id,t.id,t.desired_status] }
   end
 
   # GET /schedules/new
@@ -68,7 +70,7 @@ class SchedulesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_schedule
-      @schedule = Schedule.find(params[:id])
+      @schedule = Schedule.includes([:schedule_modules,:schedule_days]).find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
