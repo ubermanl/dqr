@@ -103,6 +103,12 @@ const int POT_SENSOR_SENSITIVITY = 100;
 const int OMNI_SENSOR_SENSITIVITY = 100;
 
 /*
+ * Temperature Sensor Config
+ * TEMP_SENSOR_INTERVAL: Interval in seconds for each measure
+ */
+#define TEMP_SENSOR_INTERVAL 30
+
+/*
  * Relay ON/OFF configuration
  * Default state for modules using relays
  */
@@ -145,7 +151,7 @@ const struct omniConfig omniConfig1 = {
   A5,   // OMNI_LUM_SENS_SCL
   5,    // OMNI_PIR_SENS_IN
   A0,   // OMNI_SND_SENS_IN
-  A1    // OMNI_TEMP_SENS_IN
+  6     // OMNI_TEMP_SENS_IN
 };
 
 
