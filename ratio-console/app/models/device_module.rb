@@ -90,14 +90,16 @@ class DeviceModule < ActiveRecord::Base
     cmd = "dqrSender A #{self.device_id} #{self.id} #{status} #{override}"
     Rails.logger.info "DqRSender Perform #{cmd}"
     result = `#{cmd}`
-    exitStatus = $?.exitstatus
+    exit_status = $?.exitstatus
+    
+    Rails.logger.info "DqrSender Perform: exit code #{exit_status}, output: #{result}"
     
     # device should report back
     if force_report
       send_status_query
     end
     
-    [exitStatus, result]
+    Hash.new exit_code: exit_status, output: result 
   end
   
   # run DqR Sender on OS to query device status
@@ -105,9 +107,9 @@ class DeviceModule < ActiveRecord::Base
     cmd = "dqrSender S #{self.device_id}"
     Rails.logger.info "DqRSender Perform #{cmd}"
     result = `#{cmd}`
-    exitStatus = $?.exitstatus
-    Rails.logger.info "Perform Result was: #{result}"
-    [exitStatus, result]
+    exit_status = $?.exitstatus
+    Rails.logger.info "DqrSender Perform: exit code #{exit_status}, output: #{result}"
+    Hash.new  exit_code: exit_status, output: result 
   end
   
   def inconsistent_status

@@ -9,7 +9,7 @@
 
 #include "Arduino.h"
 #include <BH1750.h>
-#include <dht.h>
+#include <DHT.h>
 #include <FiniteStateMachine.h>
 #include "dqr-device-config.h"
 #include "dqr-device-network.h"
@@ -73,6 +73,7 @@ class TempSensor : public Sensor {
     void senseData();
     float getAverageValue();
   protected:
+    uint32_t _timer = 0;
 };
 
 class SoundSensor : public Sensor {

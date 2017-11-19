@@ -128,6 +128,7 @@ App.Device = do ->
       selector.siblings(button).removeClass('disabled')
     else
       selector.removeClass('disabled loading')
+      Fwk.showMessage 'negative', true, 'Toggle Device Status', 'Toggle operation failed, make sure device is powered on and retry'
       
       
   bindAjax: ->

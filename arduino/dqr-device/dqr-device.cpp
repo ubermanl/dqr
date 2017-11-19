@@ -98,14 +98,19 @@ float PIRSensor::getAverageValue() {
 TempSensor::TempSensor(byte pin) : Sensor(TEMP_TYPE_ID, pin) {};
 
 void TempSensor::senseData() {
-  dht DHT;
-  DHT.read11(_pinSensor);
-  _currentValue = DHT.temperature;
-  if (_accumulatedValue + _currentValue > MAX_ACCUMULATED_VALUE) {
-    _accumulatedValue = getAverageValue();
+  if ( millis() - _timer > TEMP_SENSOR_INTERVAL ) {
+    _timer = millis();
+    dht11 DHT;
+    int readReturn = DHT.read(_pinSensor);
+    if (readReturn == DHTLIB_OK) {
+      _currentValue = (float)DHT.temperature;
+      if (_accumulatedValue + _currentValue > MAX_ACCUMULATED_VALUE) {
+        _accumulatedValue = getAverageValue();
+      }
+      _accumulatedValue += _currentValue;
+      _sampleCount += 1;
+    }
   }
-  _accumulatedValue += _currentValue;
-  _sampleCount += 1;
 };
 
 float TempSensor::getAverageValue() {
