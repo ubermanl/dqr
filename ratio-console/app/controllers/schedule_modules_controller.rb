@@ -45,6 +45,9 @@ class ScheduleModulesController < ApplicationController
   def set_schedule
     @schedule = Schedule.find(params[:schedule_id])
     @schedule_module = ScheduleModule.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    flash[:error] = 'Schedule not found'
+    redirect_to schedules_url
   end
   
   def schedule_module_params

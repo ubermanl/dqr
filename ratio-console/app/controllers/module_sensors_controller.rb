@@ -9,5 +9,8 @@ class ModuleSensorsController < ApplicationController
   private 
   def set_module
     @module = ModuleSensor.find_by_device_module_id_and_sensor_type_id(params[:device_module_id],params[:sensor_type_id])
+  rescue ActiveRecord::RecordNotFound
+    flash[:error] = "Module Not Found"
+    redirect_to devices_url
   end
 end

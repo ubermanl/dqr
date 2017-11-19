@@ -2,6 +2,8 @@ class DeviceModule < ActiveRecord::Base
   belongs_to :device
   belongs_to :module_type
   
+  validates :name, length: { maximum: 40 }, uniqueness: true
+  
   has_many :sensors, class_name: 'ModuleSensor', dependent: :destroy
   
   has_many :events, class_name:'DeviceEventView', foreign_key: :module_id
