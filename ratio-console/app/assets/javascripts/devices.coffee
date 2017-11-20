@@ -123,7 +123,7 @@ App.Device = do ->
     else 
       button = selectors.toggleOff
     
-    if eventData.status == 0
+    if eventData.exit_code == 0
       selector.addClass('disabled').removeClass('loading')
       selector.siblings(button).removeClass('disabled')
     else

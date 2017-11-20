@@ -4,7 +4,7 @@ class DeviceModulesController < ApplicationController
   def deactivate
     @result = @module.deactivate_override
     respond_to do |format|
-      format.json
+      format.json { render json: @result, status: :ok }
       format.html { redirect_to device_url(@module.device_id)}
     end
   end
@@ -12,7 +12,7 @@ class DeviceModulesController < ApplicationController
   def activate 
     @result = @module.activate_override
     respond_to do |format|
-      format.json
+      format.json { render json: @result, status: :ok }
       format.html { redirect_to device_url(@module.device_id)}
     end
   end
@@ -21,10 +21,10 @@ class DeviceModulesController < ApplicationController
     respond_to do |format|
       if ['0','1'].include?(@status)
         @result = @status == '1' ? @module.activate_override : @module.deactivate_override
-        format.json
+        format.json { render json: @result, status: :ok }
         format.html { redirect_to device_url(@module.device_id)}
       else
-        @result = [-1,'Invalid Status']
+        @result = { exit_code: exit_status, output: result }
         flash[:error] = 'Invalid status'
         format.json { render status: :unprocesable_entity }
         format.html { redirect_to device_url(@module.device_id)}

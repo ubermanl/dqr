@@ -21,7 +21,7 @@ App.Welcome = do ->
     else 
       button = selectors.toggleOff
     
-    if eventData.status.exit_code == '0'
+    if eventData.exit_code == 0
       selector.addClass('disabled').removeClass('loading')
       selector.siblings(button).removeClass('disabled')
     else

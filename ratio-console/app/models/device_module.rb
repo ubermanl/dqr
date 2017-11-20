@@ -101,7 +101,7 @@ class DeviceModule < ActiveRecord::Base
       send_status_query
     end
     
-    Hash.new exit_code: exit_status, output: result 
+    { exit_code: exit_status, output: result }
   end
   
   # run DqR Sender on OS to query device status
@@ -111,7 +111,8 @@ class DeviceModule < ActiveRecord::Base
     result = `#{cmd}`
     exit_status = $?.exitstatus
     Rails.logger.info "DqrSender Perform: exit code #{exit_status}, output: #{result}"
-    Hash.new  exit_code: exit_status, output: result 
+    
+    { exit_code: exit_status, output: result }
   end
   
   def inconsistent_status
