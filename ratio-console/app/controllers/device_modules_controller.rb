@@ -36,5 +36,8 @@ class DeviceModulesController < ApplicationController
   def set_module
     @module = DeviceModule.find(params[:device_module_id])
     @status = params[:status]
+  rescue ActiveRecord::RecordNotFound
+    flash[:error] = "Device Not Found"
+    redirect_to devices_url
   end
 end

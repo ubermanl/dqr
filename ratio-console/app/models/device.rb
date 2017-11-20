@@ -3,7 +3,7 @@ class Device < ActiveRecord::Base
   has_many :modules, class_name:'DeviceModule', dependent: :destroy
   has_many :events, class_name:'DeviceEvent'
   
-  validates :id, uniqueness: true, presence: true
+  validates :id, uniqueness: true, presence: true, numericality: { only_integer: true, greater_than: 0, less_than: 255 }
   validates :name, uniqueness: true, presence: true
   validates :ambience_id, presence: true
   

@@ -4,13 +4,7 @@
   <div class="ui form">
     <div class="one required field">
       <%= f.label :name %>
-      <%= f.text_field :name %>  
-    </div>
-    <div class="one field">
-      <div class="ui toggle checkbox">
-        <%= f.check_box :is_deleted %>
-        <%= f.label :is_deleted %>
-      </div>
+      <%= f.text_field :name, maxlength:40 %>  
     </div>
     <div class="ui buttons">
       <%= f.submit nil, class:'ui button primary' %>
