@@ -1,22 +1,26 @@
+ <div class="ui menu borderless">
+    <div class="item header dqr colored"><i class="icon podcast"></i>Register Device</div>
+  </div>
 <%= form_for(@device) do |f| %>
   <%= render partial:'shared/errors', locals: {model: @device} %>
-  
-  <div class="ui form">
-    <div class="two wide field required">
-      <%= f.label :id %>
-      <%= f.text_field :id %>
-    </div>
-    <div class="one required field">
-      <%= f.label :name %>
-      <%= f.text_field :name %>  
-    </div>
-    <div class="sixteen wide field required">
-      <%= f.label :ambience_id %>
-      <%= f.select :ambience_id, options_from_collection_for_select(Ambience.all,:id,:name) %>
-    </div>
-    <div class="ui buttons">
-      <%= f.submit nil, class:'ui button primary' %>
-      <%= link_to 'Cancel', devices_url, class:'ui button' %>
+  <div class="ui segment">
+    <div class="ui form">
+      <div class="two wide field required">
+        <%= f.label :id %>
+        <%= f.text_field :id %>
+      </div>
+      <div class="one required field">
+        <%= f.label :name %>
+        <%= f.text_field :name %>  
+      </div>
+      <div class="sixteen wide field required">
+        <%= f.label :ambience_id %>
+        <%= f.select :ambience_id, options_from_collection_for_select(Ambience.all,:id,:name) %>
+      </div>
+      <div class="ui buttons">
+        <%= f.submit nil, class:'ui button primary' %>
+        <%= link_to 'Cancel', devices_url, class:'ui button' %>
+      </div>
     </div>
   </div>
 <% end %>

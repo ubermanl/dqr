@@ -1,14 +1,15 @@
 <%= form_for(@ambience) do |f| %>
   <%= render partial:'shared/errors', locals: {model: @ambience} %>
-  
-  <div class="ui form">
-    <div class="one required field">
-      <%= f.label :name %>
-      <%= f.text_field :name, maxlength:40 %>  
+  <div class="ui segment">
+    <div class="ui form">
+      <div class="one required field">
+        <%= f.label :name %>
+        <%= f.text_field :name, maxlength:40 %>  
+      </div>
     </div>
-    <div class="ui buttons">
-      <%= f.submit nil, class:'ui button primary' %>
-      <%= link_to 'Cancel', ambiences_url, class:'ui button' %>
-    </div>
+  </div>
+  <div class="ui buttons">
+    <%= f.submit nil, class:'ui button primary' %>
+    <%= link_to 'Cancel', ambiences_url, class:'ui button' %>
   </div>
 <% end %>

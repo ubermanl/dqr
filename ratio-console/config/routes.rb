@@ -34,9 +34,12 @@ Rails.application.routes.draw do
   
   get 'events' => 'events#index'
   
+  
   resources :user_sessions, only: [:create, :destroy]
   get '/logout', to: 'user_sessions#destroy', as: :logout
   get '/login', to: 'user_sessions#new', as: :login
+  get '/my_account', to: 'users#edit', as: :my_account
+  resources :users
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

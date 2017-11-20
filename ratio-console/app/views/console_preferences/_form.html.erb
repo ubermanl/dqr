@@ -1,5 +1,9 @@
+<div class="ui menu borderless">
+  <div class="item header"><i class="icon settings"></i>Console Preferences</div>
+</div>
 <%= form_for(@console_preferences, url: console_preferences_url, method: :post) do |f| %>
  <%= render partial:'shared/errors', locals: {model: @console_preferences} %>
+ <div class="ui segment">
   <div class="ui form">
     <div class="fields">
       <div class="four wide field">
@@ -18,7 +22,7 @@
       </div>
     </div>
   </div>
-  <br/>
+  </div>
   <div class="ui buttons">
     <%= f.submit 'Update', class:'ui button primary' %>
   </div>
