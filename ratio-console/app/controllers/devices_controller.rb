@@ -59,6 +59,9 @@ class DevicesController < ApplicationController
   def set_device
     @device = Device.find(params[:id])
     @preferences = ConsolePreference.first
+  rescue ActiveRecord::RecordNotFound
+    flash[:error] = "Device Not Found"
+    redirect_to action: :index
   end
   
   def device_params

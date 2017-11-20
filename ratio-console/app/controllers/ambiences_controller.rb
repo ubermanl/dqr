@@ -71,6 +71,9 @@ class AmbiencesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_ambience
       @ambience = Ambience.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      flash[:error] = "Ambience Not Found"
+      redirect_to action: :index
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

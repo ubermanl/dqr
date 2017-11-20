@@ -2,27 +2,32 @@
   <div>
     <div>
       <%= form_for @user_session do |f| %>
-        <h1>DQR Ratio Console Login</h1>
-        <%= render 'shared/errors', object: @user_session %>
-        <div class="ui form">
-          <div class="ui stacked segment basic">
+        <div class="ui segment">
+          <h3 class="ui center aligned icon header dqr colored"><i class="icon home"></i>DqR Ratio Console Login</h3>  
+        </div>
+        <%= render partial:'shared/errors', locals: {model: @user_session} %>
+        <div class="ui segment">
+           <div class="ui form">
+          <div class="ui segment basic">
             <div class="field">
               <div class="ui left icon input">
                 <i class="user icon"></i>
-                <%= f.text_field :login, placeholder:'Usuario' %>
+                <%= f.text_field :login, placeholder:'Username' %>
               </div>
             </div>
             <div class="field">
               <div class="ui left icon input">
                 <i class="user icon"></i>
-                <%= f.password_field :password, placeholder:'Clave' %>
+                <%= f.password_field :password, placeholder:'Password' %>
               </div>    
             </div>
             <div class="field">
-              <%= f.submit 'Ingresar',class:'ui button fluid teal' %>
+              <%= f.submit 'Ingresar',class:'ui button fluid primary' %>
             </div>
           </div>
         </div>
+        </div>
+       
       <% end %>
     </div>
   </div>

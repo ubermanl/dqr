@@ -1,7 +1,6 @@
 <% if @pinned_modules.any? %>
-  <div class="ui header dqr colored">
-    <i class="icon pin"></i>
-    Pinned Devices
+  <div class="ui menu borderless">
+    <div class="item header dqr colored"><i class="icon pin"></i>Pinned Devices</div>
   </div>
   <div class="ui list">
      <% @pinned_modules.each do |m| %>

@@ -1,0 +1,19 @@
+<%= form_for(@current_user) do |f| %>
+  <%= render partial:'shared/errors', locals: {model: @current_user} %>
+  <div class="ui segment">
+    <div class="ui form">
+      <div class="one required field">
+        <%= f.label :password %>
+        <%= f.text_field :password, maxlength:40 %>  
+      </div>
+      <div class="one required field">
+        <%= f.label :password_confirmation %>
+        <%= f.text_field :password_confirmation, maxlength:40 %>  
+      </div>
+    </div>
+  </div>
+  <div class="ui buttons">
+    <%= f.submit nil, class:'ui button primary' %>
+    <%= link_to 'Cancel', ambiences_url, class:'ui button' %>
+  </div>
+<% end %>

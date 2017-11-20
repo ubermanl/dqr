@@ -21,11 +21,12 @@ App.Welcome = do ->
     else 
       button = selectors.toggleOff
     
-    if eventData.status == 0
+    if eventData.status.exit_code == '0'
       selector.addClass('disabled').removeClass('loading')
       selector.siblings(button).removeClass('disabled')
     else
       selector.removeClass('disabled loading')
+      Fwk.showMessage 'negative', true, 'Toggle Device Status', 'Toggle operation failed, make sure device is powered on and retry'
       
       
   bindAjax: ->

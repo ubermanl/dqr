@@ -36,7 +36,8 @@ window.App = do ->
       toggleSidebar()
    
     #d dismissable messages
-    Fwk.get(selectors.messageSelector).on 'click', ->
+    Fwk.get(document).on 'click',selectors.messageSelector, ->
+      
       Fwk.get(this)
         .closest('.message')
         .transition('fade')
