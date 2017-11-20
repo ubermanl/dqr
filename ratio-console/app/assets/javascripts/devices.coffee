@@ -17,9 +17,11 @@ App.Device = do ->
     yLabels: ['No','Yes']
 
   buildChart: (chid,container,data)->
-    
     chartDataSeries = []
     dataInterval = Number(Fwk.getByBehavior('settings').data(selectors.graphDivisors))
+    dataYLabels = data.labels.split(';')
+    for d in dataYLabels
+      dataYLabels[d] = Number(dataYLabels[d])
     
     for datum in data.events
       chartDataSeries.push { x: Date.parse(datum.ts), y: datum.value }
@@ -36,6 +38,11 @@ App.Device = do ->
       series: [ 
                 { name:'', data: chartDataSeries }
               ]
+              
+     # y axis labels
+    array = data.labels.split ':'
+    interval = array[0].split(';')
+    step_size = array[1]
     
     # options for y axis when data is binary
     axisYOptions = {}
@@ -45,7 +52,11 @@ App.Device = do ->
           return selectors.yLabels[index]
       axisYOptions.stretch = true
     else
-      axisYOptions.type = Chartist.AutoScaleAxis
+      #axisYOptions.type = Chartist.AutoScaleAxis
+      axisYOptions.type = Chartist.FixedScaleAxis
+      axisYOptions.high = Number(interval[1])
+      axisYOptions.low = Number(interval[0])
+      axisYOptions.divisor = Number(step_size)
         
     options =
       axisX:
@@ -85,7 +96,44 @@ App.Device = do ->
           easing: Chartist.Svg.Easing.easeOutQuint
       return
 
-                              
+  buildChart2:(chid,container,data)->
+    # data series container
+    dataSeries = []
+    labelSeries = []
+    mixedSeries = []
+    # remap data to typed data
+    for datum in data.events
+      dataSeries.push Number(datum.value)
+      labelSeries.push Date.parse(datum.ts)
+      mixedSeries.push { x: new Date(Date.parse(datum.ts)), y: Number(datum.value) }
+      true
+    
+    # y axis labels
+    array = data.labels.split ':'
+    interval = array[0].split(';')
+    step_size = array[1]
+
+    myChart = new Chart(container,
+      type: 'line'
+      data:
+        labels: labelSeries
+        datasets: [ {
+          label: data.unit
+          data: dataSeries
+          'backgroundColor': 'rgba(11, 117, 66, 0.4)'
+          'borderColor': 'rgba(11, 117, 66, 0.8)'
+          pointBorderWidth: 0.5
+          radius:2
+          lineTension: 0
+          borderWidth:2
+        } ]
+      options:
+        legend:
+          display: true
+        scales: 
+          yAxes: [ { ticks: { min: Number(interval[0]), max: Number(interval[1]) } } ]
+          xAxes: [ type:'time', time: { unit: 'minute', tooltipFormat: 'h:mm:ss a' } ]
+                                )
   updateGraphs: ->
     Fwk.log selectors
     graphContainers = Fwk.getByData(selectors.sensorGraph,'graph')
