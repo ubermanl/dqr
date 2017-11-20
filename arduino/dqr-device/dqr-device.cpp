@@ -442,7 +442,7 @@ void Device::setNetwork(RF24Network &network, RF24Mesh &mesh) {
 void Device::setup() {
   /**** Mesh setup and initialization ****/
   _mesh->setNodeID(DEVICE_NODE_ID);
-  LOG(F("Connecting to mesh..."));
+  LOG("Connecting to mesh...");
   _mesh->begin();
 
   _configuredModulesSize = 0;
@@ -453,8 +453,8 @@ void Device::getModuleStatus(payload_module modules[]) {
   for (int i=0; i < _configuredModulesSize; i++) {
      modules[i].moduleId = _configuredModules[i]->getId();
      modules[i].state = _configuredModules[i]->getState();
-     if ( ! _configuredModules[i]->getType() == OMNI_TYPE_ID || modules[i].state == MODULE_ACTIVE ) {
-        // Won't send sensor data if module is Omni and
+     if ( (! (_configuredModules[i]->getType() == OMNI_TYPE_ID) ) || (modules[i].state == MODULE_ACTIVE) ) {
+        // Won't send sensor data if module is Omni and state is inactive
         _configuredModules[i]->getSensorsData(modules[i].sensors);
      }
   }
