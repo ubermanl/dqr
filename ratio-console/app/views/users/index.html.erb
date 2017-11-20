@@ -1,0 +1,32 @@
+<div class="ui menu borderless">
+  <div class="item header"><i class="icon block layout"></i>Ambiences</div>
+  <div class="right menu">
+    <%= link_to text_with_icon('New Ambience','plus'), new_ambience_url, class:'item main-link' %>    
+  </div>
+</div>
+<table class="ui table unstackable striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Deleted</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ambiences.each do |ambience| %>
+      <tr>
+        <td><%= ambience.name %></td>
+        <td><%= human_bool ambience.is_deleted %></td>
+        <td class="right aligned">
+          <div class="ui buttons">
+            <%= link_to semantic_icon('unhide'), ambience, class:'ui button icon compact' %>
+            <%= link_to semantic_icon('edit'), edit_ambience_path(ambience), class:'ui icon button compact' %>
+            <%= link_to semantic_icon('remove'), ambience, method: :delete, data: { confirm: 'Are you sure?' }, class:'ui icon button compact' %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
