@@ -5,7 +5,6 @@
   <div class="right menu">
       <%= link_to text_with_icon('Edit','edit'), edit_device_url, class:'item' %>    
   </div>
-  
 </div>
 <% @device.modules.each do |m| %>
    <%= render partial:'device', locals: {m: m} %>

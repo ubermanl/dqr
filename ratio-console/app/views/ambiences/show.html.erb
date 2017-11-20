@@ -1,5 +1,9 @@
-<h1><%= @ambience.name %> <%= link_to text_with_icon('Edit','edit'),edit_ambience_url(@ambience), class:'ui button icon compact tiny' %> </h1>
-
+<div class="ui menu borderless">
+  <div class="item header"><i class="icon block layout"></i><%= @ambience.name %></div>
+  <div class="right menu">
+      <%= link_to text_with_icon('Edit','edit'), edit_ambience_url(@ambience), class:'item' %>    
+  </div>
+</div>
 <table class="ui table unstackable selectable">
   <thead>
     <tr>

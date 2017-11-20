@@ -1,5 +1,5 @@
 <div class="ui menu borderless">
-  <div class="item header"><%= @schedule.description %></div>
+  <div class="item header"><i class="icon calendar"></i><%= @schedule.description %></div>
   <div class="right menu">
     <%= link_to semantic_icon('edit'), edit_schedule_path(@schedule), class:'item' %>
     <%= link_to semantic_icon('remove'), @schedule, method: :delete, data: { confirm: 'Are you sure?' },class:'item'  %>
