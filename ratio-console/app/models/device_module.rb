@@ -76,13 +76,11 @@ class DeviceModule < ActiveRecord::Base
   
   def save_status_and_mark
     self.previous_state = self.last_known_status
-    self.in_schedule = true
     save
   end
   
   def restore_status_and_unmark
     self.previous_state = self.last_known_status
-    self.in_schedule = false
     save
   end
   
