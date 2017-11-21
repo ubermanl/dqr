@@ -79,11 +79,6 @@ class DeviceModule < ActiveRecord::Base
     save
   end
   
-  def restore_status_and_unmark
-    self.previous_state = self.last_known_status
-    save
-  end
-  
   private
   # run DqR Sender on OS to perform toggle
   def send_toggle_status(status,override, force_report = true)

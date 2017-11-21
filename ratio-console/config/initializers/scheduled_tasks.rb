@@ -2,6 +2,9 @@ require 'rufus/scheduler'
 
 scheduler = Rufus::Scheduler.new
 
+# if app restarts all schedules are turned to false
+Schedule.update_all(is_running: false)
+
 scheduler.every '1m' do
   # iterate over defined schedules
   Rails.logger.debug "RatioScheduler: Checking Schedules"
@@ -34,11 +37,9 @@ scheduler.every '1m' do
         Rails.logger.debug "RatioScheduler: Found one schedule to stop"    
         schedule.schedule_modules.each do |m|
           if m.device_module.last_known_status != m.desired_status
-            # save previous state
-            m.device_module.restore_status_and_unmark
             # do transition to desired
-            m.device_module.transition_to(m.device_module.last_known_status)
-            Rails.logger.debug "RatioScheduler: #{m.device_module.name} reverted to state #{m.desired_status}"
+            m.device_module.transition_to(m.device_module.previous_state)
+            Rails.logger.debug "RatioScheduler: #{m.device_module.name} reverted to state #{m.device_module.previous_state}"
           end
         end
         schedule.is_running = false
