@@ -7,6 +7,8 @@ class Device < ActiveRecord::Base
   validates :name, uniqueness: true, presence: true
   validates :ambience_id, presence: true
   
+  before_validation :sanitize
+  
   accepts_nested_attributes_for :modules
   
   after_commit :mark_detected, on: :update
@@ -16,5 +18,9 @@ class Device < ActiveRecord::Base
     if self.detection_pending
       update_column(:detection_pending, false)
     end
+  end
+  
+  def sanitize
+    self.name = self.name.strip if self.name.present?
   end
 end

@@ -38,7 +38,7 @@ class DevicesController < ApplicationController
       if @device.update(device_params) 
         format.html { redirect_to @device, notice: 'Device was successfully created.' }
       else
-        format.html { render :new } 
+        format.html { render :edit } 
       end
     end
   end
