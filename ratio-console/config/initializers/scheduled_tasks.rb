@@ -36,7 +36,7 @@ scheduler.every '1m' do
       if schedule.is_running?
         Rails.logger.debug "RatioScheduler: Found one schedule to stop"    
         schedule.schedule_modules.each do |m|
-          if m.device_module.last_known_status != m.previous_state
+          if m.device_module.last_known_status != m.device_module.previous_state
             # do transition to desired
             m.device_module.transition_to(m.device_module.previous_state)
             Rails.logger.debug "RatioScheduler: #{m.device_module.name} reverted to state #{m.device_module.previous_state}"
