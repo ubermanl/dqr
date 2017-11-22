@@ -8,7 +8,7 @@ Schedule.update_all(is_running: false)
 scheduler.every '1m' do
   # iterate over defined schedules
   Rails.logger.debug "RatioScheduler: Checking Schedules"
-  active_schedules = Schedule.includes(:schedule_modules => [:device_module]).all
+  active_schedules = Schedule.includes(:schedule_modules => [:device_module]).active.all
   active_schedules.each do |schedule|
     # if in time for action
     if schedule.should_apply?
