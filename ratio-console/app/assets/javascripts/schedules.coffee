@@ -99,8 +99,13 @@ App.Schedules = do ->
           Fwk.showMessage 'negative',true,'Include Device',data.error
           include.prop('checked', false)
         
-      error: ->
-        Fwk.showMessage 'negative',true,'Include Device','Operation has failed'
+      error: (xhr,status)->
+        message = ''
+        d = JSON.parse(xhr.responseText)
+        for k,v of d
+          message += v + '\r\n'
+          
+        Fwk.showMessage 'negative',true, 'Add Schedule', message, true
         include.prop('checked', false)
         
       complete: ->
