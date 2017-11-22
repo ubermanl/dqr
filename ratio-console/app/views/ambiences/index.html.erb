@@ -8,7 +8,6 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Deleted</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -17,7 +16,6 @@
     <% @ambiences.each do |ambience| %>
       <tr>
         <td><%= ambience.name %></td>
-        <td><%= human_bool ambience.is_deleted %></td>
         <td class="right aligned">
           <div class="ui buttons">
             <%= link_to semantic_icon('unhide'), ambience, class:'ui button icon compact' %>

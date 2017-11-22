@@ -29,7 +29,13 @@ App.Device = do ->
 
     if data.events.length > 0
       Fwk.log 'Events'
-      container.closest('.column').find(selectors.lastMeasure).text("#{data.events[0].value} #{data.unit}")
+      value = data.events[0].value
+      if data.isBinary
+        if value == '1.0'
+          value = 'Detected'
+        else
+          value = 'No'
+      container.closest('.column').find(selectors.lastMeasure).text("#{value} #{data.unit}")
       container.closest('.column').find(selectors.lastTime).text("#{Fwk.formatDate(new Date(data.events[0].ts),'%H:%N')} hs")
     
     cssClass = ".#{chid}"

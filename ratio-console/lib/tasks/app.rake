@@ -12,7 +12,7 @@ namespace :app do
     updates = {
       1 => { unit: 'Amp'},
       2 => { unit: 'lux'},
-      3 => { unit: ''},
+      3 => { unit: 'movement'},
       4 => { unit: 'dB'},
       5 => { unit: 'C'}
     }

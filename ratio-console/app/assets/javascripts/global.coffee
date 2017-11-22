@@ -89,3 +89,5 @@ window.App = do ->
     
     Fwk.get(document).ajaxComplete ->
       hideWaitPopup()
+      
+    Fwk.get(document).find('.pulsed').transition('set looping').transition('pulse', '1000ms')
