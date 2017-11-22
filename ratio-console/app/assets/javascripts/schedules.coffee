@@ -93,10 +93,12 @@ App.Schedules = do ->
       success: (data)->
         if action == 'DELETE' && data.status == 'OK'
           deviceRow.data('schedule-module-id',0)
+          Fwk.showMessage 'positive',true, 'Include Module', 'Module successfully included', true
         else if data.status == 'OK'
           deviceRow.data('schedule-module-id',data.schedule_module_id)
+          Fwk.showMessage 'positive',true, 'Include Module', 'Module successfully included', true
         else
-          Fwk.showMessage 'negative',true,'Include Device',data.error
+          Fwk.showMessage 'negative',true,'Include Module',data.error
           include.prop('checked', false)
         
       error: (xhr,status)->
