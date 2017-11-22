@@ -9,7 +9,7 @@ class ScheduleModulesController < ApplicationController
         format.json { render json:{ status: 'OK', schedule_module_id: @schedule_module.id }, status: :ok }
         format.html { redirect_to @schedule_module.schedule }
       else
-        format.json { render json:{ status: 'Error', errors: @schedule_module.errors }, status: :unprocessable_entity }
+        format.json { render json: @schedule_module.errors, status: :unprocessable_entity }
         format.html { redirect_to @schedule_module.schedule, notice: 'Error' }
       end
     end
