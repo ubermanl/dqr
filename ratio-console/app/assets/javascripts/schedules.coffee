@@ -36,9 +36,10 @@ App.Schedules = do ->
     
     Fwk.get(selectors.timelineEvent).removeClass('selected')
     if !isSelected
-      schedule.addClass('selected')
-      Fwk.getByBehavior(selectors.eventContent).text(schedule.data('text'))
-      dimmer.dimmer('show')
+      schedule.closest('.timeline').animate { scrollLeft: 0 }, 250, ->
+        schedule.addClass('selected')
+        Fwk.getByBehavior(selectors.eventContent).text(schedule.data('text'))
+        dimmer.dimmer('show')
     else
       dimmer.dimmer('hide dimmer')
       if dimmer.dimmer('is active')
