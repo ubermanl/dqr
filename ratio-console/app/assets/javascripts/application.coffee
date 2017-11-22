@@ -10,6 +10,7 @@
 #  require turbolinks
 #= require chartist
 #= require chartist.axis
+#= require Chart.bundle
 #= require framework
 #= require global
 #= require_tree .

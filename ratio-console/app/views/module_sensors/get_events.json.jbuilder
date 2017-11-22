@@ -5,3 +5,4 @@ json.events @events do |e|
 end
 json.isBinary @isBinary
 json.unit @unit
+json.labels @labels

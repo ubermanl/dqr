@@ -26,13 +26,13 @@ class SwaggerEndpoint
     
     response_hash = make_json(response.body)
     
-    Hash.new status_code: response.code, body: response_hash.json, is_json: response_hash.is_json
+    { status_code: response.code, body: response_hash[:json], is_json: response_hash[:is_json] }
   end
   
   def make_json(json)
     result = JSON.parse(json)
-    return Hash.new is_json: true, json: result
+    return { is_json: true, json: result }
   rescue JSON::ParserError => e
-    return Hash.new is_json: false, json: json
+    return { is_json: false, json: json }
   end
 end

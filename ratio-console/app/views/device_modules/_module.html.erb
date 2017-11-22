@@ -12,7 +12,11 @@
       <% m.sensors.each do |s| %>
         <div class="statistic">
           <div class="value" style="font-size:1.3em !important;">
-            <%= s.last_event.value.round(2) %>
+            <% if s.is_binary? %>
+              <%= case s.last_event.value when 0 then 'No' else 'Yes' end %>
+            <% else %>
+              <%= s.last_event.value.round(2) %>
+            <% end %>
           </div>
           <div class="label dqr colored">
             <%= s.sensor_type.unit %>

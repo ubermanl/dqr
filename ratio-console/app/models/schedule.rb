@@ -2,8 +2,9 @@ class Schedule < ActiveRecord::Base
   has_many :schedule_days, dependent: :destroy
   has_many :schedule_modules, dependent: :destroy
   
-  
   validates :description, presence: true
+  
+  scope :active, ->{ where(enabled: true) }
   
   def should_apply?
     # for ruby a value between 0 and 6 with 0 sunday

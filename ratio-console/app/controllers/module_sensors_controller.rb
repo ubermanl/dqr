@@ -3,7 +3,8 @@ class ModuleSensorsController < ApplicationController
   def get_events
     @events = @module.events.order(ts: :desc).take(50)
     @unit = @module.sensor_type.unit
-    @isBinary = @module.sensor_type_id == 3
+    @labels = @module.sensor_type.graphic_scale
+    @isBinary = @module.is_binary?
   end
   
   private 
