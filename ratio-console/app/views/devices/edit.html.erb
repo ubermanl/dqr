@@ -12,7 +12,7 @@
         </div>
         <div class="one required field">
           <%= f.label :name %>
-          <%= f.text_field :name %>  
+          <%= f.text_field :name, maxlength:30 %>  
         </div>
         <div class="sixteen wide field required">
           <%= f.label :ambience_id %>
@@ -39,7 +39,7 @@
           <% else %>
           <td><%= d.object.module_type.name %></td>
           <% end %>
-          <td><%= d.text_field :name %></td>
+          <td><%= d.text_field :name, maxlength:30 %></td>
           <td>
             <div class="ui toggle checkbox">
               <%= d.check_box :show_in_dashboard %>

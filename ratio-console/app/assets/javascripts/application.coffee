@@ -4,10 +4,8 @@
 # codigo
 # -------------------------------------------
 #= require jquery
-# require jquery.turbolinks
 #= require jquery_ujs
 #= require semantic-ui
-#  require turbolinks
 #= require chartist
 #= require chartist.axis
 #= require Chart.bundle
