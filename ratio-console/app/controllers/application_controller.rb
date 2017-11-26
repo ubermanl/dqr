@@ -24,6 +24,19 @@ class ApplicationController < ActionController::Base
       redirect_to login_path
     end
   end
+  
+  def require_admin
+    if current_user.present? && !current_user.admin?
+      respond_to do |format|
+        format.json { render json: { error: "Administrator privileges are required to use that functionality" }, status: :unprocessable_entity }
+        format.html do 
+          flash[:error] = "Administrator privileges are required to use that functionality"
+          redirect_to root_url
+        end
+      end
+    end
+  end
+    
 
   def handle_unverified_request
     # raise an exception

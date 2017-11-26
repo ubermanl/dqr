@@ -1,4 +1,5 @@
 class SchedulesController < ApplicationController
+  before_action :require_admin, only: [:edit, :update, :destroy,:create]
   before_action :set_schedule, only: [:show, :edit, :update, :destroy, :schedules]
 
   # GET /schedules

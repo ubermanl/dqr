@@ -39,7 +39,7 @@ Rails.application.routes.draw do
   get '/logout', to: 'user_sessions#destroy', as: :logout
   get '/login', to: 'user_sessions#new', as: :login
   get '/my_account', to: 'users#edit', as: :my_account
-  resources :users
+  resources :users, param: :login
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

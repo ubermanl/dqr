@@ -16,7 +16,7 @@
    <ul class="day">
      <li class="mark"><%= week_day(k) %></li>
      <% values.each do |v| %>
-    <li class="event" data-event-id="<%= v.id %>" data-span-start="<%= v.start_hour %>" data-span-end="<%= v.end_hour %>" data-text="<%= schedule_tooltip(v) %>"></li>
+     <li class="event" data-event-id="<%= v.id %>" data-span-start="<%= v.start_hour %>" data-span-end="<%= v.end_hour %>" data-text="<%= schedule_tooltip(v) %>"></li>
      <% end %>
    </ul>
 <% end %>

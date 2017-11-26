@@ -1,4 +1,7 @@
 class AmbiencesController < ApplicationController
+  
+  before_action :require_admin, only: [:edit,:update,:destroy,:create]
+  
   before_action :set_ambience, only: [:show, :edit, :update, :destroy]
 
   # GET /ambiences

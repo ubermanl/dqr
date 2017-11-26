@@ -2,6 +2,7 @@
 <%= link_to text_with_icon('Devices','podcast'), devices_url, class:'item' %>
 <%= link_to text_with_icon('Schedules','calendar'), schedules_url, class:'item' %>
 <%= link_to text_with_icon('Ambiences','block layout'), ambiences_url, class:'item' %>
+<%= link_to text_with_icon('Users','users'), users_url, class:'item' if current_user.admin? %>
 <%= link_to text_with_icon('Preferences','settings'), console_preferences_url, class:'item' %>
 <% link_to text_with_icon('Scenes','image'), root_url, class:'item' %>
 <%= link_to text_with_icon('Events','feed'), events_url, class:'item' %>

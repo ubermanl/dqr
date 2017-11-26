@@ -1,17 +1,71 @@
-<%= form_for(@current_user) do |f| %>
-  <%= render partial:'shared/errors', locals: {model: @current_user} %>
+<%= form_for(@user) do |f| %>
+  <%= render partial:'shared/errors', locals: {model: @user} %>
   <div class="ui segment">
-    <div class="ui form">
-      <div class="one required field">
-        <%= f.label :password %>
-        <%= f.text_field :password, maxlength:40 %>  
+    <div class="ui equal width form">
+      <div class="fields">
+        <div class="field required">
+          <%= f.label :login %>
+          <%= f.text_field :login %>
+        </div>
+        <div class="field">
+          <%= f.label :name %>
+          <%= f.text_field :name %>
+        </div>
+        <div class="field">
+          <%= f.label :mail %>
+          <%= f.text_field :mail %>
+        </div>
       </div>
-      <div class="one required field">
-        <%= f.label :password_confirmation %>
-        <%= f.text_field :password_confirmation, maxlength:40 %>  
+      <div class="fields">
+        <div class="required field">
+          <%= f.label :password %>
+          <%= f.password_field :password, maxlength:40 %>  
+        </div>
+        <div class="required field">
+          <%= f.label :password_confirmation %>
+          <%= f.password_field :password_confirmation, maxlength:40 %>  
+        </div>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <%= f.label :role %>
+          <%= f.select :role, [['Admin','0'],['User','1']] %>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <label>Active</label>
+          <div class="ui toggle checkbox">
+            <%= f.check_box :active %>
+            <label></label>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+  <% if @user.persisted? %>
+  <div class="ui segment">
+    <table class="ui table unstackable">
+      <caption>Pinned Devices</caption>
+      <thead>
+        <tr>
+          <th>Module Name</th>
+          <th>Show in Dashboard</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= f.collection_check_boxes :device_module_ids, DeviceModule.all, :id, :name do |b| %>
+          <tr>
+            <td><%= b.object.name %></td>
+            <td>
+              <div class="ui toggle checkbox"><%= b.check_box %><label></label></div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% end %>
   <div class="ui buttons">
     <%= f.submit nil, class:'ui button primary' %>
     <%= link_to 'Cancel', ambiences_url, class:'ui button' %>

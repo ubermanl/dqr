@@ -1,9 +1,12 @@
-<% if @pinned_modules.any? %>
+<% if @current_user.device_modules.any? %>
   <div class="ui menu borderless">
     <div class="item header dqr colored"><i class="icon pin"></i>Pinned Devices</div>
+    <div class="right menu">
+      <%= link_to text_with_icon('Edit','edit'), my_account_url, class:'item main-link' %>    
+    </div>
   </div>
   <div class="ui list">
-     <% @pinned_modules.each do |m| %>
+     <% @current_user.device_modules.each do |m| %>
       <%= render partial: 'device_modules/module', locals:{ m: m} %>
     <% end %>
   </div>
@@ -12,6 +15,6 @@
     <div class="header">
       Show your favourites here
     </div>
-    <p>Pin your favorite modules here, and see whats happening just in one touch</p>
+    <p>Pin your favorite modules here, and see whats happening just in one touch. <%= link_to 'Add Module', my_account_url %></p>
   </div>
 <% end %>

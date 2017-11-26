@@ -7,7 +7,7 @@
     <div class="header">Oops!</div>
       <ul class="list">
         <% model.errors.each do |field,message| %>
-          <li><strong><%= field %></strong>&nbsp;<%= message %></li>
+          <li><strong><%= field == :base ? '' : field.to_s.gsub('_',' ').titleize %></strong>&nbsp;<%= message %></li>
         <% end %>
       </ul>
     </div>

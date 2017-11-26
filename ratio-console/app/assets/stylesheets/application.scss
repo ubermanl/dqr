@@ -53,6 +53,8 @@ div.vertical-center{
 
 $primary-color: #0b7542;
 $primary-border: rgba(34,36,38,0.15);
+$primary-fill: rgba(11,117,66,0.7);
+
 
 .primary{
   background-color:$primary-color !important;
@@ -122,7 +124,8 @@ $primary-border: rgba(34,36,38,0.15);
 }
 
 .ui.timeline .event{
-  background-color:gainsboro;
+  background-color:$primary-fill;
+  //border: 1px solid $primary-color;
 }
 .ui.timeline .event.selected{
   background-color: $primary-color;

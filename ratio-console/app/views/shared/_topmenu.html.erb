@@ -3,6 +3,6 @@
     DQR Menu
 </a>
 <div class="right menu">
-    <%= link_to text_with_icon('My Account','user'), my_account_path, class:'ui item' %>
+    <%= link_to text_with_icon(current_user.login,'user'), my_account_path, class:'ui item' %>
     <%= link_to semantic_icon('power'), logout_path, class:'ui item icon compact' %>
 </div>

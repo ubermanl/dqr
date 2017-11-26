@@ -8,6 +8,9 @@ class DeviceModule < ActiveRecord::Base
   
   has_many :events, class_name:'DeviceEventView', foreign_key: :module_id
   
+  has_many :user_pinned_modules;
+  has_many :users, through: :user_pinned_modules
+  
   def last_event
     self.events.order(ts: :desc).first
   end

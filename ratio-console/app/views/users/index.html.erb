@@ -1,28 +1,30 @@
 <div class="ui menu borderless">
-  <div class="item header"><i class="icon block layout"></i>Ambiences</div>
+  <div class="item header"><i class="icon users"></i>Users</div>
   <div class="right menu">
-    <%= link_to text_with_icon('New Ambience','plus'), new_ambience_url, class:'item main-link' %>    
+    <%= link_to text_with_icon('New User','plus'), new_user_url, class:'item main-link' %>    
   </div>
 </div>
 <table class="ui table unstackable striped">
   <thead>
     <tr>
+      <th>Login</th>
       <th>Name</th>
-      <th>Deleted</th>
+      <th>Active</th>
       <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
-    <% @ambiences.each do |ambience| %>
+    <% @users.each do |user| %>
       <tr>
-        <td><%= ambience.name %></td>
-        <td><%= human_bool ambience.is_deleted %></td>
+        <td><%= user.login %></td>
+        <td><%= user.name %></td>
+        <td><%= human_bool user.active? %></td>
         <td class="right aligned">
           <div class="ui buttons">
-            <%= link_to semantic_icon('unhide'), ambience, class:'ui button icon compact' %>
-            <%= link_to semantic_icon('edit'), edit_ambience_path(ambience), class:'ui icon button compact' %>
-            <%= link_to semantic_icon('remove'), ambience, method: :delete, data: { confirm: 'Are you sure?' }, class:'ui icon button compact' %>
+            <%= link_to semantic_icon('unhide'), user, class:'ui button icon compact' %>
+            <%= link_to semantic_icon('edit'), edit_user_url(user), class:'ui icon button compact' %>
+            <%= link_to semantic_icon('remove'), user, method: :delete, data: { confirm: 'Are you sure?' }, class:'ui icon button compact' %>
           </div>
         </td>
       </tr>

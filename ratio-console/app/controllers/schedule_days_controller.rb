@@ -1,4 +1,5 @@
 class ScheduleDaysController < ApplicationController
+  before_action :require_admin, only: [:edit, :update, :destroy, :create]
   before_action :set_schedule, only:[:create]
 
   def create

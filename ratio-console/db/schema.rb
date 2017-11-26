@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171120183040) do
+ActiveRecord::Schema.define(version: 20171126213533) do
 
   create_table "ambiences", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false
@@ -67,7 +67,6 @@ ActiveRecord::Schema.define(version: 20171120183040) do
     t.datetime "created_at",                                             null: false
     t.datetime "updated_at",                                             null: false
     t.string   "name",                       limit: 255
-    t.boolean  "show_in_dashboard",                      default: false, null: false
     t.integer  "last_known_status",          limit: 4,   default: 0,     null: false
     t.datetime "last_known_status_datetime"
     t.integer  "previous_state",             limit: 4,   default: 0,     null: false
@@ -153,14 +152,24 @@ ActiveRecord::Schema.define(version: 20171120183040) do
     t.string   "graphic_scale", limit: 255
   end
 
+  create_table "user_pinned_modules", id: false, force: :cascade do |t|
+    t.string  "login",            limit: 255, null: false
+    t.integer "device_module_id", limit: 4,   null: false
+  end
+
+  add_index "user_pinned_modules", ["device_module_id"], name: "index_user_pinned_modules_on_device_module_id", using: :btree
+  add_index "user_pinned_modules", ["login"], name: "fk_rails_564a04418c", using: :btree
+
   create_table "users", primary_key: "login", force: :cascade do |t|
-    t.string   "name",              limit: 255, null: false
-    t.string   "mail",              limit: 255, null: false
-    t.string   "crypted_password",  limit: 255, null: false
-    t.string   "password_salt",     limit: 255, null: false
+    t.string   "name",              limit: 255,                 null: false
+    t.string   "mail",              limit: 255,                 null: false
+    t.string   "crypted_password",  limit: 255,                 null: false
+    t.string   "password_salt",     limit: 255,                 null: false
     t.string   "persistence_token", limit: 255
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.integer  "role",              limit: 4,   default: 0,     null: false
+    t.boolean  "active",                        default: false, null: false
   end
 
   add_foreign_key "device_modules", "devices"
@@ -170,4 +179,6 @@ ActiveRecord::Schema.define(version: 20171120183040) do
   add_foreign_key "schedule_days", "schedules"
   add_foreign_key "schedule_modules", "device_modules"
   add_foreign_key "schedule_modules", "schedules"
+  add_foreign_key "user_pinned_modules", "device_modules"
+  add_foreign_key "user_pinned_modules", "users", column: "login", primary_key: "login"
 end
