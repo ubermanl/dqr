@@ -28,6 +28,44 @@ span.power_prediction_graph {
 	shape-rendering: crispEdges;
 }
 .x-axis-label, .y-axis-label {
-	font-size: 10px;
+	font-size: 11px;
 	color: #336699;
+}
+
+#sensing_time_chart_insufficient {
+	display: none;
+}
+
+/* Chart Sizes */
+#sensing_power_time_chart {
+	min-height: 185px;
+	min-width: 600px;
+}
+#sensing_power_time_range {
+	min-height: 45px;
+	min-width: 600px;
+}
+#events_count_number {
+	min-height: 71px;
+}
+#power_prediction_graph {
+	min-height: 71px;
+}
+#top_acc_power_bar {
+	min-height: 255px;
+	min-width: 300px;
+}
+#top_monthly_power_bar {
+	min-height: 255px;
+	min-width: 300px;
+}
+#monthly_power_bar {
+	min-height: 430px;
+	min-width: 600px
+}
+#sensing_time_chart {
+	min-height: 405px;
+}
+#sensing_time_range {
+	min-height: 55px;
 }

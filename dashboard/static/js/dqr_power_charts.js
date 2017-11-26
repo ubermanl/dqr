@@ -65,8 +65,8 @@ function createDqrGraphics(error, df_modules, df_sensors, df_power_events, predi
 	var maxMonthPower = datePowerMetricsDim.top(1)[0]["TIMESTAMP"];
 	
 	// Chart Initializations
-	var sensorChart = dc.lineChart("#sensing_time_chart");
-	var rangeSensorChart = dc.barChart('#sensing_time_range');
+	var sensorChart = dc.lineChart("#sensing_power_time_chart");
+	var rangeSensorChart = dc.barChart('#sensing_power_time_range');
 	var eventCountND = dc.numberDisplay("#events_count_number");
 	var predictPowerAllND = dc.numberDisplay("#power_prediction_graph");
 	var powerAccChart = dc.rowChart("#top_acc_power_bar");
@@ -143,7 +143,7 @@ function createDqrGraphics(error, df_modules, df_sensors, df_power_events, predi
 	
 	powerMonthlyChart
 		.width(600)
-		.height(400)
+		.height(425)
 		.margins({top: 10, right: 50, bottom: 30, left: 50})
 		.dimension(datePowerMonthDim)
 		.group(powerMonthDataByMonth)
@@ -158,7 +158,7 @@ function createDqrGraphics(error, df_modules, df_sensors, df_power_events, predi
 		//.x(d3.scale.linear().domain([minMonth, maxMonth]))
 		.elasticY(true)
 		.title(function(d){return (Math.round(d.value * 100) / 100) + ' kWatt/h';})
-		//.colors(d3.scale.category10())
+		.yAxisLabel("kWatt/h")
 		.yAxis().ticks(5);
 	powerMonthlyChart.xAxis().tickFormat(function(d) { return d3.time.format("%b")(d); });
 	powerMonthlyChart.addFilterHandler(function (filters, filter) {
@@ -168,13 +168,6 @@ function createDqrGraphics(error, df_modules, df_sensors, df_power_events, predi
 										});
 		
 	dc.renderAll();
-	
-	// Events
-	$('#sensing_time_select_mod').on('change', function () {
-		modIdDim.filterAll();
-		modIdDim.filter(this.value);
-		dc.redrawAll();
-	});
 
 };
 
@@ -195,10 +188,3 @@ function reduceRemoveAvg(p, v) {
 function reduceInitialAvg() {
 	return {events: 0, total: 0, avg: 0};
 }
-
-
-// Eventos
-
-$(document).ready(function(){
-	
-});

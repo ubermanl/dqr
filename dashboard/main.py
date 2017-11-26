@@ -45,13 +45,13 @@ lk_time_cols = [ 'TIMESTAMP', 'YEAR', 'YEARDAY', 'MONTH', 'YEARMONTH', 'WEEKDAY'
 lk_sensor = "lk_sensor"
 lk_sensor_cols = [ 'SENSOR_TYPE_ID', 'SENSOR_TYPE_NAME', 'UNIT' ]
 bt_events = "bt_events"
-bt_events_cols = [ 'MOD_ID', 'TIMESTAMP', 'MODULE_STATE', 'SENSOR_TYPE_ID', 'SENSED_VALUE' ]
+bt_events_cols = [ 'MOD_ID', 'TIMESTAMP', 'SENSOR_TYPE_ID', 'SENSED_VALUE' ]
 
 ### GLOBAL VARIABLES ###
 app = Flask(__name__)
 voltage = 230
 current_sensor_type_id = 1
-min_hitorical_date = 'DATE_SUB(NOW(), INTERVAL 1 WEEK)'
+min_hitorical_date = 'DATE_SUB(NOW(), INTERVAL 1 MONTH)'
 # Partial Dataframes
 df_modules = pd.DataFrame(columns=lk_module_cols)
 df_time = pd.DataFrame(columns=lk_time_cols)
@@ -79,7 +79,8 @@ def get_time_data():
 
 def get_events_data():
     conn = MySQLdb.connect(host=dbhost_hist, port=dbport_hist, user=dbuser_hist, passwd=dbpass_hist, db=dbname_hist)
-    return pd.read_sql('SELECT ' + ','.join(['%s' % x for x in bt_events_cols]) + ' FROM ' + bt_events + ' WHERE SENSOR_TYPE_ID <> ' + str(current_sensor_type_id) + ' AND TIMESTAMP > ' + min_hitorical_date, con=conn)
+    #return pd.read_sql('SELECT ' + ','.join(['%s' % x for x in bt_events_cols]) + ' FROM ' + bt_events + ' WHERE SENSOR_TYPE_ID <> ' + str(current_sensor_type_id) + ' AND TIMESTAMP > ' + min_hitorical_date, con=conn)
+    return pd.read_sql('SELECT ' + ','.join(['%s' % x for x in bt_events_cols]) + ' FROM ' + bt_events + ' WHERE SENSOR_TYPE_ID <> ' + str(current_sensor_type_id), con=conn)
     conn.close()
 
 def get_power_data():
@@ -107,6 +108,11 @@ def load_data():
         df_events.drop_duplicates(inplace=True,keep='first')
         df_events.dropna(inplace=True)
         df_events['TIMESTAMP'] = df_events.TIMESTAMP.dt.strftime('%Y-%m-%d %H:%M:%S')
+        ### Inicio - Agregado para enviar sensado agrupado en horas en vez de minutos
+        sensed_value_hours = pd.DataFrame(df_events.groupby(['YEARDAY','HOUR','MOD_ID','SENSOR_TYPE_ID']).TIMESTAMP.min(),columns=['TIMESTAMP'])
+        sensed_value_hours['SENSED_VALUE'] = df_events.groupby(['YEARDAY','HOUR','MOD_ID','SENSOR_TYPE_ID']).SENSED_VALUE.mean()
+        df_events = sensed_value_hours.reset_index()
+        ### Fin - Agregado
         # Load Power Events
         df_power = get_power_data()
         df_power = df_power.merge(df_modules,on='MOD_ID').merge(df_time,on='TIMESTAMP')
@@ -115,9 +121,9 @@ def load_data():
         df_power['TIMESTAMP'] = df_power.TIMESTAMP.dt.strftime('%Y-%m-%d %H:%M:%S')
         df_power['WATT_HOUR'] = df_power.WATT_HOUR.interpolate(method='linear')
 
-        #return '{ "retVal": 0, "msg": "OK" }'
+        #return '{ "req_status": 1, "message": "OK" }'
     except MySQLdb.Error, e:
-        #return '{ "retVal": 1, "msg": "' + e + '" }'
+        #return '{ "req_status": 0, "message": "' + e + '" }'
         print 'Error loading data: {0}'.format(e)
 
 def create_module_regressor(mod_id):
@@ -167,10 +173,27 @@ load_data()
 # Power Consumption Prediction - Train RNAs
 train_prediction()
 
+# Application Pages
 @app.route("/")
 def index():
-    return render_template("index.html")
-
+    return render_template("power.html")
+@app.route("/powerDash")
+def powerDash():
+    return render_template("power.html")
+@app.route("/luminosityDash")
+def luminosityDash():
+    return render_template("luminosity.html")
+@app.route("/soundDash")
+def soundDash():
+    return render_template("sound.html")
+@app.route("/movementDash")
+def movementDash():
+    return render_template("movement.html")
+@app.route("/temperatureDash")
+def temperatureDash():
+    return render_template("temperature.html")
+    
+# Application data enpoints
 @app.route("/get_data_description")
 def get_data_description():
     html = 'Modules: ' + str(df_modules.shape[0]) + '<br>' + \
@@ -195,7 +218,20 @@ def get_sensors():
 @app.route("/get_events")
 def get_events():
     global bt_events_cols
-    return df_events[bt_events_cols].to_json(orient='records')
+    error_ret = '{ "req_status": 0, "message": "Sensor Type ID not valid" }'
+    try:
+        sensor_type_id = request.args.get('sensor_type_id')
+        sensor_type_id = int(sensor_type_id)
+    except (ValueError, TypeError):
+        return error_ret
+    
+    if (sensor_type_id in list(df_sensors.SENSOR_TYPE_ID)):
+        try:
+            return df_events[bt_events_cols].query('SENSOR_TYPE_ID == ' + str(sensor_type_id)).to_json(orient='records')
+        except AttributeError:
+            return '{ "req_status": 0, "message": "Module ID not available for prediction" }'
+    else:
+        return error_ret
     
 @app.route("/get_power_events")
 def get_power_events():
@@ -208,22 +244,24 @@ def predict_power():
     global df_modules
     global power_prediction_models
 
+    error_ret = '{ "req_status": 0, "prediction": 0, "message": "Module ID not valid" }'
+    
     try:
         mod_id = request.args.get('mod_id')
         mod_id = int(mod_id)
     except ValueError:
-        return '{ "prediction": 0, retVal: 1, "msg": "Module ID not valid" }'
+        return error_ret
 
     if (mod_id in list(df_modules.MOD_ID)):
         try:
             last_event = df_power.query('MOD_ID == ' + str(mod_id) + ' & TIMESTAMP == "' + str(df_power.TIMESTAMP.max()) +'"')
             total_watt_per = power_prediction_models[mod_id].predict(last_event[['MONTH_HOUR','MONTH']])[0]
             result = (last_event.iloc[0].WATT_HOUR_ACC / 1000) / total_watt_per
-            return '{ "prediction": ' + str(result) + ', retVal: 0, "msg": "OK" }'
+            return '{ "req_status": 1, "prediction": ' + str(result) + ', "message": "OK" }'
         except AttributeError:
-            return '{ "prediction": 0, "msg": "Module ID not available for prediction" }'
+            return '{ "req_status": 0, "prediction": 0, "message": "Module ID not available for prediction" }'
     else:
-        return '{ "prediction": 0, retVal: 1, "msg": "Module ID not valid" }'
+        return error_ret
   
 @app.route("/predict_power_all")
 def predict_power_all():
