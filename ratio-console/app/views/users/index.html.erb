@@ -22,7 +22,6 @@
         <td><%= human_bool user.active? %></td>
         <td class="right aligned">
           <div class="ui buttons">
-            <%= link_to semantic_icon('unhide'), user, class:'ui button icon compact' %>
             <%= link_to semantic_icon('edit'), edit_user_url(user), class:'ui icon button compact' %>
             <%= link_to semantic_icon('remove'), user, method: :delete, data: { confirm: 'Are you sure?' }, class:'ui icon button compact' %>
           </div>

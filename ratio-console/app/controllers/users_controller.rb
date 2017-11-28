@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :require_admin, only: [:index,:destroy,:new,:create]
-  before_action :set_user, only: [:edit,:update, :show]
+  before_action :set_user, only: [:edit,:update, :show,:destroy]
   
   def new
     @user = User.new
@@ -11,6 +11,21 @@ class UsersController < ApplicationController
   end
   def edit
     
+  end
+  
+  # DELETE /users/1
+  # DELETE /users/1.json
+  def destroy
+    respond_to do |format|
+      if @user.login != current_user.login && @user.destroy
+        format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        flash[:error] = 'Cannot be deleted'
+        format.html { redirect_to users_url }
+        format.json { head :no_content }
+      end
+    end
   end
   
   def create
