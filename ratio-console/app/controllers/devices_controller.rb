@@ -1,4 +1,5 @@
 class DevicesController < ApplicationController
+  before_action :require_admin, only:[:edit,:destroy,:create,:update]
   before_action :set_device, only: [:show,:edit,:update, :detect, :has_data]
   
   def index
