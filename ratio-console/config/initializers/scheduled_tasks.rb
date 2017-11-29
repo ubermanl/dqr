@@ -1,6 +1,6 @@
 require 'rufus/scheduler'
 
-ENABLE_SCHEDULES = false
+ENABLE_SCHEDULES = true
 
 if ENABLE_SCHEDULES then 
   # scheduler instance  
