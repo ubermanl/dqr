@@ -1,8 +1,8 @@
 require 'rufus/scheduler'
 
-CONST enable_schedules = true
+ENABLE_SCHEDULES = false
 
-if enable_schedules then 
+if ENABLE_SCHEDULES then 
   # scheduler instance  
   scheduler = Rufus::Scheduler.new
   
