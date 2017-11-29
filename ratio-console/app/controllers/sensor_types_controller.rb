@@ -63,7 +63,7 @@ class SensorTypesController < ApplicationController
   rescue ActiveRecord::DeleteRestrictionError => er
     respond_to do |format|
       flash[:error] = 'Cannot be deleted, some modules depend on it'
-      format.html { redirect_to ambiences_url }
+      format.html { redirect_to sensor_types_url }
       format.json { head :no_content }
     end
   end
