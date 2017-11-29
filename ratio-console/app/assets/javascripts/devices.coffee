@@ -18,25 +18,32 @@ App.Device = do ->
 
   buildChart: (chid,container,data)->
     chartDataSeries = []
+    sensor_type = data.sensor_type
     dataInterval = Number(Fwk.getByBehavior('settings').data(selectors.graphDivisors))
-    dataYLabels = data.labels.split(';')
+    # labels for graph, comma separated
+    dataYLabels = sensor_type.graph_scale_labels.split(',')
     for d in dataYLabels
       dataYLabels[d] = Number(dataYLabels[d])
     
     for datum in data.events
       chartDataSeries.push { x: Date.parse(datum.ts), y: datum.value }
       true
+    
+    
 
     if data.events.length > 0
       Fwk.log 'Events'
       value = data.events[0].value
-      if data.isBinary
+      if sensor_type.graph_scale_type == 'Binary'
         if value == '1.0'
           value = 'Detected'
         else
           value = 'No'
-      container.closest('.column').find(selectors.lastMeasure).text("#{value} #{data.unit}")
+      container.closest('.column').find(selectors.lastMeasure).text("#{value} #{sensor_type.unit}")
       container.closest('.column').find(selectors.lastTime).text("#{Fwk.formatDate(new Date(data.events[0].ts),'%H:%N')} hs")
+    
+    container.closest('.column').find('.tooltip small').text(sensor_type.graph_description)
+    
     
     cssClass = ".#{chid}"
     
@@ -45,24 +52,20 @@ App.Device = do ->
                 { name:'', data: chartDataSeries }
               ]
               
-     # y axis labels
-    array = data.labels.split ':'
-    interval = array[0].split(';')
-    step_size = array[1]
-    
     # options for y axis when data is binary
     axisYOptions = {}
-    if data.isBinary
+    if sensor_type.graph_scale_type == 'Binary'
       axisYOptions.onlyInteger = true
       axisYOptions.labelInterpolationFnc = (value, index)->
           return selectors.yLabels[index]
       axisYOptions.stretch = true
+    else if sensor_type.graph_scale_type == 'Auto'
+      axisYOptions.type = Chartist.AutoScaleAxis
     else
-      #axisYOptions.type = Chartist.AutoScaleAxis
       axisYOptions.type = Chartist.FixedScaleAxis
-      axisYOptions.high = Number(interval[1])
-      axisYOptions.low = Number(interval[0])
-      axisYOptions.divisor = Number(step_size)
+      axisYOptions.high = Number(sensor_type.graph_max_value)
+      axisYOptions.low = Number(sensor_type.graph_min_value)
+      axisYOptions.divisor = Number(sensor_type.graph_step)
         
     options =
       axisX:
@@ -83,12 +86,12 @@ App.Device = do ->
                       y: 50
                     textAnchor: 'middle'
                   axisY:
-                    axisTitle: data.unit
+                    axisTitle: sensor_type.unit
                     axisClass: 'ct-axis-title'
                     offset:
                       x: 0
                       y: -1
-                    flipTitle: false) ]
+                    flipTitle: false)]
     
     chart = new Chartist.Line cssClass, chartData, options
 

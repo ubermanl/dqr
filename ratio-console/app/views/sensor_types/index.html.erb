@@ -1,0 +1,28 @@
+<div class="ui menu borderless">
+  <div class="item header"><i class="icon usb"></i>Sensor Types</div>
+  <div class="right menu">
+    <%= link_to text_with_icon('New Sensor Type','plus'), new_sensor_type_path, class:'item main-link' %>    
+  </div>
+</div>
+<table class="ui table unstackable striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @sensor_types.each do |sensor_type| %>
+      <tr>
+        <td><%= sensor_type.id %></td>
+        <td><%= sensor_type.name %></td>
+        <td class="right aligned">
+          <div class="ui buttons">
+            <%= link_to semantic_icon('edit'), edit_sensor_type_path(sensor_type), class:'ui button icon compact' %>
+            <%= link_to semantic_icon('remove'), sensor_type, method: :delete, data: { confirm: 'Are you sure?' }, class:'ui icon button compact' %>
+          </div></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

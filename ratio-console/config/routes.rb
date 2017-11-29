@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   
+  resources :sensor_types
   get 'console_preferences' => 'console_preferences#edit'
   post 'console_preferences' => 'console_preferences#update'
   

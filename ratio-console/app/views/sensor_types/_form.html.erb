@@ -1,0 +1,59 @@
+<%= form_for(@sensor_type) do |f| %>
+  <%= render partial:'shared/errors', locals: {model: @sensor_type} %>
+  <div class="ui segment">
+    <div class="ui three equal width form">
+      <div class="fields">
+        <div class="field">
+          <%= f.label :id %>
+          <%= f.text_field :id %>
+        </div>
+        <div class="field">
+          <%= f.label :name %>
+          <%= f.text_field :name %>
+        </div>
+        <div class="field">
+          <%= f.label :unit %>
+          <%= f.text_field :unit %>
+        </div>
+        <div class="field">
+          <%= f.label :icon %>
+          <%= f.text_field :icon %>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <%= f.label :graph_scale_type %>
+          <%= f.select :graph_scale_type, [['Fixed Scale','Fixed'],['Automatic Scale','Auto'],['Binary Scale','Binary'],] %>
+        </div>
+        <div class="field">
+          <%= f.label :graph_min_value %>
+          <%= f.text_field :graph_min_value %>
+        </div>
+        <div class="field">
+          <%= f.label :graph_max_value %>
+          <%= f.text_field :graph_max_value %>
+        </div>
+        <div class="field">
+          <%= f.label :graph_step %>
+          <%= f.text_field :graph_step %>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <%= f.label :graph_scale_labels %>
+          <%= f.text_field :graph_scale_labels %>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <%= f.label :graph_description %>
+          <%= f.text_area :graph_description %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui buttons">
+    <%= f.submit nil, class:'ui button primary' %>
+    <%= link_to 'Cancel', sensor_types_url, class:'ui button' %>
+  </div>
+<% end %>

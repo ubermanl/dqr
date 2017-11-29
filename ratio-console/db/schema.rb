@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171126213533) do
+ActiveRecord::Schema.define(version: 20171129155942) do
 
   create_table "ambiences", force: :cascade do |t|
     t.string   "name",       limit: 255,                 null: false
@@ -144,12 +144,18 @@ ActiveRecord::Schema.define(version: 20171126213533) do
   end
 
   create_table "sensor_types", force: :cascade do |t|
-    t.string   "name",          limit: 255
-    t.string   "icon",          limit: 255
-    t.string   "unit",          limit: 255
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.string   "graphic_scale", limit: 255
+    t.string   "name",               limit: 255
+    t.string   "icon",               limit: 255
+    t.string   "unit",               limit: 255
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.string   "graphic_scale",      limit: 255
+    t.string   "graph_min_value",    limit: 255,   default: "", null: false
+    t.string   "graph_max_value",    limit: 255,   default: "", null: false
+    t.string   "graph_step",         limit: 255,   default: "", null: false
+    t.string   "graph_scale_type",   limit: 255,   default: "", null: false
+    t.text     "graph_description",  limit: 65535,              null: false
+    t.string   "graph_scale_labels", limit: 255,   default: "", null: false
   end
 
   create_table "user_pinned_modules", id: false, force: :cascade do |t|

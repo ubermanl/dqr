@@ -3,6 +3,4 @@ json.events @events do |e|
   json.ts e.ts
   json.value e.value
 end
-json.isBinary @isBinary
-json.unit @unit
-json.labels @labels
+json.sensor_type @sensor_type
