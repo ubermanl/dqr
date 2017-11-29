@@ -3,7 +3,7 @@
   <div class="ui segment">
     <div class="ui three equal width form">
       <div class="fields">
-        <div class="field">
+        <div class="field <%= 'disabled' if @sensor_type.persisted? %>">
           <%= f.label :id %>
           <%= f.text_field :id %>
         </div>

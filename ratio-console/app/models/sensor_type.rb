@@ -6,4 +6,12 @@ class SensorType < ActiveRecord::Base
   validates :graph_min_value, presence: true, numericality: true
   validates :graph_max_value, presence: true, numericality: true
   validates :graph_step, presence: true, numericality: true
+  
+  validate :changed_sensor_id
+  
+  def changed_sensor_id
+    if persisted? && id != id_was
+      errors.add(:id, 'Cant be changed')
+    end
+  end
 end
